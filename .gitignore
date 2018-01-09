@@ -1,5 +1,4 @@
 # Ignore Linux-compiled executable.
-collisions
 geom_test
 
 # Build results
