@@ -5,6 +5,9 @@
 #include "Shape.hpp"
 
 #include <vector>
+#ifdef THREADED
+#include <mutex>
+#endif
 
 // Convex polygon with counterclockwise winding.
 namespace geom {
@@ -18,6 +21,11 @@ namespace geom {
 		// The final vertex connects with the first vertex.
 		Polygon(std::vector<Coord2> vertices);
 		Polygon(std::vector<Coord2> vertices, std::vector<Coord2> edgeNormals);
+		Polygon(const Polygon& o);
+		Polygon(Polygon&& o);
+		Polygon& operator=(const Polygon& o);
+		Polygon& operator=(Polygon&& o);
+
 		virtual ~Polygon() = default;
 
 		virtual gFloat left()   const { return x_min_; }
@@ -85,6 +93,13 @@ namespace geom {
 		mutable std::vector<Coord2> edge_normals_;
 		gFloat x_min_, x_max_, y_min_, y_max_;
 
+#ifdef THREADED
+		mutable std::mutex edge_norm_mutex_;
+		mutable std::vector<bool> is_edge_norm_set_;
+		void _set_edge_norms(); // Determine which edge normals have been calculated.
+#endif
+
+		void _init();
 		// Find the bounding box for the polygon and cache the values.
 		void _find_bounds();
 	};

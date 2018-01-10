@@ -9,12 +9,57 @@
 namespace geom {
 	Polygon::Polygon() : vertices_(), x_min_(), x_max_(), y_min_(), y_max_() {}
 	Polygon::Polygon(std::vector<Coord2> vertices) : vertices_(vertices), edge_normals_(vertices.size(), Coord2(0, 0)), x_min_(), x_max_(), y_min_(), y_max_() {
-		_find_bounds();
+		_init();
 	}
 	Polygon::Polygon(std::vector<Coord2> vertices, std::vector<Coord2> edgeNormals)
 		: vertices_(vertices), edge_normals_(edgeNormals), x_min_(), x_max_(), y_min_(), y_max_() {
-		_find_bounds();
+		_init();
 	}
+
+	Polygon::Polygon(const Polygon& o) : vertices_(o.vertices_), edge_normals_(o.edge_normals_), x_min_(o.x_min_), x_max_(o.x_max_), y_min_(o.y_min_), y_max_(o.y_max_)
+#ifdef THREADED
+		, edge_norm_mutex_(), is_edge_norm_set_(o.is_edge_norm_set_)
+#endif
+	{}
+	Polygon::Polygon(Polygon&& o) : vertices_(std::move(o.vertices_)), edge_normals_(std::move(o.edge_normals_)), x_min_(o.x_min_), x_max_(o.x_max_), y_min_(o.y_min_), y_max_(o.y_max_)
+#ifdef THREADED
+		, edge_norm_mutex_(), is_edge_norm_set_(std::move(o.is_edge_norm_set_))
+#endif
+	{}
+	Polygon& Polygon::operator=(const Polygon& o) {
+		vertices_ = o.vertices_;
+		edge_normals_ = o.edge_normals_;
+		x_min_ = o.x_min_; x_max_ = o.x_max_; y_min_ = o.y_min_; y_max_ = o.y_max_;
+#ifdef THREADED
+		is_edge_norm_set_ = o.is_edge_norm_set_;
+#endif
+		return *this;
+	}
+	Polygon& Polygon::operator=(Polygon&& o) {
+		vertices_ = std::move(o.vertices_);
+		edge_normals_ = std::move(o.edge_normals_);
+		x_min_ = o.x_min_; x_max_ = o.x_max_; y_min_ = o.y_min_; y_max_ = o.y_max_;
+#ifdef THREADED
+		is_edge_norm_set_ = std::move(o.is_edge_norm_set_);
+#endif
+		return *this;
+	}
+
+	void Polygon::_init() {
+		_find_bounds();
+#ifdef THREADED
+		_set_edge_norms();
+#endif
+	}
+
+#ifdef THREADED
+	void Polygon::_set_edge_norms() {
+		const std::size_t size(edge_normals_.size());
+		is_edge_norm_set_.resize(size);
+		for (std::size_t i = 0; i < size; ++i)
+			is_edge_norm_set_[i] = !edge_normals_[i].isZero();
+	}
+#endif
 
 	void Polygon::_find_bounds() {
 		if (vertices_.empty()) {
@@ -36,8 +81,17 @@ namespace geom {
 	}
 
 	const Coord2& Polygon::getEdgeNorm(std::size_t index) const {
+#ifdef THREADED
+		if (is_edge_norm_set_[index])
+			return edge_normals_[index];
+		std::lock_guard<std::mutex> lock(edge_norm_mutex_);
+		if (is_edge_norm_set_[index]) // May have been set by another thread.
+			return edge_normals_[index];
+		is_edge_norm_set_[index] = true;
+#else
 		if (!edge_normals_[index].isZero())
 			return edge_normals_[index];
+#endif
 		const Coord2 first = vertices_[index];
 		const Coord2 second = vertices_[index + 1 >= vertices_.size() ? 0 : index + 1];
 		edge_normals_[index] = Coord2(first.y - second.y, second.x - first.x).normalize();
