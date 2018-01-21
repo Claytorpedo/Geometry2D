@@ -668,6 +668,31 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 	}
 }
 
+TEST_CASE("Determining the type of angle the minimum angle between to vectors is." "[geom_math]") {
+	SECTION("The minimum angle is acute.") {
+		CHECK(geom::math::minAngle(Coord2(0, 1), Coord2(0, 1)) == geom::math::AngleResult::ACUTE);
+		CHECK(geom::math::minAngle(Coord2(0, 1), Coord2(1, 1)) == geom::math::AngleResult::ACUTE);
+		CHECK(geom::math::minAngle(Coord2(0, 1), Coord2(1, 1).normalize()) == geom::math::AngleResult::ACUTE);
+		CHECK(geom::math::minAngle(Coord2(0, 1), Coord2(10, 1).normalize()) == geom::math::AngleResult::ACUTE);
+		CHECK(geom::math::minAngle(Coord2(-1, 0), Coord2(-1, 0)) == geom::math::AngleResult::ACUTE);
+		CHECK(geom::math::minAngle(Coord2(-1, 0), Coord2(-1, 1)) == geom::math::AngleResult::ACUTE);
+		CHECK(geom::math::minAngle(Coord2(-1, 0), Coord2(-1, -1)) == geom::math::AngleResult::ACUTE);
+	}
+	SECTION("The minimum angle is perpendicular.") {
+		CHECK(geom::math::minAngle(Coord2(0, 1), Coord2(1, 0)) == geom::math::AngleResult::PERPENDICULAR);
+		CHECK(geom::math::minAngle(Coord2(0, -1), Coord2(1, 0)) == geom::math::AngleResult::PERPENDICULAR);
+		CHECK(geom::math::minAngle(Coord2(0, 1), Coord2(-1, 0)) == geom::math::AngleResult::PERPENDICULAR);
+		CHECK(geom::math::minAngle(Coord2(0, -1), Coord2(-1, 0)) == geom::math::AngleResult::PERPENDICULAR);
+		CHECK(geom::math::minAngle(Coord2(1, 1), Coord2(1, -1)) == geom::math::AngleResult::PERPENDICULAR);
+	}
+	SECTION("The minimum angle is obtuse.") {
+		CHECK(geom::math::minAngle(Coord2(1, 0), Coord2(-1, 0)) == geom::math::AngleResult::OBTUSE);
+		CHECK(geom::math::minAngle(Coord2(1, 0), Coord2(-1, 1)) == geom::math::AngleResult::OBTUSE);
+		CHECK(geom::math::minAngle(Coord2(1, 0), Coord2(-1, -1)) == geom::math::AngleResult::OBTUSE);
+		CHECK(geom::math::minAngle(Coord2(1, 0), Coord2(-1, 10).normalize()) == geom::math::AngleResult::OBTUSE);
+		CHECK(geom::math::minAngle(Coord2(0, -1), Coord2(10, 1).normalize()) == geom::math::AngleResult::OBTUSE);
+	}
+}
 
 TEST_CASE("Reflecting a direction across a normal.", "[geom_math]") {
 	Coord2 result, expected;
