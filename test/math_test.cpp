@@ -668,6 +668,41 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 	}
 }
 
+
+TEST_CASE("Reflecting a direction across a normal.", "[geom_math]") {
+	Coord2 result, expected;
+	SECTION("The direction and normal are orthogonal.") {
+		result = geom::math::reflect(Coord2(1, 0), Coord2(0, 1));
+		expected = Coord2(1, 0);
+		CHECK(result.x == ApproxEps(expected.x));
+		CHECK(result.y == ApproxEps(expected.y));
+		result = geom::math::reflect(Coord2(-1, 0), Coord2(0, 1));
+		expected = Coord2(-1, 0);
+		CHECK(result.x == ApproxEps(expected.x));
+		CHECK(result.y == ApproxEps(expected.y));
+	}
+	SECTION("The direction and normal are parallel.") {
+		result = geom::math::reflect(Coord2(1, 0), Coord2(-1, 0));
+		expected = Coord2(-1, 0);
+		CHECK(result.x == ApproxEps(expected.x));
+		CHECK(result.y == ApproxEps(expected.y));
+		result = geom::math::reflect(Coord2(1, 1).normalize(), Coord2(-1, -1).normalize());
+		expected = Coord2(-1, -1).normalize();
+		CHECK(result.x == ApproxEps(expected.x));
+		CHECK(result.y == ApproxEps(expected.y));
+	}
+	SECTION("The direction and normal form an acute angle.") {
+		result = geom::math::reflect(Coord2(1, 1).normalize(), Coord2(0, -1));
+		expected = Coord2(1, -1).normalize();
+		CHECK(result.x == ApproxEps(expected.x));
+		CHECK(result.y == ApproxEps(expected.y));
+		result = geom::math::reflect(Coord2(0, 1), Coord2(-1, -1).normalize());
+		expected = Coord2(-1, 0);
+		CHECK(result.x == ApproxEps(expected.x));
+		CHECK(result.y == ApproxEps(expected.y));
+	}
+}
+
 TEST_CASE("Clamping a value by two bounds.", "[geom_math]") {
 	SECTION("The smaller bound is given first.") {
 		CHECK(geom::math::clamp(0.0f, 0.0f, 1.0f) == 0.0f);

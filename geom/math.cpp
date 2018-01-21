@@ -18,6 +18,7 @@ namespace geom {
 		gFloat closestDistToLine(const Coord2& line1, const Coord2& line2, const Coord2& point) {
 			return closestDistToLine(Ray(line1, (line2 - line1).normalize()), point);
 		}
+
 		AngleResult minAngle(const Coord2& vec1, const Coord2& vec2) {
 			const gFloat dot = vec1.dot(vec2);
 			if (almostZero(dot))
@@ -25,6 +26,10 @@ namespace geom {
 			if (dot > 0)
 				return AngleResult::ACUTE;
 			return AngleResult::OBTUSE;
+		}
+
+		Coord2 reflect(const Coord2& dir, const Coord2& norm) {
+			return dir - 2.0f * norm * dir.dot(norm);
 		}
 	}
 }

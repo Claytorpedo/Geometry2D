@@ -27,6 +27,9 @@ namespace geom {
 		// Find what kind of angle the minimum angle between two vectors is.
 		AngleResult minAngle(const Coord2& vec1, const Coord2& vec2);
 
+		// Reflect a direction across a normal.
+		Coord2 reflect(const Coord2& dir, const Coord2& norm);
+
 		// Check if a value is almost zero (if the given value is between positive and negative tolerance exclusive).
 		inline bool almostZero(const gFloat t, const gFloat tolerance = constants::EPSILON) {
 			return -tolerance < t && t < tolerance;

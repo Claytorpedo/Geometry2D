@@ -6,6 +6,7 @@
 #include "../debug_logger.hpp"
 #include "../units.hpp"
 #include "../constants.hpp"
+#include "../math.hpp"
 #include "../shapes/ShapeContainer.hpp"
 #include "../collisions/collisions.hpp"
 #include "../collisions/CollisionMap.hpp"
@@ -154,7 +155,7 @@ namespace geom {
 		while (depth < COLLISION_ALG_MAX_DEPTH) {
 			if (_move(info, collisionMap))
 				return;
-			info.currentDir -= 2.0f * info.normal * info.currentDir.dot(info.normal);
+			info.currentDir = math::reflect(info.currentDir, info.normal);
 			++depth;
 			DBG_CHECK(depth >= 5, "LOG", "Reflect recursion depth: " << depth << " moveDist: " << info.moveDist << " remainingDist: " << info.remainingDist);
 		}
