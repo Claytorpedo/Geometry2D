@@ -5,8 +5,7 @@
 #include "primatives/Vector2D.hpp"
 
 namespace geom {
-	typedef float        gFloat;
-	typedef int          gInt;
+	typedef float gFloat;
 
 	typedef geom::Vec2<gFloat> Coord2;
 }
