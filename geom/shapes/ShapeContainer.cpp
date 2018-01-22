@@ -6,18 +6,18 @@
 
 #define GEOM_SHAPE_CONTAINER_CLONE_SHAPE(other) \
 	switch (type_) { \
-		case(ShapeType::RECTANGLE): rect_ = new Rect(*other.rect_);  shape_ = rect_;   break; \
-		case(ShapeType::POLYGON):   poly_ = new Polygon(*other.poly_);    shape_ = poly_;   break; \
+		case(ShapeType::RECTANGLE): rect_   = new Rect(*other.rect_);     shape_ = rect_;   break; \
+		case(ShapeType::POLYGON):   poly_   = new Polygon(*other.poly_);  shape_ = poly_;   break; \
 		case(ShapeType::CIRCLE):    circle_ = new Circle(*other.circle_); shape_ = circle_; break; \
-		case(ShapeType::EMPTY):     shape_ = nullptr; \
+		case(ShapeType::EMPTY):     shape_  = nullptr; \
 	}
 #define GEOM_SHAPE_CONTAINER_MOVE_SHAPE(other) \
 	other.shape_ = nullptr; \
 	switch (type_) { \
-		case(ShapeType::RECTANGLE): rect_ = std::move(other.rect_);     shape_ = rect_;   break; \
-		case(ShapeType::POLYGON):   poly_ = std::move(other.poly_);     shape_ = poly_;   break; \
-		case(ShapeType::CIRCLE):    circle_ = std::move(other.circle_); shape_ = circle_; break; \
-		case(ShapeType::EMPTY):     shape_ = nullptr; \
+		case(ShapeType::RECTANGLE): rect_   = other.rect_;   shape_ = rect_;   break; \
+		case(ShapeType::POLYGON):   poly_   = other.poly_;   shape_ = poly_;   break; \
+		case(ShapeType::CIRCLE):    circle_ = other.circle_; shape_ = circle_; break; \
+		case(ShapeType::EMPTY):     shape_  = nullptr; \
 	}
 
 namespace geom {

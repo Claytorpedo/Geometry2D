@@ -54,7 +54,7 @@ private:
 SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]") {
 	CollisionMapTest map;
 	GIVEN("The movable is a right triangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Polygon(shapes::rightTri)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Polygon(shapes::rightTri)));
 		GIVEN("The stationary collidable is a rectangle.") {
 			map.add(Rect(0, 0, 1, 1));
 			WHEN("The collider misses the rectangle.") {
@@ -116,7 +116,7 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 		}
 	}
 	GIVEN("The movable is a rectangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Rect(0, 0, 1, 1)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Rect(0, 0, 1, 1)));
 		GIVEN("The stationary collidable is an octagon.") {
 			map.add(Polygon(shapes::octagon));
 			WHEN("The rectangle hits the octagon on the octagon's edge.") {
@@ -137,7 +137,7 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 		}
 	}
 	GIVEN("The movable is a circle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Circle(0.5f)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Circle(0.5f)));
 		GIVEN("The stationary collidable is a rectangle.") {
 			map.add(Rect(0, 0, 1, 1));
 			WHEN("The cricle hits the rectangle on the rectangle's edge at an angle.") {
@@ -174,7 +174,7 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][deflect]") {
 	CollisionMapTest map;
 	GIVEN("The movable is a rectangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Rect(0, 0, 1, 1)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Rect(0, 0, 1, 1)));
 		GIVEN("Two stationary rectangles form a wall in mover's path.") {
 			map.add(Rect(-3, 0.5f, 1, 1));
 			map.add(Rect(-3, -0.5f, 1, 1));
@@ -234,7 +234,7 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 		}
 	}
 	GIVEN("The movable is an isosceles triangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Polygon(shapes::isoTri)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Polygon(shapes::isoTri)));
 		GIVEN("Two stationary rectangles form a wall in mover's path.") {
 			map.add(Rect(-3, 0.5f, 1, 1));
 			map.add(Rect(-3, -0.5f, 1, 1));
@@ -280,7 +280,7 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 	CollisionMapTest map;
 	GIVEN("The mover is a rectangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Rect(0, 0, 1, 1)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Rect(0, 0, 1, 1)));
 		GIVEN("A wedge formed by two triangles, with no room for the mover.") {
 			map.add(Polygon(std::vector<Coord2>{Coord2(-1, 0), Coord2(0, 1), Coord2(0.5f, 0)}));
 			map.add(Polygon(std::vector<Coord2>{Coord2(0.5f, 0), Coord2(1, 1), Coord2(2, 0)}));
@@ -339,7 +339,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 		}
 	}
 	GIVEN("The mover is an isosceles triangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Polygon(shapes::isoTri)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Polygon(shapes::isoTri)));
 		GIVEN("A wedge formed by two triangles, that fit the mover perfectly.") {
 			map.add(Polygon(std::vector<Coord2>{ Coord2(0, 0), Coord2(-1, -1), Coord2(-2, 0) }));
 			map.add(Polygon(std::vector<Coord2>{ Coord2(-2, 0), Coord2(-3, -1), Coord2(-4, 0) }));
@@ -374,7 +374,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 		}
 	}
 	GIVEN("The mover is an octagon.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Polygon(shapes::octagon)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Polygon(shapes::octagon)));
 		GIVEN("A wedge formed by several shapes, that fit the octagon perfectly.") {
 			map.add(Polygon(std::vector<Coord2>{Coord2(-2, 0), Coord2(-1.5f, -1.5f), Coord2(-2, -1)}));
 			map.add(Polygon(std::vector<Coord2>{Coord2(-1.5f, -1.5f), Coord2(0, -2), Coord2(-1, -2)}));
@@ -428,7 +428,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 	CollisionMapTest map;
 	GIVEN("The mover is a rectangle.") {
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Rect(0, 0, 1, 1)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Rect(0, 0, 1, 1)));
 		GIVEN("Two rectangles form a corridr.") {
 			map.add(Rect(-1, -2, 1, 12));
 			map.add(Rect(1, 0, 1, 10));
@@ -501,7 +501,7 @@ SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 	}
 	GIVEN("The mover is a rectangle, slightly smaller than a full unit.") {
 		// Allow the mover to deflect down a tight corridor, by taking the collision buffer into account.
-		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(new Rect(0, 0, 1 - Movable::COLLISION_BUFFER, 1 - Movable::COLLISION_BUFFER)));
+		MovableTest mover(Movable::CollisionType::DEFLECT, ShapeContainer(Rect(0, 0, 1 - Movable::COLLISION_BUFFER, 1 - Movable::COLLISION_BUFFER)));
 		GIVEN("Several shapes form a capped corridor with a bend in the middle.") {
 			map.add(Rect(-1, 1, 1, 10));
 			map.add(Rect(1, 1, 1, 9));
