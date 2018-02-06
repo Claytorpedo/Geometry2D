@@ -12,7 +12,7 @@
 		case(ShapeType::EMPTY):     shape_  = nullptr; \
 	}
 #define GEOM_SHAPE_CONTAINER_MOVE_SHAPE(other) \
-	other.shape_ = nullptr; \
+	other.shape_ = nullptr; other.type_ = ShapeType::EMPTY; \
 	switch (type_) { \
 		case(ShapeType::RECTANGLE): rect_   = other.rect_;   shape_ = rect_;   break; \
 		case(ShapeType::POLYGON):   poly_   = other.poly_;   shape_ = poly_;   break; \
