@@ -1,5 +1,5 @@
 #pragma once
-#ifdef DEBUG
+#if defined(DEBUG) || defined(_DEBUG)
 
 /* --------------- Set logging colours --------------- */
 #ifdef NO_CONSOLE_COLOUR
@@ -41,4 +41,4 @@
 #define DBG_WARN(x) do {} while(0)
 #define DBG_LOG(x)  do {} while(0)
 #define DBG_CHECK(cond, type, str) do {} while(0)
-#endif // DEBUG
+#endif // DEBUG || _DEBUG
