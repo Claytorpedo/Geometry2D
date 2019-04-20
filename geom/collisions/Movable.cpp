@@ -193,7 +193,7 @@ namespace geom {
 		return false; // May not be resolved.
 	}
 
-	bool Movable::onCollision(CollisionInfo & info) {
+	bool Movable::onCollision(CollisionInfo&) {
 		return true;
 	}
 }
