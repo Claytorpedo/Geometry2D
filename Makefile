@@ -17,7 +17,7 @@ LIBRARY := $(LIBDIR)/libgeom.a
 TESTPROG := $(TOPDIR)/geom_test
 
 CC = g++
-COMP_FLAGS = -std=c++11 -Wall -pedantic
+COMP_FLAGS = -std=c++11 -Wall -Wextra -pedantic
 INCL_DIRS =
 LINK_FLAGS =
 
