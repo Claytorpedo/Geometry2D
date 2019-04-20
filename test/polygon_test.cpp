@@ -167,7 +167,7 @@ bool _polygons_equal(Polygon p, Polygon o) {
 		WARN("Error: Polygon p and Polygon o have different numbers of vertices (" << p.size() << " vs " << o.size() << ").");
 		return false;
 	}
-	std::size_t offset;
+	std::size_t offset{ 0 };
 	bool found = false;
 	for (std::size_t i = 0; i < o.size(); ++i) {
 		if (geom::math::almostEquals(p[0], o[i])) {

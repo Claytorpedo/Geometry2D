@@ -787,10 +787,10 @@ SCENARIO("One shape is moving, and will not collide with another one.", "[collid
 				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("They \"glance\" each other, but never overlap.") {
-			Coord2 colliderPos(11, 12), stationaryPos(1, 2);
+			Coord2 colliderPos2(11, 12), stationaryPos2(1, 2);
 			Coord2 delta(-20, -20);
 			THEN("They will not collide.")
-				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(geom::collides(collider, colliderPos2, delta, stationary, stationaryPos2, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("They are not moving.") {
 			Coord2 delta(0, 0);

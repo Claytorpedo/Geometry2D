@@ -401,7 +401,7 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 					CHECK(geom::overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is overlapping a corner.") {
-				Coord2 dir(Coord2(1, 1).normalize());
+				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * 2.0f);
 				Coord2 pos2(dir * 6.9f);
 				THEN("They are overlapping.")
@@ -414,14 +414,14 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 					CHECK_FALSE(geom::overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is close to a corner, but not touching.") {
-				Coord2 dir(Coord2(1, 1).normalize());
+				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * -3.1f);
 				Coord2 pos2(dir * 2.0f);
 				THEN("They are not overlapping.")
 					CHECK_FALSE(geom::overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is touching a corner, but not overlapping.") {
-				Coord2 dir(Coord2(1, 1).normalize());
+				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * -3.0f);
 				Coord2 pos2(dir * 2.0f);
 				THEN("They are not overlapping.")
@@ -660,7 +660,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				}
 			}
 			WHEN("The circle is overlapping a corner.") {
-				Coord2 dir(Coord2(1, 1).normalize());
+				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * 2.0f);
 				Coord2 pos2(dir * 6.9f);
 				THEN("The circle is pushed out diagonally, along its axis with the corner.") {
@@ -689,7 +689,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				Coord2 pos2(1, 2);
 				THEN("The circle is pushed out of one of the octagon's faces.") {
 					// Find the distance out of one of the octagon's faces.
-					Coord2 dir(Coord2(0.5f, 1.5f).normalize());
+					Coord2 dir{ Coord2(0.5f, 1.5f).normalize() };
 					gFloat cosTheta(Coord2(0, 1).dot(dir));
 					gFloat outDist = 5.0f + cosTheta * 2.0f; // Radius + cosTheta * octagon_height.
 					REQUIRE(geom::overlaps(c, pos1, p, pos2, out_norm, out_dist));
@@ -702,12 +702,12 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 	GIVEN("An octagon and arbitrary convex shape.") {
 		Polygon p(shapes::octagon);
 		Polygon o(shapes::arb);
-		Coord2 pos1(0, 0), pos2(0, 0);
+		const Coord2 pos2(0, 0);
 		WHEN("They octagon overlaps the arbitrary shape's left side.") {
-			pos1 = Coord2(4, 0);
+			Coord2 pos1{ 4, 0 };
 			THEN("The octagon is separated out to the right.") {
 				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
-				Coord2 expected_norm(Coord2(1, 0));
+				Coord2 expected_norm{ 1, 0 };
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_dist == ApproxEps(1));
