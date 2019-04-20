@@ -4,7 +4,7 @@
 #include "Rectangle.hpp"
 #include "../debug_logger.hpp"
 #include "../units.hpp"
-#include "../primatives/Projection.hpp"
+#include "../primitives/Projection.hpp"
 
 namespace geom {
 	gFloat Shape::side(Direction side) const {

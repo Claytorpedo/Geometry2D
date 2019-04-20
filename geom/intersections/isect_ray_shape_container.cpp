@@ -6,7 +6,7 @@
 
 #include "../units.hpp"
 #include "../debug_logger.hpp"
-#include "../primatives/Ray.hpp"
+#include "../primitives/Ray.hpp"
 #include "../shapes/ShapeContainer.hpp"
 
 namespace geom {

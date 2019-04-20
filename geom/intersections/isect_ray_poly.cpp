@@ -1,8 +1,8 @@
 #include "isect_ray_poly.hpp"
 
 #include "intersections.hpp"
-#include "../primatives/Ray.hpp"
-#include "../primatives/LineSegment.hpp"
+#include "../primitives/Ray.hpp"
+#include "../primitives/LineSegment.hpp"
 #include "../shapes/Polygon.hpp"
 
 namespace geom {

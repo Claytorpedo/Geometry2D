@@ -4,7 +4,7 @@
 
 #include "Shape.hpp"
 #include "../units.hpp"
-#include "../primatives/Projection.hpp"
+#include "../primitives/Projection.hpp"
 
 namespace geom {
 	class Circle : public Shape {

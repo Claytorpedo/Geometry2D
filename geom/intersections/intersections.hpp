@@ -35,7 +35,7 @@ namespace geom {
 	// Parallel lines are not considered intersecting.
 	bool intersects_ignore_parallel(const Ray& r, const LineSegment& l, gFloat& out_t);
 
-	// Intersections of shapes with primatives -----------------------------------------------------------------------------
+	// Intersections of shapes with primitives -----------------------------------------------------------------------------
 
 	// Intersection between a rectangle and a line segment. Considered intersecting if they touch.
 	bool intersects(const Rect& r, const LineSegment& l);

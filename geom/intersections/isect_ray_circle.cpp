@@ -1,7 +1,7 @@
 #include "isect_ray_circle.hpp"
 
 #include "../math.hpp"
-#include "../primatives/Ray.hpp"
+#include "../primitives/Ray.hpp"
 #include "../shapes/Circle.hpp"
 
 namespace geom {

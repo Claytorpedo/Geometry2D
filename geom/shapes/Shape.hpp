@@ -3,7 +3,7 @@
 #define INCLUDE_GEOM_SHAPE_HPP
 
 #include "../units.hpp"
-#include "../primatives/Direction.hpp"
+#include "../primitives/Direction.hpp"
 
 // Parent class for geometry objects.
 namespace geom {

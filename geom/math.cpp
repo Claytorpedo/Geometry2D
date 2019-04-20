@@ -1,6 +1,6 @@
 #include "math.hpp"
 
-#include "primatives/Ray.hpp"
+#include "primitives/Ray.hpp"
 #include "units.hpp"
 
 namespace geom {

@@ -11,9 +11,9 @@
 #include "../shapes/Rectangle.hpp"
 #include "../shapes/Polygon.hpp"
 #include "../shapes/Circle.hpp"
-#include "../primatives/LineSegment.hpp"
-#include "../primatives/Ray.hpp"
-#include "../primatives/Projection.hpp"
+#include "../primitives/LineSegment.hpp"
+#include "../primitives/Ray.hpp"
+#include "../primitives/Projection.hpp"
 #include "../intersections/sat.hpp"
 #include "../intersections/overlaps.hpp"
 

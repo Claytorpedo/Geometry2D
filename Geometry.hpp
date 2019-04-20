@@ -8,11 +8,11 @@
 #include "geom/constants.hpp"
 #include "geom/math.hpp"
 
-#include "geom/primatives/Ray.hpp"
-#include "geom/primatives/LineSegment.hpp"
-#include "geom/primatives/Projection.hpp"
-#include "geom/primatives/Direction.hpp"
-#include "geom/primatives/Vector2D.hpp"
+#include "geom/primitives/Ray.hpp"
+#include "geom/primitives/LineSegment.hpp"
+#include "geom/primitives/Projection.hpp"
+#include "geom/primitives/Direction.hpp"
+#include "geom/primitives/Vector2D.hpp"
 
 #include "geom/shapes/ShapeContainer.hpp"
 #include "geom/shapes/Shape.hpp"

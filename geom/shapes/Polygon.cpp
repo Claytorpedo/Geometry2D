@@ -1,7 +1,7 @@
 #include "Polygon.hpp"
 
 #include "Rectangle.hpp"
-#include "../primatives/Projection.hpp"
+#include "../primitives/Projection.hpp"
 #include "../units.hpp"
 #include "../constants.hpp"
 #include "../math.hpp"

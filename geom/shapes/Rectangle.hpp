@@ -5,7 +5,7 @@
 #include "Shape.hpp"
 #include "Polygon.hpp"
 #include "../units.hpp"
-#include "../primatives/Projection.hpp"
+#include "../primitives/Projection.hpp"
 
 namespace geom {
 	class Rect : public Shape {

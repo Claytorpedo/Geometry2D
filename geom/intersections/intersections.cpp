@@ -3,8 +3,8 @@
 #include "../units.hpp"
 #include "../math.hpp"
 #include "../constants.hpp"
-#include "../primatives/LineSegment.hpp"
-#include "../primatives/Ray.hpp"
+#include "../primitives/LineSegment.hpp"
+#include "../primitives/Ray.hpp"
 #include "../shapes/Rectangle.hpp"
 
 namespace geom {
