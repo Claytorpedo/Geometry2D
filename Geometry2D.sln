@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Geometry2D", "vcxproj\Geometry2D\Geometry2D.vcxproj", "{36788756-1109-4AD0-90E3-AD81BDCB34E6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Geometry2DTest", "vcxproj\Geometry2DTest\Geometry2DTest.vcxproj", "{345241C7-D4CC-44E7-A606-9BEDD4E992E0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6} = {36788756-1109-4AD0-90E3-AD81BDCB34E6}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Debug|x64.ActiveCfg = Debug|x64
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Debug|x64.Build.0 = Debug|x64
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Debug|x86.ActiveCfg = Debug|Win32
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Debug|x86.Build.0 = Debug|Win32
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Release|x64.ActiveCfg = Release|x64
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Release|x64.Build.0 = Release|x64
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Release|x86.ActiveCfg = Release|Win32
+		{36788756-1109-4AD0-90E3-AD81BDCB34E6}.Release|x86.Build.0 = Release|Win32
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Debug|x64.ActiveCfg = Debug|x64
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Debug|x64.Build.0 = Debug|x64
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Debug|x86.ActiveCfg = Debug|Win32
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Debug|x86.Build.0 = Debug|Win32
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Release|x64.ActiveCfg = Release|x64
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Release|x64.Build.0 = Release|x64
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Release|x86.ActiveCfg = Release|Win32
+		{345241C7-D4CC-44E7-A606-9BEDD4E992E0}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F76AAD74-9452-437A-9FA4-6A6C0CF4DBF1}
+	EndGlobalSection
+EndGlobal
