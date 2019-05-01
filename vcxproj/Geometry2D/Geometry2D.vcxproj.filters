@@ -113,19 +113,19 @@
     <ClInclude Include="..\..\geom\intersections\sat.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\geom\primatives\Direction.hpp">
+    <ClInclude Include="..\..\geom\primitives\Direction.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\geom\primatives\LineSegment.hpp">
+    <ClInclude Include="..\..\geom\primitives\LineSegment.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\geom\primatives\Projection.hpp">
+    <ClInclude Include="..\..\geom\primitives\Projection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\geom\primatives\Ray.hpp">
+    <ClInclude Include="..\..\geom\primitives\Ray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\geom\primatives\Vector2D.hpp">
+    <ClInclude Include="..\..\geom\primitives\Vector2D.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\geom\shapes\Circle.hpp">

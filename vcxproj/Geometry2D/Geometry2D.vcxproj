@@ -135,11 +135,11 @@
     <ClInclude Include="..\..\geom\intersections\overlaps.hpp" />
     <ClInclude Include="..\..\geom\intersections\sat.hpp" />
     <ClInclude Include="..\..\geom\math.hpp" />
-    <ClInclude Include="..\..\geom\primatives\Direction.hpp" />
-    <ClInclude Include="..\..\geom\primatives\LineSegment.hpp" />
-    <ClInclude Include="..\..\geom\primatives\Projection.hpp" />
-    <ClInclude Include="..\..\geom\primatives\Ray.hpp" />
-    <ClInclude Include="..\..\geom\primatives\Vector2D.hpp" />
+    <ClInclude Include="..\..\geom\primitives\Direction.hpp" />
+    <ClInclude Include="..\..\geom\primitives\LineSegment.hpp" />
+    <ClInclude Include="..\..\geom\primitives\Projection.hpp" />
+    <ClInclude Include="..\..\geom\primitives\Ray.hpp" />
+    <ClInclude Include="..\..\geom\primitives\Vector2D.hpp" />
     <ClInclude Include="..\..\geom\shapes\Circle.hpp" />
     <ClInclude Include="..\..\geom\shapes\Polygon.hpp" />
     <ClInclude Include="..\..\geom\shapes\Rectangle.hpp" />
