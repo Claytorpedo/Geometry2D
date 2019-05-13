@@ -11,7 +11,7 @@
 *.sln.docstates
 
 # Ignore Linux-compiled executable.
-geom_test
+geom_test*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
