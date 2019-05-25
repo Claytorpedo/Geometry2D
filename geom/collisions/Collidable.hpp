@@ -9,7 +9,7 @@ namespace geom {
 
 	class Collidable {
 	public:
-		virtual ~Collidable() {}
+		virtual ~Collidable() = default;
 		virtual const Coord2& getPosition() const = 0;
 		virtual const ShapeContainer& getCollider() const = 0;
 	};
