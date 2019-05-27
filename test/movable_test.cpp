@@ -16,8 +16,8 @@ struct MovableTest : public Movable {
 	ShapeContainer collider;
 	Coord2 position;
 
-	MovableTest(Movable::CollisionType type, const ShapeContainer& collider) : Movable(type), collider(collider) {}
-	MovableTest(Movable::CollisionType type, const ShapeContainer& collider, Coord2 position) : Movable(type), collider(collider), position(position) {}
+	MovableTest(Movable::CollisionType type, ShapeContainer collider) : Movable{type}, collider{std::move(collider)} {}
+	MovableTest(Movable::CollisionType type, ShapeContainer collider, Coord2 position) : Movable{type}, collider{std::move(collider)}, position{position} {}
 	~MovableTest() override {}
 	const Coord2& getPosition() const { return position;  }
 	const ShapeContainer& getCollider() const { return collider; }
