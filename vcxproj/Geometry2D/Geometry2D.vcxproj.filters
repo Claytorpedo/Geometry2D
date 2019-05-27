@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\geom\shapes\Shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\geom\shapes\ShapeContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\geom\constants.hpp">

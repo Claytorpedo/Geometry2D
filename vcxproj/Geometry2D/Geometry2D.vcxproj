@@ -116,7 +116,6 @@
     <ClCompile Include="..\..\geom\shapes\Polygon.cpp" />
     <ClCompile Include="..\..\geom\shapes\Rectangle.cpp" />
     <ClCompile Include="..\..\geom\shapes\Shape.cpp" />
-    <ClCompile Include="..\..\geom\shapes\ShapeContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\geometry.hpp" />
