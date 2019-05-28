@@ -31,11 +31,10 @@ namespace geom {
 	bool overlaps(const ShapeContainer& first, const Coord2& firstPos, const ShapeContainer& second, const Coord2& secondPos) {
 		const Coord2 offset(firstPos - secondPos);
 		const std::vector<Coord2> axes(sat::getSeparatingAxes(first, second, offset));
-		const Shape &firstShape(first.shape()), &secondShape(second.shape());
 		Projection projFirst, projSecond;
 		for (std::size_t i = 0; i < axes.size(); ++i) {
-			projFirst = firstShape.getProjection(axes[i]);
-			projSecond = secondShape.getProjection(axes[i]);
+			projFirst = first.shape().getProjection(axes[i]);
+			projSecond = second.shape().getProjection(axes[i]);
 			projFirst += offset.dot(axes[i]); // Apply offset between the two shapes' positions.
 			if (projFirst.min + constants::EPSILON > projSecond.max || projFirst.max < projSecond.min + constants::EPSILON)
 				return false;
