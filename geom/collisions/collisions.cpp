@@ -167,6 +167,8 @@ namespace geom {
 		case ShapeType::CIRCLE:
 			return _circle_circle(circle, other.circle(), offset, delta, out_norm, out_t);
 		}
+		DBG_ERR("Unhandled shape type for circle collision. Ignoring.");
+		return CollisionResult::NONE;
 	}
 
 	// Tests the axes of one polygon against the other using SAT. Checks if they are currently overlapping, or will overlap in the future (SAT test and sweep test).
