@@ -16,7 +16,7 @@ namespace geom {
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos);
 		case ShapeType::CIRCLE:    return intersects(r, s.circle(), pos);
 		}
-		DBG_ERR("Unhandled shape type ray intersection.");
+		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
 	bool intersects(const Ray& r, const ShapeContainer& s, const Coord2& pos, gFloat& out_t) {
@@ -25,7 +25,7 @@ namespace geom {
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_t);
 		case ShapeType::CIRCLE:    return intersects(r, s.circle(), pos, out_t);
 		}
-		DBG_ERR("Unhandled shape type ray intersection.");
+		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
 	bool intersects(const Ray& r, const ShapeContainer& s, const Coord2& pos, gFloat& out_t, Coord2& out_norm) {
@@ -34,7 +34,7 @@ namespace geom {
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_t, out_norm);
 		case ShapeType::CIRCLE:    return intersects(r, s.circle(), pos, out_t, out_norm);
 		}
-		DBG_ERR("Unhandled shape type ray intersection.");
+		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
 	bool intersects(const Ray& r, const ShapeContainer& s, const Coord2& pos, gFloat& out_enter, gFloat& out_exit) {
@@ -43,7 +43,7 @@ namespace geom {
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_enter, out_exit);
 		case ShapeType::CIRCLE:    return intersects(r, s.circle(), pos, out_enter, out_exit);
 		}
-		DBG_ERR("Unhandled shape type ray intersection.");
+		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
 	bool intersects(const Ray& r, const ShapeContainer& s, const Coord2& pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
@@ -52,7 +52,7 @@ namespace geom {
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_enter, out_norm_enter, out_exit, out_norm_exit);
 		case ShapeType::CIRCLE:    return intersects(r, s.circle(), pos, out_enter, out_norm_enter, out_exit, out_norm_exit);
 		}
-		DBG_ERR("Unhandled shape type ray intersection.");
+		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
 }
