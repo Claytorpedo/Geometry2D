@@ -166,9 +166,6 @@ namespace geom {
 			return _circle_poly(circle, other.poly(), offset, delta, out_norm, out_t);
 		case ShapeType::CIRCLE:
 			return _circle_circle(circle, other.circle(), offset, delta, out_norm, out_t);
-		default:
-			DBG_WARN("Unhandled shape type for circle collision. Converting to polygon.");
-			return _circle_poly(circle, other.shape().toPoly(), offset, delta, out_norm, out_t);
 		}
 	}
 
