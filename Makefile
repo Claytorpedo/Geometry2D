@@ -45,7 +45,7 @@ CONFIG_APPEND.release := _r
 
 COMPILER := g++
 #Set language level or extra warnings here.
-COMP_FLAGS := -std=c++17 -Wall -Wextra -pedantic
+COMP_FLAGS := -std=c++17 -Wall -Wextra -Werror -pedantic
 #Set libraries for linking here.
 #Useful to use either package config for an instaled dependency or a direct path to a library (e.g. a submodule):
 #`pkg-config --libs sdl2`
