@@ -3,42 +3,46 @@
 #define INCLUDE_GEOM_RECT_HPP
 
 #include "Shape.hpp"
-#include "Polygon.hpp"
-#include "../units.hpp"
-#include "../primitives/Projection.hpp"
 
 namespace geom {
+	class Polygon;
+	struct Projection;
+
 	class Rect : public Shape {
 	public:
-		gFloat x, y, w, h;
+		gFloat x{0}, y{0}, w{0}, h{0};
 
-		Rect() : x(0.0f), y(0.0f), w(0.0f), h(0.0f) {}
-		Rect(gFloat x, gFloat y, gFloat w, gFloat h) : x(x), y(y), w(w), h(h) {}
-		Rect(Coord2 topLeft, gFloat w, gFloat h) : x(topLeft.x), y(topLeft.y), w(w), h(h) {}
-		Rect(const Rect& rect) : x(rect.x), y(rect.y), w(rect.w), h(rect.h) {}
+		Rect() = default;
+		constexpr Rect(gFloat x, gFloat y, gFloat w, gFloat h) noexcept : x(x), y(y), w(w), h(h) {}
+		constexpr Rect(Coord2 topLeft, gFloat w, gFloat h) noexcept : x(topLeft.x), y(topLeft.y), w(w), h(h) {}
+		Rect(const Rect& rect) = default;
+		Rect(Rect&& rect) = default;
+		Rect& operator=(const Rect& rect) = default;
+		Rect& operator=(Rect&& rect) = default;
+		~Rect() = default;
 
 		// Translate by a vector.
-		inline Rect& operator+=(const Coord2& c) { x += c.x; y += c.y; return *this; }
+		constexpr Rect& operator+=(const Coord2& c) noexcept { x += c.x; y += c.y; return *this; }
 		// Translate by a vector.
-		inline Rect operator+(const Coord2& c) const { return Rect(x + c.x, y + c.y, w, h); }
+		Rect operator+(const Coord2& c) const noexcept { return Rect{x + c.x, y + c.y, w, h}; }
 
-		inline Coord2 position() const { return Coord2(x, y); }
-		inline Coord2 center()   const { return Coord2(x + w*0.5f, y + h*0.5f); }
-		inline gFloat center_x() const { return x + w*0.5f; }
-		inline gFloat center_y() const { return y + h*0.5f; }
-		inline gFloat width()    const { return w; }
-		inline gFloat height()   const { return h; }
-		inline virtual gFloat left()   const { return x; }
-		inline virtual gFloat right()  const { return x + w; }
-		inline virtual gFloat top()    const { return y; }
-		inline virtual gFloat bottom() const { return y + h; }
+		constexpr Coord2 position() const noexcept { return Coord2(x, y); }
+		constexpr Coord2 center() const noexcept { return Coord2(x + w*0.5f, y + h*0.5f); }
+		constexpr gFloat center_x() const noexcept { return x + w*0.5f; }
+		constexpr gFloat center_y() const noexcept { return y + h*0.5f; }
+		constexpr gFloat width() const noexcept { return w; }
+		constexpr gFloat height() const noexcept { return h; }
+		virtual gFloat left() const noexcept { return x; }
+		virtual gFloat right() const noexcept { return x + w; }
+		virtual gFloat top() const noexcept { return y; }
+		virtual gFloat bottom() const noexcept { return y + h; }
 
-		inline Coord2 topLeft()     const { return Coord2(left(), top()); }
-		inline Coord2 topRight()    const { return Coord2(right(), top()); }
-		inline Coord2 bottomLeft()  const { return Coord2(left(), bottom()); }
-		inline Coord2 bottomRight() const { return Coord2(right(), bottom()); }
+		constexpr Coord2 topLeft() const noexcept { return {x, y}; }
+		constexpr Coord2 topRight() const noexcept { return {x + w, y}; }
+		constexpr Coord2 bottomLeft() const noexcept { return {x, y + h}; }
+		constexpr Coord2 bottomRight() const noexcept { return {x + w, y + h}; }
 
-		bool isInside(const Rect& o) const; // See if this rectangle is contained by another one.
+		bool isInside(const Rect& o) const noexcept; // See if this rectangle is contained by another one.
 
 		virtual Projection getProjection(const Coord2& axis) const;
 		virtual Coord2 getClosestTo(const Coord2 point) const; // Gets closest corner of the rectangle.
