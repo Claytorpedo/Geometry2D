@@ -36,18 +36,17 @@ namespace geom {
 		};
 
 		struct CollisionInfo {
-			bool isCollision;               // Whether a collision occurred.
-			const ShapeContainer& collider; // The collider for collision testing.
-			const Coord2 originalDir;       // Original direction of the delta vector.
-			Coord2 currentDir;              // Direction the collider is currently travelling in.
-			gFloat remainingDist;           // Distance left for the collider to move.
-			gFloat moveDist;                // Distance collidable can move before a collision occurs.
-			Coord2 currentPosition;         // The collider's current position.
-			Coord2 normal;                  // Collision normal.
-			Collidable* collidable;         // Collidable collided with.
-			CollisionInfo(const ShapeContainer& collider, Coord2 position, Coord2 dir, gFloat dist) :
-				isCollision(false), collider(collider), originalDir(dir), currentDir(dir), remainingDist(dist),
-				moveDist(0), currentPosition(position), normal(0, 0), collidable(nullptr) {}
+			bool isCollision{false};         // Whether a collision occurred.
+			ConstShapeRef collider;          // The collider for collision testing.
+			const Coord2 originalDir;        // Original direction of the delta vector.
+			Coord2 currentDir;               // Direction the collider is currently travelling in.
+			gFloat remainingDist{0};         // Distance left for the collider to move.
+			gFloat moveDist{0};              // Distance collidable can move before a collision occurs.
+			Coord2 currentPosition;          // The collider's current position.
+			Coord2 normal;                   // Collision normal.
+			Collidable* collidable{nullptr}; // Collidable collided with.
+			CollisionInfo(ConstShapeRef collider, Coord2 position, Coord2 dir, gFloat dist) :
+				collider(collider), originalDir(dir), currentDir(dir), remainingDist(dist), currentPosition(position) {}
 		};
 		Movable() : type(CollisionType::DEFLECT) {}
 		Movable(CollisionType type) : type(type) {}
@@ -56,7 +55,7 @@ namespace geom {
 		// Takes the collidable's bounding shape, its origin, the delta it is moving in, and the objects it can collide with.
 		// Calls onCollision when collisions occur, if any special action is to be taken.
 		// Returns the final position of the collider.
-		Coord2 move(const ShapeContainer& collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap);
+		Coord2 move(ConstShapeRef collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap);
 	protected:
 		CollisionType type;
 

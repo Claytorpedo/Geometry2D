@@ -19,7 +19,7 @@ namespace geom {
 	const unsigned int Movable::COLLISION_DEBUG_MAX_ATTEMPTS = 3;
 	const unsigned int Movable::COLLISION_ALG_MAX_DEPTH = 25;
 
-	Movable::~Movable() {}
+	Movable::~Movable() = default;
 
 	CollisionResult Movable::_find_closest_collision(const CollisionMap& collisionMap, Movable::CollisionInfo& info) const {
 		Coord2 testNorm;
@@ -75,7 +75,7 @@ namespace geom {
 		return false;
 	}
 
-	Coord2 Movable::move(const ShapeContainer& collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap) {
+	Coord2 Movable::move(ConstShapeRef collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap) {
 		const gFloat originalDist = delta.magnitude();
 		CollisionInfo info(collider, origin, delta / originalDist, originalDist);
 		if (delta.isZero())
@@ -96,8 +96,6 @@ namespace geom {
 		case CollisionType::_DEBUG_:
 			DBG_ERR("Error: _DEBUG_ collision algorithm is for internal use only.");
 			break;
-		default:
-			DBG_ERR("Error: Unimplemented collision algorithm type.");
 		}
 		return info.currentPosition;
 	}

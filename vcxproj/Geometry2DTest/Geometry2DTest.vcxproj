@@ -100,6 +100,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -133,6 +134,7 @@
     <ClCompile Include="..\..\test\overlaps_test.cpp" />
     <ClCompile Include="..\..\test\polygon_test.cpp" />
     <ClCompile Include="..\..\test\sat_test.cpp" />
+    <ClCompile Include="..\..\test\shape_container_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\catch.hpp" />

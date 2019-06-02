@@ -12,7 +12,6 @@
 namespace geom {
 	class LineSegment;
 	class Ray;
-	class ShapeContainer;
 	class Rect;
 
 	// Intersections with points. No need to output a point of collision. -------------------------------------------------

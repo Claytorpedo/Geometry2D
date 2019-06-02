@@ -158,7 +158,7 @@ namespace geom {
 			return CollisionResult::MTV;
 		return _circle_poly_sweep(circle, rect.toPoly(), offset, delta, out_norm, out_t);
 	}
-	inline CollisionResult _handle_circle_collisions(const Circle& circle, const ShapeContainer& other, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+	inline CollisionResult _handle_circle_collisions(const Circle& circle, ConstShapeRef other, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
 		switch (other.type()) {
 		case ShapeType::RECTANGLE:
 			return _circle_rect(circle, other.rect(), offset, delta, out_norm, out_t);
@@ -243,8 +243,8 @@ namespace geom {
 		return CollisionResult::SWEEP;
 	}
 
-	CollisionResult collides(const ShapeContainer& first, const Coord2& firstPos, const Coord2& firstDelta,
-	const ShapeContainer& second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_t) {
+	CollisionResult collides(ConstShapeRef first, const Coord2& firstPos, const Coord2& firstDelta,
+	ConstShapeRef second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_t) {
 		if (firstDelta.isZero()) // No movement, just do regular SAT.
 			return overlaps(first, firstPos, second, secondPos, out_norm, out_t) ? CollisionResult::MTV : CollisionResult::NONE;
 		const Coord2 offset(firstPos - secondPos);
@@ -260,8 +260,8 @@ namespace geom {
 		return _perform_hybrid_SAT(first.shape(), second.shape(), sat::getSeparatingAxes(first, second, offset), offset, firstDelta, out_norm, out_t);
 	}
 
-	CollisionResult collides(const ShapeContainer& first, const Coord2& firstPos, const Coord2& firstDelta,
-	const ShapeContainer& second, const Coord2& secondPos, const Coord2& secondDelta, Coord2& out_norm, gFloat& out_t) {
+	CollisionResult collides(ConstShapeRef first, const Coord2& firstPos, const Coord2& firstDelta,
+	ConstShapeRef second, const Coord2& secondPos, const Coord2& secondDelta, Coord2& out_norm, gFloat& out_t) {
 		return collides(first, firstPos, firstDelta - secondDelta, second, secondPos, out_norm, out_t);
 	}
 }

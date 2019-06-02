@@ -12,7 +12,7 @@ namespace geom {
 		Wall(const ShapeContainer& shape, const Coord2& position);
 		~Wall();
 		const Coord2& getPosition() const;
-		const ShapeContainer& getCollider() const;
+		ConstShapeRef getCollider() const;
 	private:
 		ShapeContainer shape_;
 		Coord2 position_;

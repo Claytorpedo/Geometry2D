@@ -1,16 +1,7 @@
 #include "catch.hpp"
 #include "definitions.hpp"
 
-using geom::Movable;
-using geom::Collidable;
-using geom::Wall;
-using geom::CollisionMap;
-using geom::Coord2;
-using geom::ShapeContainer;
-using geom::Polygon;
-using geom::Rect;
-using geom::Circle;
-
+using namespace geom;
 
 struct MovableTest : public Movable {
 	ShapeContainer collider;
@@ -19,8 +10,8 @@ struct MovableTest : public Movable {
 	MovableTest(Movable::CollisionType type, ShapeContainer collider) : Movable{type}, collider{std::move(collider)} {}
 	MovableTest(Movable::CollisionType type, ShapeContainer collider, Coord2 position) : Movable{type}, collider{std::move(collider)}, position{position} {}
 	~MovableTest() override {}
-	const Coord2& getPosition() const { return position;  }
-	const ShapeContainer& getCollider() const { return collider; }
+	const Coord2& getPosition() const override { return position; }
+	ConstShapeRef getCollider() const override { return collider; }
 	void move(const Coord2& delta, const CollisionMap& map) {
 		position = Movable::move(collider, position, delta, map);
 	}
@@ -71,7 +62,7 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 			WHEN("The movable hits the rectangle straight on.") {
 				Coord2 origin(-0.5f, -5);
 				Coord2 dir(0, 1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves to the rectangle and stops.") {
@@ -83,12 +74,12 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 			WHEN("The movable hits the rectangle on the movable's edge.") {
 				Coord2 origin(0.5f, -5);
 				Coord2 dir(0, 1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It deflects off the rectangle using the movable's edge.") {
 					Coord2 norm(Coord2(1, -1).normalize());
-					geom::gFloat moveDist = 4.5f - Movable::getPushoutDistance(dir, norm);
+					gFloat moveDist = 4.5f - Movable::getPushoutDistance(dir, norm);
 					Coord2 projection = dir.project(norm.perpCCW(), dist - moveDist);
 					Coord2 expected_pos = origin + dir*moveDist + projection;
 					CHECK(mover.position.x == ApproxEps(expected_pos.x));
@@ -101,12 +92,12 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 			WHEN("The movable collides with the matching edge.") {
 				Coord2 origin(0.5f, 0);
 				Coord2 dir(0, 1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It deflects along it.") {
 					Coord2 norm(Coord2(1, -1).normalize());
-					geom::gFloat moveDist = 5.5f - Movable::getPushoutDistance(dir, norm);
+					gFloat moveDist = 5.5f - Movable::getPushoutDistance(dir, norm);
 					Coord2 projection = dir.project(norm.perpCCW(), dist - moveDist);
 					Coord2 expected_pos = origin + dir*moveDist + projection;
 					CHECK(mover.position.x == ApproxEps(expected_pos.x));
@@ -122,12 +113,12 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 			WHEN("The rectangle hits the octagon on the octagon's edge.") {
 				Coord2 origin(3, 0);
 				Coord2 dir(Coord2(-1, 0.5f).normalize());
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It deflects off the octagon's edge.") {
 					Coord2 norm(Coord2(3, 1).normalize());
-					geom::gFloat moveDist(std::sqrt(1.2f*1.2f + 0.6f * 0.6f) - Movable::getPushoutDistance(dir, norm)); // Intersect at (1.8, 0.6).
+					gFloat moveDist(std::sqrt(1.2f*1.2f + 0.6f * 0.6f) - Movable::getPushoutDistance(dir, norm)); // Intersect at (1.8, 0.6).
 					Coord2 projection = dir.project(norm.perpCCW(), dist - moveDist);
 					Coord2 expected_pos = origin + dir*moveDist + projection;
 					CHECK(mover.position.x == ApproxEps(expected_pos.x));
@@ -147,7 +138,7 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 				mover.move(delta, map);
 				THEN("The circle deflects off the rectangle's edge.") {
 					Coord2 dir(delta.normalize());
-					geom::gFloat x_pushout((Movable::getPushoutDistance(dir, Coord2(-1, 0)) * dir).x);
+					gFloat x_pushout((Movable::getPushoutDistance(dir, Coord2(-1, 0)) * dir).x);
 					CHECK(mover.position.x == ApproxEps(-0.5f - x_pushout));
 					CHECK(mover.position.y == ApproxEps(9.5f));
 				}
@@ -162,7 +153,7 @@ SCENARIO("A movable deflects off a stationary collidable.", "[movable][deflect]"
 				mover.move(delta, map);
 				THEN("The circle deflects off the other circle at a 90 degree angle.") {
 					Coord2 dir(delta.normalize());
-					geom::gFloat x_pushout((Movable::getPushoutDistance(dir, Coord2(-1, 0)) * dir).x);
+					gFloat x_pushout((Movable::getPushoutDistance(dir, Coord2(-1, 0)) * dir).x);
 					CHECK(mover.position.x == ApproxEps(-0.5f - x_pushout));
 					CHECK(mover.position.y == ApproxEps(9.5f));
 				}
@@ -181,7 +172,7 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 			WHEN("The mover moves left into them.") {
 				Coord2 origin(0, 0);
 				Coord2 dir(-1, 0);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It will hit the wall and stop.") {
@@ -198,13 +189,13 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 			WHEN("The mover moves down-left.") {
 				Coord2 origin(0, 0);
 				Coord2 dir(Coord2(-1, 1).normalize());
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It will deflect off of the first, and stop on the second.") {
-					geom::gFloat diagDist = Movable::getPushoutDistance(dir, Coord2(1, 0)); // Diagonal pushout distance for first collision.
-					geom::gFloat x_pos(-1 + std::sqrt((diagDist * diagDist)/2.0f)); // Solve the triangle for the final x position.
-					geom::gFloat y_pos(3 - Movable::getPushoutDistance(Coord2(0, 1), Coord2(0, -1))); // Deflects straight down for second collision.
+					gFloat diagDist = Movable::getPushoutDistance(dir, Coord2(1, 0)); // Diagonal pushout distance for first collision.
+					gFloat x_pos(-1 + std::sqrt((diagDist * diagDist)/2.0f)); // Solve the triangle for the final x position.
+					gFloat y_pos(3 - Movable::getPushoutDistance(Coord2(0, 1), Coord2(0, -1))); // Deflects straight down for second collision.
 					CHECK(mover.position.x == ApproxEps(x_pos));
 					CHECK(mover.position.y == ApproxEps(y_pos));
 				}
@@ -220,13 +211,13 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 			WHEN("The mover moves down-right.") {
 				Coord2 origin(0, 0);
 				Coord2 dir(Coord2(1, 1).normalize());
-				geom::gFloat dist(100);
+				gFloat dist(100);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It deflects several times, and stop against some rectangles.") {
-					geom::gFloat diagDist = Movable::getPushoutDistance(Coord2(1, 1).normalize(), Coord2(0, -1)); // Off edgeTriR, into rectangle.
-					geom::gFloat y_pos(8 - std::sqrt((diagDist * diagDist) / 2.0f)); // Solve the triangle for the final y position.
-					geom::gFloat x_pos(5 - Movable::getPushoutDistance(Coord2(1, 0), Coord2(-1, 0))); // Hits final rectangle straight on.
+					gFloat diagDist = Movable::getPushoutDistance(Coord2(1, 1).normalize(), Coord2(0, -1)); // Off edgeTriR, into rectangle.
+					gFloat y_pos(8 - std::sqrt((diagDist * diagDist) / 2.0f)); // Solve the triangle for the final y position.
+					gFloat x_pos(5 - Movable::getPushoutDistance(Coord2(1, 0), Coord2(-1, 0))); // Hits final rectangle straight on.
 					CHECK(mover.position.x == ApproxEps(x_pos));
 					CHECK(mover.position.y == ApproxEps(y_pos));
 				}
@@ -241,7 +232,7 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 			WHEN("The mover moves left into them.") {
 				Coord2 origin(0, 0);
 				Coord2 dir(-1, 0);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It will hit the wall and stop.") {
@@ -262,13 +253,13 @@ SCENARIO("A movable deflects off multiple stationary collidables.", "[movable][d
 			WHEN("The mover moves down-right.") {
 				Coord2 origin(-1, 0);
 				Coord2 dir(Coord2(1, 2).normalize());
-				geom::gFloat dist(100);
+				gFloat dist(100);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It deflects several times, and stop against some rectangles.") {
-					geom::gFloat diagDist = Movable::getPushoutDistance(Coord2(1, 1).normalize(), Coord2(0, -1)); // Off edgeTriR, into rectangle.
-					geom::gFloat y_pos(8 - std::sqrt((diagDist * diagDist) / 2.0f)); // Solve the triangle for the final y position.
-					geom::gFloat x_pos(4 - Movable::getPushoutDistance(Coord2(1, 0), Coord2(-1, 0))); // Hits final rectangle straight on.
+					gFloat diagDist = Movable::getPushoutDistance(Coord2(1, 1).normalize(), Coord2(0, -1)); // Off edgeTriR, into rectangle.
+					gFloat y_pos(8 - std::sqrt((diagDist * diagDist) / 2.0f)); // Solve the triangle for the final y position.
+					gFloat x_pos(4 - Movable::getPushoutDistance(Coord2(1, 0), Coord2(-1, 0))); // Hits final rectangle straight on.
 					CHECK(mover.position.x == ApproxEps(x_pos));
 					CHECK(mover.position.y == ApproxEps(y_pos));
 				}
@@ -287,7 +278,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves up into the wedge.") {
 				Coord2 origin(0, 5);
 				Coord2 dir(0, -1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It hits the top of the wedge and stops immediately.") {
@@ -303,7 +294,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves up into the wedge.") {
 				Coord2 origin(0, 5);
 				Coord2 dir(0, -1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves halfway down the wedge and stops.") {
@@ -315,7 +306,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves up into the wedge from off-center.") {
 				Coord2 origin(0.4f, 5);
 				Coord2 dir(0, -1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves halfway down the wedge and stops.") {
@@ -327,7 +318,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves up-left into the wedge from off-center.") {
 				Coord2 origin(0.8f, 5);
 				Coord2 dir(Coord2(-0.1f, -1).normalize());
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves halfway down the wedge and stops.") {
@@ -346,7 +337,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves down into the wedge.") {
 				Coord2 origin(-3, -5);
 				Coord2 dir(0, 1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves to the bottom of the wedge and stops.") {
@@ -362,7 +353,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves down into the wedge.") {
 				Coord2 origin(-3, -5);
 				Coord2 dir(0, 1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It bottoms out between them and stops.") {
@@ -383,7 +374,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves up into the wedge.") {
 				Coord2 origin(0, 5);
 				Coord2 dir(0, -1);
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves to the top of the wedge, and stops.") {
@@ -395,7 +386,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 			WHEN("The mover moves up into the wedge from off-center.") {
 				Coord2 origin(1, 5);
 				Coord2 dir(0, -1);
-				geom::gFloat dist(100);
+				gFloat dist(100);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves to the top of the wedge, and stops.") {
@@ -416,7 +407,7 @@ SCENARIO("A mover deflects into a wedge.", "[movable][deflect]") {
 				mover.position = Coord2(0, 0);
 				mover.move(Coord2(20, 0), map);
 				THEN("It moves slightly less than halfway through the wedge, and stops.") {
-					geom::gFloat x(5.876894431f - Movable::getPushoutDistance(Coord2(1, 0), Coord2(-2, -8).normalize())); // Used graphing software.
+					gFloat x(5.876894431f - Movable::getPushoutDistance(Coord2(1, 0), Coord2(-2, -8).normalize())); // Used graphing software.
 					CHECK(mover.position.x == ApproxCollides(x));
 					CHECK(mover.position.y == ApproxCollides(0));
 				}
@@ -435,7 +426,7 @@ SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 			WHEN("The mover moves down into the corridor.") {
 				Coord2 origin(0, -2);
 				Coord2 dir(Coord2(0, 1).normalize());
-				geom::gFloat dist(20);
+				gFloat dist(20);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves through without collision.") {
@@ -447,7 +438,7 @@ SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 			WHEN("The mover moves into the corridor at an angle.") {
 				Coord2 origin(0, -2);
 				Coord2 dir(Coord2(-1, 1).normalize());
-				geom::gFloat dist(20);
+				gFloat dist(20);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves through without collision.") {
@@ -466,7 +457,7 @@ SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 			WHEN("The mover moves down into the corridor.") {
 				Coord2 origin(0, 0);
 				Coord2 dir(Coord2(0, 1).normalize());
-				geom::gFloat dist(20);
+				gFloat dist(20);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves down to the stopper and stops.") {
@@ -488,11 +479,11 @@ SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 			WHEN("The mover moves diagonally through the corridor.") {
 				Coord2 origin(0, 0);
 				Coord2 dir(Coord2(1, 1).normalize());
-				geom::gFloat dist(10);
+				gFloat dist(10);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves through without collision.") {
-					geom::gFloat expected(std::sqrt(50.0f));
+					gFloat expected(std::sqrt(50.0f));
 					CHECK(mover.position.x == ApproxEps(expected));
 					CHECK(mover.position.y == ApproxEps(expected));
 				}
@@ -517,7 +508,7 @@ SCENARIO("A mover deflects down a corridor.", "[movable][deflect]") {
 			WHEN("The mover moves down through the corridor.") {
 				Coord2 origin(Movable::COLLISION_BUFFER * 0.5f, 0);
 				Coord2 dir(Coord2(0, 1).normalize());
-				geom::gFloat dist(25);
+				gFloat dist(25);
 				mover.position = origin;
 				mover.move(dir*dist, map);
 				THEN("It moves through, deflects off the bend, and reaches the end.") {
@@ -579,7 +570,7 @@ SCENARIO("A movable reflects off a stationary collidable.", "[movable][reflect]"
 				Coord2 dir(Coord2(1, 1).normalize());
 				mover.move(Coord2(10, 10), map);
 				THEN("It reflects off at that angle.") {
-					geom::gFloat pushout_x(Movable::getPushoutDistance(dir, Coord2(-1, 0)) * dir.x);
+					gFloat pushout_x(Movable::getPushoutDistance(dir, Coord2(-1, 0)) * dir.x);
 					CHECK(mover.position.x == ApproxEps(-10 - pushout_x *2));
 					CHECK(mover.position.y == ApproxEps(9));
 				}
@@ -591,7 +582,7 @@ SCENARIO("A movable reflects off a stationary collidable.", "[movable][reflect]"
 				mover.position = Coord2(-2, 0.5f);
 				mover.move(Coord2(10, 0), map);
 				THEN("It reflects downwards.") {
-					geom::gFloat pushout_x(Movable::getPushoutDistance(Coord2(1, 0), Coord2(-1, 1).normalize()));
+					gFloat pushout_x(Movable::getPushoutDistance(Coord2(1, 0), Coord2(-1, 1).normalize()));
 					CHECK(mover.position.x == ApproxEps(-0.5f - pushout_x));
 					CHECK(mover.position.y == ApproxEps(9 + pushout_x)); // Pushout is added to downward motion.
 				}
@@ -637,7 +628,7 @@ SCENARIO("A movable reflects out of a wedge.", "[movable][reflect]") {
 				mover.position = Coord2(0, 5);
 				mover.move(Coord2(0, -10), map);
 				THEN("It reflects off both sides, and reverses direction.") {
-					geom::gFloat pushout_y(Movable::getPushoutDistance(Coord2(0, -1), Coord2(1, 1).normalize()));
+					gFloat pushout_y(Movable::getPushoutDistance(Coord2(0, -1), Coord2(1, 1).normalize()));
 					CHECK(mover.position.x == ApproxEps(0));
 					CHECK(mover.position.y == ApproxEps(6 + pushout_y *2));
 				}
@@ -646,7 +637,7 @@ SCENARIO("A movable reflects out of a wedge.", "[movable][reflect]") {
 				mover.position = Coord2(0.4f, 5);
 				mover.move(Coord2(0, -10), map);
 				THEN("It reflects off both sides, and reverses direction.") {
-					geom::gFloat pushout_y(Movable::getPushoutDistance(Coord2(0, -1), Coord2(1, 1).normalize()));
+					gFloat pushout_y(Movable::getPushoutDistance(Coord2(0, -1), Coord2(1, 1).normalize()));
 					CHECK(mover.position.x == ApproxEps(-0.4f));
 					CHECK(mover.position.y == ApproxEps(6 + pushout_y * 2));
 				}

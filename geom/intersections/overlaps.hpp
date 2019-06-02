@@ -5,7 +5,7 @@
 #include "../units.hpp"
 
 namespace geom {
-	class ShapeContainer;
+	class ConstShapeRef;
 	class Rect;
 
 	// Specialized algorithms ------------------------------------------------
@@ -16,14 +16,14 @@ namespace geom {
 
 	// Test if two shapes overlap each other.
 	// Returns true if they overlap.
-	bool overlaps(const ShapeContainer& first, const ShapeContainer& second);
+	bool overlaps(ConstShapeRef first, ConstShapeRef second);
 	// Test if two shapes with given positions overlap each other.
 	// Returns true if they overlap.
-	bool overlaps(const ShapeContainer& first, const Coord2& firstPos, const ShapeContainer& second, const Coord2& secondPos);
+	bool overlaps(ConstShapeRef first, const Coord2& firstPos, ConstShapeRef second, const Coord2& secondPos);
 	// Test if two shapes with given positions overlap each other.
 	// Gives the normal and distance that make up the minimum translation vector of separation to move the first shape out of the second shape.
 	// Returns true if they overlap.
-	bool overlaps(const ShapeContainer& first, const Coord2& firstPos, const ShapeContainer& second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_dist);
+	bool overlaps(ConstShapeRef first, const Coord2& firstPos, ConstShapeRef second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_dist);
 }
 
 #endif // INCLUDE_GEOM_OVERLAPS_HPP

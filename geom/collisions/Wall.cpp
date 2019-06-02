@@ -7,7 +7,7 @@ namespace geom {
 	const Coord2& Wall::getPosition() const {
 		return position_;
 	}
-	const ShapeContainer& Wall::getCollider() const {
+	ConstShapeRef Wall::getCollider() const {
 		return shape_;
 	}
 }

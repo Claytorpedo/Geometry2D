@@ -5,13 +5,13 @@
 #include "../units.hpp"
 
 namespace geom {
-	class ShapeContainer;
+	class ConstShapeRef;
 
 	class Collidable {
 	public:
 		virtual ~Collidable() = default;
 		virtual const Coord2& getPosition() const = 0;
-		virtual const ShapeContainer& getCollider() const = 0;
+		virtual ConstShapeRef getCollider() const = 0;
 	};
 }
 #endif // INCLUDE_GEOM_COLLIDABLE_HPP
