@@ -5,9 +5,6 @@
 #include "Shape.hpp"
 
 namespace geom {
-	class Polygon;
-	struct Projection;
-
 	class Rect : public Shape {
 	public:
 		gFloat x{0}, y{0}, w{0}, h{0};
@@ -34,10 +31,10 @@ namespace geom {
 		[[nodiscard]] constexpr gFloat center_y() const noexcept { return y + h*0.5f; }
 		[[nodiscard]] constexpr gFloat width() const noexcept { return w; }
 		[[nodiscard]] constexpr gFloat height() const noexcept { return h; }
-		[[nodiscard]] virtual gFloat left() const noexcept { return x; }
-		[[nodiscard]] virtual gFloat right() const noexcept { return x + w; }
-		[[nodiscard]] virtual gFloat top() const noexcept { return y; }
-		[[nodiscard]] virtual gFloat bottom() const noexcept { return y + h; }
+		[[nodiscard]] gFloat left() const noexcept override { return x; }
+		[[nodiscard]] gFloat right() const noexcept override { return x + w; }
+		[[nodiscard]] gFloat top() const noexcept override { return y; }
+		[[nodiscard]] gFloat bottom() const noexcept override { return y + h; }
 
 		[[nodiscard]] constexpr Coord2 topLeft() const noexcept { return {x, y}; }
 		[[nodiscard]] constexpr Coord2 topRight() const noexcept { return {x + w, y}; }
@@ -46,9 +43,9 @@ namespace geom {
 
 		[[nodiscard]] bool isInside(const Rect& o) const noexcept; // See if this rectangle is contained by another one.
 
-		[[nodiscard]] virtual Projection getProjection(const Coord2& axis) const;
-		[[nodiscard]] virtual Coord2 getClosestTo(const Coord2 point) const; // Gets closest corner of the rectangle.
-		[[nodiscard]] virtual Polygon toPoly() const;
+		[[nodiscard]] Projection getProjection(const Coord2& axis) const noexcept override;
+		[[nodiscard]] Coord2 getClosestTo(const Coord2& point) const noexcept override; // Gets closest corner of the rectangle.
+		[[nodiscard]] Polygon toPoly() const override;
 	};
 }
 #endif // INCLUDE_GEOM_RECT_HPP
