@@ -13,7 +13,7 @@ namespace geom {
 
 	class Shape {
 	public:
-		virtual ~Shape() {}
+		virtual ~Shape() = default;
 
 		// Get leftmost x coordinate.
 		virtual gFloat left()   const = 0;
