@@ -12,21 +12,21 @@ namespace geom {
 		static const std::size_t SEGS_IN_POLY;
 
 		Coord2 center;
-		gFloat radius;
+		gFloat radius{0};
 
-		Circle() : center(0, 0), radius(0) {}
-		Circle(gFloat radius) : center(0, 0), radius(radius) {}
-		Circle(gFloat center_x, gFloat center_y, gFloat radius) : center(center_x, center_y), radius(radius) {}
-		Circle(Coord2 center, gFloat radius) : center(center), radius(radius) {}
+		Circle() = default;
+		constexpr Circle(gFloat radius) noexcept : radius(radius) {}
+		constexpr Circle(gFloat center_x, gFloat center_y, gFloat radius) noexcept : center(center_x, center_y), radius(radius) {}
+		constexpr Circle(Coord2 center, gFloat radius) noexcept : center(center), radius(radius) {}
 
-		inline virtual gFloat left()   const { return center.x - radius; }
-		inline virtual gFloat right()  const { return center.x + radius; }
-		inline virtual gFloat top()    const { return center.y - radius; }
-		inline virtual gFloat bottom() const { return center.y + radius; }
+		[[nodiscard]] inline gFloat left()   const noexcept override { return center.x - radius; }
+		[[nodiscard]] inline gFloat right()  const noexcept override { return center.x + radius; }
+		[[nodiscard]] inline gFloat top()    const noexcept override { return center.y - radius; }
+		[[nodiscard]] inline gFloat bottom() const noexcept override { return center.y + radius; }
 
-		virtual Projection getProjection(const Coord2& axis) const;
-		virtual Coord2 getClosestTo(const Coord2& point) const; // Gets closest point on the circle.
-		virtual Polygon toPoly() const;
+		[[nodiscard]] Projection getProjection(const Coord2& axis) const noexcept override;
+		[[nodiscard]] Coord2 getClosestTo(const Coord2& point) const noexcept override; // Gets closest point on the circle.
+		[[nodiscard]] Polygon toPoly() const override;
 	};
 }
 #endif // INCLUDE_GEOM_CIRCLE_HPP
