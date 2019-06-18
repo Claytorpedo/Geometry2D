@@ -92,6 +92,19 @@ namespace geom {
 		ShapeContainer(Circle c) noexcept : ShapeRef{ShapeType::CIRCLE}, shape_{::std::move(c)} {
 			ShapeRef::setShape(::std::get<Circle>(shape_));
 		}
+		// Construct shape in place by forwarding arguments.
+		template <typename Contained, typename... Args>
+		ShapeContainer(::std::in_place_type_t<Contained> placeType, Args&&... args) noexcept : ShapeRef(ShapeType::RECTANGLE), shape_{placeType, ::std::forward<Args>(args)...} {
+			if constexpr (::std::is_same_v<Rect, Contained>) {
+				// Type was defaulted to Rect.
+			} else if constexpr (::std::is_same_v<Polygon, Contained>) {
+				type_ = ShapeType::POLYGON;
+			} else if constexpr (::std::is_same_v<Circle, Contained>) {
+				type_ = ShapeType::CIRCLE;
+			} else
+				static_assert(::std::is_same_v<Contained, false>); // Unhandled shape type.
+			ShapeRef::setShape(::std::get<Contained>(shape_));
+		}
 
 		ShapeContainer(const ShapeContainer& o) noexcept : ShapeRef{o.type_}, shape_{o.shape_} {
 			setShape();
