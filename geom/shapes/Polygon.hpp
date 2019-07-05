@@ -4,23 +4,16 @@
 
 #include "Shape.hpp"
 
+#include <optional>
 #include <vector>
-#ifdef THREADED
-#include <mutex>
-#endif
 
 // Convex polygon with counterclockwise winding.
+// Vertices are in counterclockwise order, the final vertex connecting to the first vertex.
 namespace geom {
-	class Rect;
-	struct Projection;
-
 	class Polygon : public Shape {
 	public:
-		Polygon();
-		// Vertices should be in counterclockwise order.
-		// The final vertex connects with the first vertex.
-		Polygon(std::vector<Coord2> vertices);
-		Polygon(std::vector<Coord2> vertices, std::vector<Coord2> edgeNormals);
+		Polygon() = default;
+		Polygon(std::vector<Coord2> vertices, std::optional<std::vector<Coord2>> edgeNormals=std::nullopt);
 		Polygon(const Polygon& o);
 		Polygon(Polygon&& o);
 		Polygon& operator=(const Polygon& o);
@@ -47,9 +40,9 @@ namespace geom {
 
 		// Get normalized counter-clockwise edge normal for the polygon at a given index.
 		// Edges are indexed by vertex order, e.g. edge 0 is made from vertex 0 and 1.
-		const Coord2& getEdgeNorm(std::size_t index) const;
-		// Compute all normals for the polygon.
-		void computeNormals() const;
+		Coord2 getEdgeNorm(std::size_t index) const;
+		// Precompute all normals for the polygon. NOOP if already computed.
+		void computeNormals();
 
 		// Find the region of vertices in a given direction (for instance, to extend the polygon in that direction).
 		// out_first         - the first vertex in the region.
@@ -67,39 +60,34 @@ namespace geom {
 		bool getVerticesInDirection(const Coord2& dir, std::size_t& out_first, std::size_t& out_last) const;
 		// Extend a polygon by projecting it along a direction by delta (dir*dist), clipping the result to only include
 		// the portion of the polygon that was extended.
-		Polygon clipExtend(const Coord2& dir, const gFloat dist) const;
+		Polygon clipExtend(const Coord2& dir, gFloat dist) const;
 		// If we've already found the range of vertices to use, we can clip extend with the found values.
-		Polygon clipExtend(const Coord2& dir, const gFloat dist, const std::size_t rangeFirst, const std::size_t rangeLast) const;
+		Polygon clipExtend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, std::size_t rangeLast) const;
 		// If we've already found the range of vertices to use, we can extend with the found values.
-		Polygon extend(const Coord2& dir, const gFloat dist,
-			const std::size_t rangeFirst, const std::size_t rangeLast, const bool isFirstPerp, const bool isLastPerp) const;
+		Polygon extend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, std::size_t rangeLast, bool isFirstPerp, bool isLastPerp) const;
 
 		// Move the polygon by given x and y.
-		void translate(const gFloat x, const gFloat y);
+		void translate(gFloat x, gFloat y);
 		// Move the polygon by delta.
 		void translate(const Coord2& delta);
 		// Create a polygon by translating an existing polygon by a delta vector.
 		static Polygon translate(const Polygon& p, const Coord2& delta);
 
 		// For accessing the values of the vertices of the polygon. Note no safety checks.
-		inline const Coord2& operator[](std::size_t index) const { return vertices_[index]; }
+		inline const Coord2& operator[](std::size_t index) const noexcept { return vertices_[index]; }
 		// Get the number of vertices in the polygon.
-		inline std::size_t size() const { return vertices_.size(); }
+		[[nodiscard]] inline std::size_t size() const noexcept { return vertices_.size(); }
 		// Check if the polygon has any vertices.
-		inline bool isEmpty() const { return vertices_.empty(); }
+		[[nodiscard]] inline bool isEmpty() const noexcept { return vertices_.empty(); }
 
 	private:
 		std::vector<Coord2> vertices_;
-		mutable std::vector<Coord2> edge_normals_;
-		gFloat x_min_, x_max_, y_min_, y_max_;
+		gFloat x_min_{0};
+		gFloat x_max_{0};
+		gFloat y_min_{0};
+		gFloat y_max_{0};
+		std::optional<std::vector<Coord2>> edge_normals_;
 
-#ifdef THREADED
-		mutable std::mutex edge_norm_mutex_;
-		mutable std::vector<bool> is_edge_norm_set_;
-		void _set_edge_norms(); // Determine which edge normals have been calculated.
-#endif
-
-		void _init();
 		// Find the bounding box for the polygon and cache the values.
 		void _find_bounds();
 	};
