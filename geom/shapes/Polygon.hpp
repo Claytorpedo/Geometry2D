@@ -67,9 +67,9 @@ namespace geom {
 		Polygon extend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, std::size_t rangeLast, bool isFirstPerp, bool isLastPerp) const;
 
 		// Move the polygon by given x and y.
-		void translate(gFloat x, gFloat y);
+		void translate(gFloat x, gFloat y) noexcept { translate({x, y}); }
 		// Move the polygon by delta.
-		void translate(const Coord2& delta);
+		void translate(const Coord2& delta) noexcept;
 		// Create a polygon by translating an existing polygon by a delta vector.
 		static Polygon translate(const Polygon& p, const Coord2& delta);
 

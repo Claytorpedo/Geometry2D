@@ -216,11 +216,7 @@ Polygon Polygon::clipExtend(const Coord2& dir, gFloat dist, std::size_t rangeFir
 	return Polygon(std::move(newVertices), std::move(newEdgeNorms));
 }
 
-void Polygon::translate(gFloat x, gFloat y) {
-	translate(Coord2(x, y));
-}
-
-void Polygon::translate(const Coord2& delta) {
+void Polygon::translate(const Coord2& delta) noexcept {
 	for (auto& vertex : vertices_)
 		vertex += delta;
 	x_min_ += delta.x;
