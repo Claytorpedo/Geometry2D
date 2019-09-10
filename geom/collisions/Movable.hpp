@@ -48,7 +48,7 @@ namespace geom {
 			CollisionInfo(ConstShapeRef collider, Coord2 position, Coord2 dir, gFloat dist) :
 				collider(collider), originalDir(dir), currentDir(dir), remainingDist(dist), currentPosition(position) {}
 		};
-		Movable() : type(CollisionType::DEFLECT) {}
+		Movable() = default;
 		Movable(CollisionType type) : type(type) {}
 		virtual ~Movable() = 0;
 
@@ -57,7 +57,7 @@ namespace geom {
 		// Returns the final position of the collider.
 		Coord2 move(ConstShapeRef collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap);
 	protected:
-		CollisionType type;
+		CollisionType type = CollisionType::DEFLECT;
 
 		// What to do on collision. This can be used to handle special collisions.
 		// Default implementation simply returns true, to continue the algorithm.
