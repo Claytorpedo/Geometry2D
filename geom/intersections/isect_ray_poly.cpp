@@ -37,12 +37,11 @@ namespace geom {
 	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_t) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
-		std::size_t first, last;
-		p.getVerticesInDirection(-r.dir, first, last);
-		if (_find_poly_intersect(r, p, pos, first, last, out_t))
+		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
+		if (_find_poly_intersect(r, p, pos, vertexInfo.first_index, vertexInfo.last_index, out_t))
 			return true;
 		// Ray's origin may be inside the polygon. Check edges on the far side for an exit intersection.
-		if (_find_poly_intersect(r, p, pos, last, first, out_t)) {
+		if (_find_poly_intersect(r, p, pos, vertexInfo.last_index, vertexInfo.first_index, out_t)) {
 			out_t = 0;
 			return true;
 		}
@@ -51,15 +50,14 @@ namespace geom {
 	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_t, Coord2& out_norm) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
-		std::size_t first, last;
-		p.getVerticesInDirection(-r.dir, first, last);
-		if (_find_poly_intersect(r, p, pos, first, last, out_t, &out_norm)) {
+		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
+		if (_find_poly_intersect(r, p, pos, vertexInfo.first_index, vertexInfo.last_index, out_t, &out_norm)) {
 			if (out_t == 0.0f) // Ray's origin is on the edge.
 				out_norm = Coord2(0, 0);
 			return true;
 		}
 		// Ray's origin may be inside the polygon. Check edges on the far side for an exit intersection.
-		if (_find_poly_intersect(r, p, pos, last, first, out_t)) {
+		if (_find_poly_intersect(r, p, pos, vertexInfo.last_index, vertexInfo.first_index, out_t)) {
 			out_t = 0;
 			out_norm = Coord2(0, 0);
 			return true;
@@ -69,22 +67,20 @@ namespace geom {
 	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_enter, gFloat& out_exit) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
-		std::size_t first, last;
-		p.getVerticesInDirection(-r.dir, first, last);
-		if (!_find_poly_intersect(r, p, pos, last, first, out_exit)) // Check for exit first.
+		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
+		if (!_find_poly_intersect(r, p, pos, vertexInfo.last_index, vertexInfo.first_index, out_exit)) // Check for exit first.
 			return false;
-		if (!_find_poly_intersect(r, p, pos, first, last, out_enter))
+		if (!_find_poly_intersect(r, p, pos, vertexInfo.first_index, vertexInfo.last_index, out_enter))
 			out_enter = 0; // Ray's origin is inside the polygon.
 		return true;
 	}
 	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
-		std::size_t first, last;
-		p.getVerticesInDirection(-r.dir, first, last);
-		if (!_find_poly_intersect(r, p, pos, last, first, out_exit, &out_norm_exit)) // Check for exit first.
+		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
+		if (!_find_poly_intersect(r, p, pos, vertexInfo.last_index, vertexInfo.first_index, out_exit, &out_norm_exit)) // Check for exit first.
 			return false;
-		if (!_find_poly_intersect(r, p, pos, first, last, out_enter, &out_norm_enter))
+		if (!_find_poly_intersect(r, p, pos, vertexInfo.first_index, vertexInfo.last_index, out_enter, &out_norm_enter))
 			out_enter = 0; // Ray's origin is inside the polygon.
 		if (out_enter == 0.0f)
 			out_norm_enter = Coord2(0, 0); // Ray's origin is inside or touching the polygon.

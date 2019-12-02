@@ -39,11 +39,11 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			Polygon o(shapes::tri);
 			THEN("They don't overlap until we move them together.") {
 				CHECK_FALSE(geom::overlaps(p, o));
-				o.translate(0, 1);
+				o.translate({ 0, 1 });
 				CHECK(geom::overlaps(p, o));
-				o.translate(1.9f, 1.5f);
+				o.translate({ 1.9f, 1.5f });
 				CHECK(geom::overlaps(p, o));
-				o.translate(0.1f, 0);
+				o.translate({ 0.1f, 0 });
 				CHECK_FALSE(geom::overlaps(p, o));
 			}
 		}
@@ -58,7 +58,7 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			Polygon o(inside);
 			THEN("They overlap.") {
 				CHECK(geom::overlaps(p, o));
-				o.translate(0.5f, 0.5f);
+				o.translate({ 0.5f, 0.5f });
 				CHECK(geom::overlaps(p, o));
 			}
 		}
@@ -91,7 +91,7 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 		CHECK(geom::overlaps(p, o));
 		o += Coord2(-0.5f, -0.5f);
 		CHECK(geom::overlaps(p, o));
-		p.translate(0, -1.5f);
+		p.translate({ 0, -1.5f });
 		CHECK_FALSE(geom::overlaps(p, o));
 	}
 	GIVEN("Convex polygons.") {
@@ -103,42 +103,42 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 					CHECK(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is nearly out the left side.") {
-				o.translate(-1.9f, 0);
+				o.translate({ -1.9f, 0 });
 				THEN("They overlap.")
 					CHECK(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is nearly out of the right side.") {
-				o.translate(4.9f, 0);
+				o.translate({ 4.9f, 0 });
 				THEN("They overlap.")
 					CHECK(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is only touching the left side.") {
-				o.translate(-2, 0);
+				o.translate({ -2, 0 });
 				THEN("Touching polygons are not overlapping.")
 					CHECK_FALSE(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is only touching the right side.") {
-				o.translate(5, 0);
+				o.translate({ 5, 0 });
 				THEN("They are not overlapping.")
 					CHECK_FALSE(geom::overlaps(p, o));
 			}
 			WHEN("They are significantly apart.") {
-				o.translate(20, 50);
+				o.translate({ 20, 50 });
 				THEN("They do not overlap.")
 					CHECK_FALSE(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is nearly out of the top.") {
-				o.translate(1, -3.9f);
+				o.translate({ 1, -3.9f });
 				THEN("They overlap.")
 					CHECK(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is only touching the top.") {
-				o.translate(1, -4);
+				o.translate({ 1, -4 });
 				THEN("They are not overlapping.")
 					CHECK_FALSE(geom::overlaps(p, o));
 			}
 			WHEN("The octagon is edged out of the top left.") {
-				o.translate(-0.66f, -3.9f);
+				o.translate({ -0.66f, -3.9f });
 				THEN("They are not overlapping.")
 					CHECK_FALSE(geom::overlaps(p, o));
 			}
@@ -153,7 +153,7 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 					CHECK(geom::overlaps(p, o));
 			}
 			WHEN("One is inside the other, sharing edges.") {
-				o.translate(-1, 0);
+				o.translate({ -1, 0 });
 				THEN("They overlap.")
 					CHECK(geom::overlaps(p, o));
 			}
@@ -209,12 +209,12 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 		GIVEN("An octagon.") {
 			Polygon p(shapes::octagon);
 			WHEN("The circle is touching a vertex, but not overlapping.") {
-				p.translate(7, 0);
+				p.translate({ 7, 0 });
 				THEN("They don't overlap.")
 					CHECK_FALSE(geom::overlaps(c, p));
 			}
 			WHEN("The circle is overlapping a vertex.") {
-				p.translate(6.9f, 0);
+				p.translate({ 6.9f, 0 });
 				THEN("They overlap.")
 					CHECK(geom::overlaps(c, p));
 			}

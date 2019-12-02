@@ -14,56 +14,21 @@ namespace {
 	}
 }
 
-Polygon::Polygon(std::vector<Coord2> vertices, std::optional<std::vector<Coord2>> edgeNormals) : vertices_(std::move(vertices)), edge_normals_(std::move(edgeNormals)) {
+Polygon::Polygon(std::vector<Coord2> vertices, bool computeEdgeNormals) : vertices_(std::move(vertices)) {
+	_find_bounds();
+	if (computeEdgeNormals)
+		computeNormals();
+}
+
+Polygon::Polygon(std::vector<Coord2> vertices, std::optional<std::vector<Coord2>> edgeNormals)
+	: vertices_(std::move(vertices))
+	, edge_normals_(std::move(edgeNormals)) {
 	_find_bounds();
 }
 
-Polygon::Polygon(const Polygon& o) : vertices_(o.vertices_), x_min_(o.x_min_), x_max_(o.x_max_), y_min_(o.y_min_), y_max_(o.y_max_), edge_normals_(o.edge_normals_) {}
-Polygon::Polygon(Polygon&& o) : vertices_(std::move(o.vertices_)), x_min_(o.x_min_), x_max_(o.x_max_), y_min_(o.y_min_), y_max_(o.y_max_), edge_normals_(std::move(o.edge_normals_)) {}
-
-Polygon& Polygon::operator=(const Polygon& o) {
-	vertices_ = o.vertices_;
-	edge_normals_ = o.edge_normals_;
-	x_min_ = o.x_min_;
-	x_max_ = o.x_max_;
-	y_min_ = o.y_min_;
-	y_max_ = o.y_max_;
-	return *this;
-}
-Polygon& Polygon::operator=(Polygon&& o) {
-	vertices_ = std::move(o.vertices_);
-	edge_normals_ = std::move(o.edge_normals_);
-	x_min_ = o.x_min_;
-	x_max_ = o.x_max_;
-	y_min_ = o.y_min_;
-	y_max_ = o.y_max_;
-	return *this;
-}
-
-Coord2 Polygon::getEdgeNorm(std::size_t index) const {
-	if (edge_normals_)
-		return (*edge_normals_)[index];
-	const Coord2& first = vertices_[index];
-	const Coord2& second = vertices_[index + 1 >= vertices_.size() ? 0 : index + 1];
-	return computeEdgeNormal(first, second);
-}
-
-void Polygon::computeNormals() {
-	if (edge_normals_)
-		return;
-	edge_normals_ = std::vector<Coord2>{};
-	const size_t size = vertices_.size();
-	edge_normals_->reserve(size);
-	for (size_t i = 0; i < size; ++i) {
-		const Coord2& first = vertices_[i];
-		const Coord2& second = vertices_[i + 1 >= size ? 0 : i + 1];
-		edge_normals_->emplace_back(computeEdgeNormal(first, second));
-	}
-}
-
 Projection Polygon::getProjection(const Coord2& axis) const {
-	gFloat min(vertices_[0].dot(axis));
-	gFloat max(min);
+	gFloat min = vertices_[0].dot(axis);
+	gFloat max = min;
 	for (std::size_t i = 1, size = vertices_.size(); i < size; ++i) {
 		const gFloat proj = vertices_[i].dot(axis);
 		if (proj < min)
@@ -74,104 +39,107 @@ Projection Polygon::getProjection(const Coord2& axis) const {
 	return Projection(min, max);
 }
 
-bool Polygon::getVerticesInDirection(const Coord2& dir, std::size_t& out_first, std::size_t& out_last, bool& out_is_first_perp, bool& out_is_last_perp) const {
-	const int numVerts(vertices_.size());
+Coord2 Polygon::getClosestTo(const Coord2& point) const {
+	std::optional<gFloat> minDist;
+	Coord2 closest;
+	for (auto& vertex : vertices_) {
+		const gFloat testDist = (point - vertex).magnitude2();
+		if (!minDist || testDist < *minDist) {
+			minDist = testDist;
+			closest = vertex;
+		}
+	}
+	return closest;
+}
+
+Coord2 Polygon::getEdgeNorm(std::size_t index) const {
+	if (edge_normals_)
+		return (*edge_normals_)[index];
+	const Coord2& first = vertices_[index];
+	++index;
+	const Coord2& second = vertices_[index * (index < vertices_.size())]; // Wrap if necessary.
+	return computeEdgeNormal(first, second);
+}
+
+void Polygon::computeNormals() {
+	if (edge_normals_)
+		return;
+	edge_normals_.emplace();
+	const size_t size = vertices_.size();
+	edge_normals_->reserve(size);
+	for (size_t i = 0; i < size;) {
+		const Coord2& first = vertices_[i];
+		++i;
+		const Coord2& second = vertices_[i * (i < size)];
+		edge_normals_->emplace_back(computeEdgeNormal(first, second));
+	}
+}
+
+Polygon::VerticesInDirection Polygon::getVerticesInDirection(const Coord2& dir) const {
+	const int numVerts = static_cast<int>(vertices_.size());
 	// Look for where edge normals change from being acute with the given direction, to perpendicular or obtuse.
 	// The first and last vertices in the range will have only one acute edge normal.
-	const math::AngleResult firstEdge(math::minAngle(getEdgeNorm(numVerts - 1), dir));
-	const bool isFirstEdgeAcute(firstEdge == math::AngleResult::ACUTE); // Whether this edge is inside or outside the region.
+	VerticesInDirection result;
+	const math::AngleResult firstEdge = math::minAngle(getEdgeNorm(numVerts - 1), dir);
+	const bool isFirstEdgeAcute = firstEdge == math::AngleResult::ACUTE; // Whether this edge is inside or outside the region.
 	math::AngleResult prevEdge = firstEdge;
-	math::AngleResult currEdge;
-	bool found(false);
-	for (int i = 0; i < numVerts - 1; ++i) {
+	math::AngleResult currEdge = firstEdge;
+	int i = 0;
+	for (; i < numVerts - 1; ++i) {
 		currEdge = math::minAngle(getEdgeNorm(i), dir);
-		if (isFirstEdgeAcute != (currEdge == math::AngleResult::ACUTE)) { // We either flipped from inside to outside the region, or vice versa.
-			found = true;
+		if (isFirstEdgeAcute != (currEdge == math::AngleResult::ACUTE)) { // Crossed into or out of the region.
 			if (isFirstEdgeAcute) {
-				out_last = i;
-				out_is_last_perp = currEdge == math::AngleResult::PERPENDICULAR;
+				result.last_index = i;
+				result.is_last_edge_perpendicular = currEdge == math::AngleResult::PERPENDICULAR;
 			} else {
-				out_first = i;
-				out_is_first_perp = prevEdge == math::AngleResult::PERPENDICULAR;
+				result.first_index = i;
+				result.is_first_edge_perpendicular = prevEdge == math::AngleResult::PERPENDICULAR;
 			}
 			break;
 		}
 		prevEdge = currEdge;
 	}
-	if (!found)
-		return false; // Invalid polygon.
-	if (!isFirstEdgeAcute) {
-		for (int i = out_first + 1; i < numVerts - 1; ++i) { // Continue forwards to find where the region ends.
-			currEdge = math::minAngle(getEdgeNorm(i), dir);
-			if (currEdge != math::AngleResult::ACUTE) {
-				out_last = i;
-				out_is_last_perp = currEdge == math::AngleResult::PERPENDICULAR;
-				return true;
-			}
-		}
-		// The edge normal between the last and first vertex is the only non-acute edge normal.
-		out_last = numVerts - 1;
-		out_is_last_perp = firstEdge == math::AngleResult::PERPENDICULAR;
-		return true;
+	// Loop backwards from the end of the polygon to find the other side of the region.
+	prevEdge = firstEdge;
+	int k = numVerts - 2;
+	for (; k != i; --k) {
+		currEdge = math::minAngle(getEdgeNorm(k), dir);
+		if (isFirstEdgeAcute != (currEdge == math::AngleResult::ACUTE)) // Crossed the region boundary again.
+			break;
+		prevEdge = currEdge;
 	}
-	// Loop backwards from the end of the polygon to find the start of the region.
-	for (int i = numVerts - 2; i >= 0; --i) {
-		currEdge = math::minAngle(getEdgeNorm(i), dir);
-		if (currEdge != math::AngleResult::ACUTE) {
-			out_first = i + 1;
-			out_is_first_perp = currEdge == math::AngleResult::PERPENDICULAR;
-			return true;
-		}
+	if (isFirstEdgeAcute) {
+		result.first_index = k + 1;
+		result.is_first_edge_perpendicular = currEdge == math::AngleResult::PERPENDICULAR;
 	}
-	return false; // Invalid polygon? (In theory, this case should be impossible to reach.)
-}
-bool Polygon::getVerticesInDirection(const Coord2& dir, std::size_t& out_first, std::size_t& out_last) const {
-	bool unused1, unused2;
-	return getVerticesInDirection(dir, out_first, out_last, unused1, unused2);
+	else {
+		result.last_index = k + 1;
+		result.is_last_edge_perpendicular = prevEdge == math::AngleResult::PERPENDICULAR;
+	}
+	return result;
 }
 
-Polygon Polygon::extend(const Coord2& dir, gFloat dist) const {
-	if (dir.isZero() || dist == 0.0f) { // No delta. Just return the current polygon.
-		return Polygon(*this);
-	}
-	std::size_t first, last;
-	bool isFirstPerp, isLastPerp;
-	if (!getVerticesInDirection(dir, first, last, isFirstPerp, isLastPerp)) {
-		return Polygon(); // The polygon is invalid and cannot be extended.
-	}
-	return extend(dir, dist, first, last, isFirstPerp, isLastPerp);
-}
-
-Polygon Polygon::clipExtend(const Coord2& dir, gFloat dist) const {
-	if (dir.isZero() || dist == 0.0f) // No delta. Just return the current polygon.
-		return Polygon(*this);
-	std::size_t first, last;
-	if (!getVerticesInDirection(dir, first, last))
-		return Polygon(); // The polygon is invalid and cannot be extended.
-	return clipExtend(dir, dist, first, last);
-}
-
-Polygon Polygon::extend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, std::size_t rangeLast, bool isFirstPerp, bool isLastPerp) const {
+Polygon Polygon::extend(const Coord2& dir, gFloat dist, const VerticesInDirection& verticesInfo) const {
 	std::vector<Coord2> newVertices;
 	std::optional<std::vector<Coord2>> newEdgeNorms;
-	const std::size_t size = vertices_.size();
-	const std::size_t numVerts = size + (isFirstPerp ? 0 : 1) + (isLastPerp ? 0 : 1);
+	const int size = static_cast<int>(vertices_.size());
+	const int numVerts = size + (verticesInfo.is_first_edge_perpendicular ? 0 : 1) + (verticesInfo.is_last_edge_perpendicular ? 0 : 1);
 	newVertices.reserve(numVerts);
 	if (edge_normals_) {
-		newEdgeNorms = std::vector<Coord2>{};
+		newEdgeNorms.emplace();
 		newEdgeNorms->reserve(numVerts);
 	}
 	const Coord2 translation(dir*dist);
-	for (std::size_t i = 0; i < size; ++i) {
+	for (int i = 0; i < size; ++i) {
 		// Extend vertices in the region first-to-last inclusive. Duplicate first/last vertices if required.
-		if (i == rangeFirst && !isFirstPerp) {
+		if (i == verticesInfo.first_index && !verticesInfo.is_first_edge_perpendicular) {
 			newVertices.emplace_back(vertices_[i]);
 			newVertices.emplace_back(vertices_[i] + translation);
 			if (edge_normals_) {
 				newEdgeNorms->emplace_back(dir.perpCCW());
 				newEdgeNorms->emplace_back((*edge_normals_)[i]);
 			}
-		} else if (i == rangeLast && !isLastPerp) {
+		} else if (i == verticesInfo.last_index && !verticesInfo.is_last_edge_perpendicular) {
 			newVertices.emplace_back(vertices_[i] + translation);
 			newVertices.emplace_back(vertices_[i]);
 			if (edge_normals_) {
@@ -179,9 +147,9 @@ Polygon Polygon::extend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, 
 				newEdgeNorms->emplace_back((*edge_normals_)[i]);
 			}
 		} else {
-			newVertices.emplace_back(rangeFirst > rangeLast ? // Determine which range to use.
-				((i <= rangeLast || i >= rangeFirst) ? vertices_[i] + translation : vertices_[i]) : // Range overlaps end/start of the array.
-				((i <= rangeLast && i >= rangeFirst) ? vertices_[i] + translation : vertices_[i])); // Range is somewhere in the middle of the array.
+			newVertices.emplace_back(verticesInfo.first_index > verticesInfo.last_index ? // Determine which range to use.
+				((i <= verticesInfo.last_index || i >= verticesInfo.first_index) ? vertices_[i] + translation : vertices_[i]) : // Range overlaps end/start of the vector.
+				((i <= verticesInfo.last_index && i >= verticesInfo.first_index) ? vertices_[i] + translation : vertices_[i])); // Range is somewhere in the middle of the vector.
 			if (edge_normals_)
 				newEdgeNorms->emplace_back((*edge_normals_)[i]);
 		}
@@ -189,29 +157,29 @@ Polygon Polygon::extend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, 
 	return Polygon(std::move(newVertices), std::move(newEdgeNorms));
 }
 
-Polygon Polygon::clipExtend(const Coord2& dir, gFloat dist, std::size_t rangeFirst, std::size_t rangeLast) const {
+Polygon Polygon::clipExtend(const Coord2& dir, gFloat dist, const VerticesInDirection& verticesInfo) const {
 	std::vector<Coord2> newVertices;
 	std::optional<std::vector<Coord2>> newEdgeNorms;
 	// Since we always duplicate when clipping, we will have last-to-first inclusive + 2x duplicates.
-	const std::size_t numVerts = std::abs(static_cast<int>(rangeLast) - static_cast<int>(rangeFirst)) + 3;
+	const std::size_t numVerts = std::abs(verticesInfo.last_index - verticesInfo.first_index) + 3;
 	newVertices.reserve(numVerts);
-	newVertices.emplace_back(vertices_[rangeFirst]); // First vertex gets duplicated.
+	newVertices.emplace_back(vertices_[verticesInfo.first_index]); // First vertex gets duplicated.
 	if (edge_normals_) {
-		newEdgeNorms = std::vector<Coord2>{};
+		newEdgeNorms.emplace();
 		newEdgeNorms->reserve(numVerts);
 		newEdgeNorms->emplace_back(dir.perpCCW());
 	}
 	const Coord2 translation(dir*dist);
-	for (std::size_t i = rangeFirst, size = vertices_.size(); i != rangeLast; i = ( i + 1 < size ) ? i + 1 : 0) {
+	for (int i = verticesInfo.first_index, size = static_cast<int>(vertices_.size()); i != verticesInfo.last_index; i = (++i < size) ? i : 0) {
 		newVertices.emplace_back(vertices_[i] + translation);
-		if (edge_normals_)
+		if (newEdgeNorms)
 			newEdgeNorms->emplace_back((*edge_normals_)[i]);
 	}
-	newVertices.emplace_back(vertices_[rangeLast] + translation);
-	newVertices.emplace_back(vertices_[rangeLast]); // Last vertex gets duplicated.
-	if (edge_normals_) {
+	newVertices.emplace_back(vertices_[verticesInfo.last_index] + translation);
+	newVertices.emplace_back(vertices_[verticesInfo.last_index]); // Last vertex gets duplicated.
+	if (newEdgeNorms) {
 		newEdgeNorms->emplace_back(dir.perpCW());
-		newEdgeNorms->emplace_back(computeEdgeNormal(vertices_[rangeLast], vertices_[rangeFirst]));
+		newEdgeNorms->emplace_back(computeEdgeNormal(vertices_[verticesInfo.last_index], vertices_[verticesInfo.first_index]));
 	}
 	return Polygon(std::move(newVertices), std::move(newEdgeNorms));
 }
@@ -229,23 +197,6 @@ Polygon Polygon::translate(const Polygon& p, const Coord2& delta) {
 	Polygon t(p);
 	t.translate(delta);
 	return t;
-}
-
-Coord2 Polygon::getClosestTo(const Coord2& point) const {
-	gFloat minDist(-1);
-	Coord2 closest;
-	for (auto& vertex : vertices_) {
-		const gFloat testDist = (point - vertex).magnitude2();
-		if (minDist == -1 || testDist < minDist) {
-			minDist = testDist;
-			closest = vertex;
-		}
-	}
-	return closest;
-}
-
-Polygon Polygon::toPoly() const {
-	return Polygon(*this);
 }
 
 void Polygon::_find_bounds() {

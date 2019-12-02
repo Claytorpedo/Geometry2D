@@ -19,7 +19,7 @@
 
 namespace geom {
 
-	const static gFloat MAX_TIME = 1.0f; // Max t for sweep tests. Using interval [0,1].
+	constexpr static gFloat MAX_TIME = 1.0f; // Max t for sweep tests. Using interval [0,1].
 
 	inline CollisionResult _circle_circle(const Circle& first, const Circle& second, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
 		const Coord2 firstPos(first.center + offset);
@@ -102,21 +102,20 @@ namespace geom {
 		}
 		// Perform a sweep test by expanding the polygon by the circle's radius, and testing if the line segment made from the circle's motion collides with the polygon.
 		inline CollisionResult _circle_poly_sweep(const Circle& circle, const Polygon& poly, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
-			const std::size_t polySize(poly.size());
-			const Coord2 circlePos(circle.center + offset);
-			const gFloat radiusEps(circle.radius - constants::EPSILON); // Radius with eps subtracted.
-			const gFloat deltaMag2(delta.magnitude2());
-			const gFloat deltaMag(std::sqrt(deltaMag2));
-			const Coord2 deltaDir(delta / deltaMag);
-			const Coord2 perpDeltaDir(deltaDir.perpCCW()); // For projection tests, to find what edges/vertices the circle may collide with.
+			const int polySize = static_cast<int>(poly.size());
+			const Coord2 circlePos = circle.center + offset;
+			const gFloat radiusEps = circle.radius - constants::EPSILON; // Radius with eps subtracted. TODO: Get proper epsilon here.
+			const gFloat deltaMag2 = delta.magnitude2();
+			const gFloat deltaMag = std::sqrt(deltaMag2);
+			const Coord2 deltaDir = delta / deltaMag;
+			const Coord2 perpDeltaDir = deltaDir.perpCCW(); // For projection tests, to find what edges/vertices the circle may collide with.
 			// Determine the range of edges/vertices on the polygon that the circle can collide with.
 			// They will be on the opposide side of the polygon in the direction that the circle is travelling.
-			std::size_t firstIndex, lastIndex;
-			poly.getVerticesInDirection(-deltaDir, firstIndex, lastIndex);
+			const auto verticesInfo = poly.getVerticesInDirection(-deltaDir);
 			gFloat circleProj(circlePos.dot(perpDeltaDir));
-			Coord2 edgeNorm(poly.getEdgeNorm(lastIndex == 0 ? polySize - 1 : lastIndex - 1));
+			Coord2 edgeNorm(poly.getEdgeNorm(verticesInfo.last_index == 0 ? polySize - 1 : verticesInfo.last_index - 1));
 			Coord2 edgePushout(edgeNorm * radiusEps);
-			LineSegment edge(poly[lastIndex == 0 ? polySize - 1 : lastIndex - 1], poly[lastIndex]); // Last relevant edge on the polygon.
+			LineSegment edge(poly[verticesInfo.last_index == 0 ? polySize - 1 : verticesInfo.last_index - 1], poly[verticesInfo.last_index]); // Last relevant edge on the polygon.
 			LineSegment pushedOutEdge(edge.start + edgePushout, edge.end + edgePushout);
 			gFloat startProj(pushedOutEdge.start.dot(perpDeltaDir)), endProj(pushedOutEdge.end.dot(perpDeltaDir));
 			const bool isLastVertMax(endProj >= startProj); // Verify polygon's winding. Determines if lastIndex is on the "left" or "right" of firstIndex on the deltaDir axis.
@@ -128,7 +127,7 @@ namespace geom {
 			// circleProj falls "inside" the polygon from the last edge. Continue testing.
 
 			// Test the remaining edges, starting from the other side of the range.
-			for (std::size_t i = (firstIndex + 1 < polySize) ? firstIndex + 1 : 0; i != lastIndex; i = (++i < polySize) ? i : 0) {
+			for (int i = (verticesInfo.first_index + 1 < polySize) ? verticesInfo.first_index + 1 : 0; i != verticesInfo.last_index; i = ++i < polySize ? i : 0) {
 				edgeNorm = poly.getEdgeNorm(i > 0 ? i - 1 : polySize - 1);
 				edgePushout = edgeNorm * radiusEps;
 				edge = LineSegment(poly[i > 0 ? i - 1 : polySize - 1], poly[i]); // Edge on the polygon.
@@ -140,9 +139,9 @@ namespace geom {
 					return _collides_with_vertex(circlePos, isLastVertMax ? edge.start : edge.end, deltaDir, deltaMag2, deltaMag, radiusEps, out_norm, out_t);
 				else if (isLastVertMax ? (circleProj <= endProj) : (circleProj <= startProj)) // circleProj falls on this edge.
 					return _collides_with_edge(circlePos, pushedOutEdge.start, edgeNorm, delta, out_norm, out_t);
-				// circleProj falls "inside" the polygon from this edge. Continue testing.
+				// else circleProj falls "inside" the polygon from this edge. Continue testing.
 			}
-			const Coord2 testVert(lastIndex > 0 ? poly[lastIndex - 1] : poly[polySize - 1]);
+			const Coord2 testVert(verticesInfo.last_index > 0 ? poly[verticesInfo.last_index - 1] : poly[polySize - 1]);
 			return _collides_with_vertex(circlePos, testVert, deltaDir, deltaMag2, deltaMag, radiusEps, out_norm, out_t);
 		}
 	}
