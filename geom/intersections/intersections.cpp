@@ -34,9 +34,9 @@ namespace geom {
 		}
 		// Some diagonal line. Apply line equation to test the point.
 		// We've already bounds checked, and checked for division by zero.
-		const gFloat slope = numer/denom;
-		const gFloat intercept = l.start.y - slope*l.start.x; // b = y - mx
-		const gFloat q = slope*p.x + intercept; // y = mx + b
+		const gFloat slope = numer / denom;
+		const gFloat intercept = l.start.y - slope * l.start.x; // b = y - mx
+		const gFloat q = slope * p.x + intercept; // y = mx + b
 		// Check with line equation.
 		return std::abs(q - p.y) < constants::EPSILON;
 	}
@@ -49,19 +49,19 @@ namespace geom {
 		}
 		if (std::abs(r.dir.x) < constants::EPSILON) {
 			// Vertical ray.
-			return std::abs(p.x - r.origin.x) < constants::EPSILON && 
+			return std::abs(p.x - r.origin.x) < constants::EPSILON &&
 				(r.dir.y > 0 ? (p.y >= r.origin.y) : (p.y <= r.origin.y) );
 		}
 		if (std::abs(r.dir.y) < constants::EPSILON) {
 			// Horizontal ray.
-			return std::abs(p.y - r.origin.y) < constants::EPSILON && 
+			return std::abs(p.y - r.origin.y) < constants::EPSILON &&
 				(r.dir.x > 0 ? (p.x >= r.origin.x) : (p.x <= r.origin.x) );
 		}
 		// Check for a point on the line created by the ray.
 		// We've already bounds checked, and checked for division by zero.
 		const gFloat slope = r.dir.y / r.dir.x;
-		const gFloat intercept = r.origin.y - slope*r.origin.x; // b = y - mx
-		const gFloat q = slope*p.x + intercept; // y = mx + b
+		const gFloat intercept = r.origin.y - slope * r.origin.x; // b = y - mx
+		const gFloat q = slope * p.x + intercept; // y = mx + b
 		return std::abs(q - p.y) < constants::EPSILON; 
 	}
 
@@ -102,7 +102,7 @@ namespace geom {
 		const Coord2 qp = l.start - r.origin;
 		const Coord2 axis(r.dir.perpCCW());
 		//     [is in front of ray]             [is on the line segment]
-		return 0 <= qp.cross(s)*rxs && math::isBetween(axis.dot(r.origin), axis.dot(l.start), axis.dot(l.end));
+		return 0 <= qp.cross(s) * rxs && math::isBetween(axis.dot(r.origin), axis.dot(l.start), axis.dot(l.end));
 	}
 
 	// --------------------------- Intersections with output point ----------------------------------------------------
@@ -150,14 +150,14 @@ namespace geom {
 				if (0 <= t0 && t1 <= 1) {
 					// Get closest intersect (to start point) for the segment this is called on.
 					// Either the interval of overlap happens somewhere after start, or at the starting point.
-					out_intersection = t1 > 0.0 ? a.start + t1*r : a.start;
+					out_intersection = t1 > 0.0 ? a.start + t1 * r : a.start;
 					return true;
 				}
 			} else {
 				if (0 <= t1 && t0 <= 1) {
 					// Get closest intersect (to start point) for the segment this is called on.
 					// Either the interval of overlap happens somewhere after start, or at the starting point.
-					out_intersection = t0 > 0.0 ? a.start + t0*r : a.start;
+					out_intersection = t0 > 0.0 ? a.start + t0 * r : a.start;
 					return true;
 				}
 			}			
@@ -167,7 +167,7 @@ namespace geom {
 		const gFloat t = qp.cross(s) / rxs;
 		const gFloat u = qpxr / rxs;
 		if (0 <= t && t <= 1 && 0 <= u && u <= 1) {
-			out_intersection = a.start + t*r;
+			out_intersection = a.start + t * r;
 			return true;
 		}
 		return false;
