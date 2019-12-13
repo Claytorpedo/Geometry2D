@@ -28,7 +28,7 @@ namespace geom {
 		return true;
 	}
 
-	bool overlaps(ConstShapeRef first, const Coord2& firstPos, ConstShapeRef second, const Coord2& secondPos) {
+	bool overlaps(ConstShapeRef first, Coord2 firstPos, ConstShapeRef second, Coord2 secondPos) {
 		const Coord2 offset(firstPos - secondPos);
 		const std::vector<Coord2> axes(sat::getSeparatingAxes(first, second, offset));
 		Projection projFirst, projSecond;
@@ -42,7 +42,7 @@ namespace geom {
 		return true;
 	}
 
-	bool overlaps(ConstShapeRef first, const Coord2& firstPos, ConstShapeRef second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_dist) {
+	bool overlaps(ConstShapeRef first, Coord2 firstPos, ConstShapeRef second, Coord2 secondPos, Coord2& out_norm, gFloat& out_dist) {
 		const Coord2 offset(firstPos - secondPos);
 		const std::vector<Coord2> axes(sat::getSeparatingAxes(first, second, offset));
 		const Shape &firstShape(first.shape()), &secondShape(second.shape());

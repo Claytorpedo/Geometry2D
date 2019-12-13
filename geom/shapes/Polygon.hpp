@@ -24,13 +24,13 @@ namespace geom {
 		gFloat top()    const override { return y_min_; }
 		gFloat bottom() const override { return y_max_; }
 
-		Projection getProjection(const Coord2& axis) const override;
+		Projection getProjection(Coord2 axis) const override;
 
 		Polygon toPoly() const noexcept override { return *this; }
 
 		// Find the closest vertex to the given point.
 		// Note: this doesn't disqualify the edge case were the closest vertex could be on the "far" side of the polygon.
-		Coord2 getClosestTo(const Coord2& point) const override;
+		Coord2 getClosestTo(Coord2 point) const override;
 
 		// Get normalized counter-clockwise edge normal for the polygon at a given index.
 		// Edges are indexed by vertex order, e.g. edge 0 is made from vertex 0 and 1.
@@ -46,22 +46,22 @@ namespace geom {
 			bool is_last_edge_perpendicular = false;
 		};
 		// Find the region of vertices in a given direction (for instance, to extend the polygon in that direction).
-		[[nodiscard]] VerticesInDirection getVerticesInDirection(const Coord2& dir) const;
+		[[nodiscard]] VerticesInDirection getVerticesInDirection(Coord2 dir) const;
 
 		// Extend a polygon by projecting it along a direction by dist.
-		[[nodiscard]] Polygon extend(const Coord2& dir, gFloat dist) const { return extend(dir, dist, getVerticesInDirection(dir)); }
-		[[nodiscard]] Polygon extend(const Coord2& dir, gFloat dist, const VerticesInDirection& verticesInfo) const;
+		[[nodiscard]] Polygon extend(Coord2 dir, gFloat dist) const { return extend(dir, dist, getVerticesInDirection(dir)); }
+		[[nodiscard]] Polygon extend(Coord2 dir, gFloat dist, const VerticesInDirection& verticesInfo) const;
 
 		// Extend a polygon by projecting it along a direction by delta (dir*dist), clipping the result to only include
 		// the portion of the polygon that was extended.
-		[[nodiscard]] Polygon clipExtend(const Coord2& dir, gFloat dist) const { return clipExtend(dir, dist, getVerticesInDirection(dir)); }
-		[[nodiscard]] Polygon clipExtend(const Coord2& dir, gFloat dist, const VerticesInDirection& verticesInfo) const;
+		[[nodiscard]] Polygon clipExtend(Coord2 dir, gFloat dist) const { return clipExtend(dir, dist, getVerticesInDirection(dir)); }
+		[[nodiscard]] Polygon clipExtend(Coord2 dir, gFloat dist, const VerticesInDirection& verticesInfo) const;
 
-		void translate(const Coord2& delta) noexcept;
-		[[nodiscard]] static Polygon translate(const Polygon& p, const Coord2& delta);
+		void translate(Coord2 delta) noexcept;
+		[[nodiscard]] static Polygon translate(const Polygon& p, Coord2 delta);
 
 		// For accessing the values of the vertices of the polygon. Note no safety checks.
-		inline const Coord2& operator[](std::size_t index) const noexcept { return vertices_[index]; }
+		inline Coord2 operator[](std::size_t index) const noexcept { return vertices_[index]; }
 		// Get the number of vertices in the polygon.
 		[[nodiscard]] std::size_t size() const noexcept { return vertices_.size(); }
 		// Check if the polygon has any vertices.

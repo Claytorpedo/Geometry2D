@@ -10,13 +10,13 @@
 namespace geom {
 	// ------------------------------- Point intersections --------------------------------------------------
 
-	bool intersects(const Rect& r, const Coord2& p) {
+	bool intersects(const Rect& r, Coord2 p) {
 		return (p.x >= (r.left()   - constants::EPSILON) &&
 		        p.x <= (r.right()  + constants::EPSILON) &&
 		        p.y >= (r.top()    - constants::EPSILON) &&
 		        p.y <= (r.bottom() + constants::EPSILON));
 	}
-	bool intersects(const LineSegment& l, const Coord2& p) {
+	bool intersects(const LineSegment& l, Coord2 p) {
 		// Check bounding box.
 		if ((p.x + constants::EPSILON) < l.min_x() || (p.x - constants::EPSILON) > l.max_x() ||
 			(p.y + constants::EPSILON) < l.min_y() || (p.y - constants::EPSILON) > l.max_y()) {
@@ -41,7 +41,7 @@ namespace geom {
 		return std::abs(q - p.y) < constants::EPSILON;
 	}
 
-	bool intersects(const Ray& r, const Coord2& p) {
+	bool intersects(const Ray& r, Coord2 p) {
 		// Bounds test. Point must be either at origin, or away from the origin in the direction of the ray.
 		if ((r.dir.y >= 0 ? ((p.y + constants::EPSILON) < r.origin.y) : ((p.y - constants::EPSILON) > r.origin.y)) ||
 			(r.dir.x >= 0 ? ((p.x + constants::EPSILON) < r.origin.x) : ((p.x - constants::EPSILON) > r.origin.x))) {
@@ -68,12 +68,12 @@ namespace geom {
 	// ---------------------------- No output point intersections --------------------------------------------
 
 	namespace {
-		inline char _compute_direction(const Coord2& a, const Coord2& b, const Coord2& c ) {
+		inline char _compute_direction(Coord2 a, Coord2 b, Coord2 c ) {
 			const gFloat p = (c.x - a.x) * (b.y - a.y);
 			const gFloat q = (b.x - a.x) * (c.y - a.y);
 			return p < q ? -1 : p > q ? 1 : 0;
 		}
-		inline bool _is_on_segment(const Coord2& a, const Coord2& b, const Coord2& c) {
+		inline bool _is_on_segment(Coord2 a, Coord2 b, Coord2 c) {
 			return	(a.x <= c.x || b.x <= c.x) && (c.x <= a.x || c.x <= b.x) &&
 				    (a.y <= c.y || b.y <= c.y) && (c.y <= a.y || c.y <= b.y);
 		}

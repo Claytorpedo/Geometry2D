@@ -12,7 +12,7 @@ namespace geom {
 	public:
 		virtual ~CollisionMap() {}
 		// Given a collider and its delta, return a set of shapes it may collide with.
-		virtual const std::vector<Collidable*> getColliding(const Collidable& collider, const Coord2& delta) const = 0;
+		virtual const std::vector<Collidable*> getColliding(const Collidable& collider, Coord2 delta) const = 0;
 		// Given a collider, return a set of shapes it may overlap with.
 		virtual const std::vector<Collidable*> getColliding(const Collidable& collider) const {
 			return getColliding(collider, Coord2(0, 0));

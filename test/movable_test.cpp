@@ -10,9 +10,9 @@ struct MovableTest : public Movable {
 	MovableTest(Movable::CollisionType type, ShapeContainer collider) : Movable{type}, collider{std::move(collider)} {}
 	MovableTest(Movable::CollisionType type, ShapeContainer collider, Coord2 position) : Movable{type}, collider{std::move(collider)}, position{position} {}
 	~MovableTest() override {}
-	const Coord2& getPosition() const override { return position; }
+	Coord2 getPosition() const override { return position; }
 	ConstShapeRef getCollider() const override { return collider; }
-	void move(const Coord2& delta, const CollisionMap& map) {
+	void move(Coord2 delta, const CollisionMap& map) {
 		position = Movable::move(collider, position, delta, map);
 	}
 };
@@ -24,13 +24,13 @@ public:
 	~CollisionMapTest() override {
 		clear();
 	}
-	const std::vector<Collidable*> getColliding(const Collidable&, const Coord2&) const override {
+	const std::vector<Collidable*> getColliding(const Collidable&, Coord2) const override {
 		return std::vector<Collidable*>(obstacles_.begin(), obstacles_.end());
 	}
 	void add(const ShapeContainer& obstacle) {
 		obstacles_.push_back(new Wall(obstacle));
 	}
-	void add(const ShapeContainer& obstacle, const Coord2& position) {
+	void add(const ShapeContainer& obstacle, Coord2 position) {
 		obstacles_.push_back(new Wall(obstacle, position));
 	}
 	void clear() {

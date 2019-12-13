@@ -21,9 +21,9 @@ namespace geom {
 		[[nodiscard]] constexpr bool operator==(const Rect& o) noexcept { return x == o.x && y == o.y && w == o.w && h == o.h; }
 
 		// Translate by a vector.
-		constexpr Rect& operator+=(const Coord2& c) noexcept { x += c.x; y += c.y; return *this; }
+		constexpr Rect& operator+=(Coord2 c) noexcept { x += c.x; y += c.y; return *this; }
 		// Translate by a vector.
-		[[nodiscard]] Rect operator+(const Coord2& c) const noexcept { return Rect{x + c.x, y + c.y, w, h}; }
+		[[nodiscard]] Rect operator+(Coord2 c) const noexcept { return Rect{x + c.x, y + c.y, w, h}; }
 
 		[[nodiscard]] constexpr Coord2 position() const noexcept { return Coord2(x, y); }
 		[[nodiscard]] constexpr Coord2 center() const noexcept { return Coord2(x + w*0.5f, y + h*0.5f); }
@@ -43,8 +43,8 @@ namespace geom {
 
 		[[nodiscard]] bool isInside(const Rect& o) const noexcept; // See if this rectangle is contained by another one.
 
-		[[nodiscard]] Projection getProjection(const Coord2& axis) const noexcept override;
-		[[nodiscard]] Coord2 getClosestTo(const Coord2& point) const noexcept override; // Gets closest corner of the rectangle.
+		[[nodiscard]] Projection getProjection(Coord2 axis) const noexcept override;
+		[[nodiscard]] Coord2 getClosestTo(Coord2 point) const noexcept override; // Gets closest corner of the rectangle.
 		[[nodiscard]] Polygon toPoly() const override;
 	};
 }

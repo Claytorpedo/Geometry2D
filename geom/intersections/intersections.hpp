@@ -16,9 +16,9 @@ namespace geom {
 
 	// Intersections with points. No need to output a point of collision. -------------------------------------------------
 
-	bool intersects(const Rect& r, const Coord2& p);
-	bool intersects(const LineSegment& l, const Coord2& p);
-	bool intersects(const Ray& r, const Coord2& p);
+	bool intersects(const Rect& r, Coord2 p);
+	bool intersects(const LineSegment& l, Coord2 p);
+	bool intersects(const Ray& r, Coord2 p);
 
 	// Intersection functions that return true/false, and do not find the specific point of collision. --------------------
 

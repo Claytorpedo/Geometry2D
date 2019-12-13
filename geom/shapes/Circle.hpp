@@ -24,8 +24,8 @@ namespace geom {
 		[[nodiscard]] inline gFloat top()    const noexcept override { return center.y - radius; }
 		[[nodiscard]] inline gFloat bottom() const noexcept override { return center.y + radius; }
 
-		[[nodiscard]] Projection getProjection(const Coord2& axis) const noexcept override;
-		[[nodiscard]] Coord2 getClosestTo(const Coord2& point) const noexcept override; // Gets closest point on the circle.
+		[[nodiscard]] Projection getProjection(Coord2 axis) const noexcept override;
+		[[nodiscard]] Coord2 getClosestTo(Coord2 point) const noexcept override; // Gets closest point on the circle.
 		[[nodiscard]] Polygon toPoly() const override;
 	};
 }

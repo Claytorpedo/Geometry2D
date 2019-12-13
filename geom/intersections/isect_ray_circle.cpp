@@ -5,7 +5,7 @@
 #include "../shapes/Circle.hpp"
 
 namespace geom {
-	bool intersects(const Ray& r, const Circle& c, const Coord2& pos) {
+	bool intersects(const Ray& r, const Circle& c, Coord2 pos) {
 		if (math::closestDistToLine(r, pos + c.center) > c.radius)
 			return false; // Ray passes the circle.
 		const Coord2 originToCircle(pos + c.center - r.origin);
@@ -13,7 +13,7 @@ namespace geom {
 			return true; // The ray's origin is inside the circle.
 		return originToCircle.dot(r.dir) >= 0.0f; // Check if the circle is in front of the ray.
 	}
-	bool intersects(const Ray& r, const Circle& c, const Coord2& pos, gFloat& out_t) {
+	bool intersects(const Ray& r, const Circle& c, Coord2 pos, gFloat& out_t) {
 		const Coord2 originToCircle(c.center + pos - r.origin);
 		const gFloat overlap(originToCircle.magnitude2() - c.radius*c.radius);
 		if (overlap <= 0.0f) {
@@ -29,13 +29,13 @@ namespace geom {
 		out_t = proj - std::sqrt(d);
 		return true;
 	}
-	bool intersects(const Ray& r, const Circle& c, const Coord2& pos, gFloat& out_t, Coord2& out_norm) {
+	bool intersects(const Ray& r, const Circle& c, Coord2 pos, gFloat& out_t, Coord2& out_norm) {
 		if (!intersects(r, c, pos, out_t))
 			return false;
 		out_norm = out_t == 0.0f ? Coord2(0, 0) : ((r.origin + r.dir*out_t) - (c.center + pos)).normalize();
 		return true;
 	}
-	bool intersects(const Ray& r, const Circle& c, const Coord2& pos, gFloat& out_enter, gFloat& out_exit) {
+	bool intersects(const Ray& r, const Circle& c, Coord2 pos, gFloat& out_enter, gFloat& out_exit) {
 		const Coord2 originToCircle(c.center + pos - r.origin);
 		const gFloat proj(r.dir.dot(originToCircle));
 		if (proj < -c.radius)
@@ -59,7 +59,7 @@ namespace geom {
 		out_exit = proj + sqrt_d;
 		return true;
 	}
-	bool intersects(const Ray& r, const Circle& c, const Coord2& pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
+	bool intersects(const Ray& r, const Circle& c, Coord2 pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
 		if (!intersects(r, c, pos, out_enter, out_exit))
 			return false;
 		out_norm_enter = out_enter == 0.0f ? Coord2(0, 0) : ((r.origin + r.dir*out_enter) - (c.center + pos)).normalize();

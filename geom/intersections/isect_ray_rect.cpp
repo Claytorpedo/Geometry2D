@@ -58,10 +58,10 @@ namespace geom {
 		}
 		return false;
 	}
-	bool intersects(const Ray& ray, const Rect& rect, const Coord2& pos) {
+	bool intersects(const Ray& ray, const Rect& rect, Coord2 pos) {
 		return intersects(ray, rect + pos);
 	}
-	bool intersects(const Ray& ray, const Rect& rect, const Coord2& pos, gFloat& out_t) {
+	bool intersects(const Ray& ray, const Rect& rect, Coord2 pos, gFloat& out_t) {
 		const Rect r(rect + pos); // Translate the rectangle.
 		if (_is_rect_behind_ray(ray, r))
 			return false;
@@ -71,7 +71,7 @@ namespace geom {
 		}
 		return _find_rect_intersect(ray, r, true, out_t);
 	}
-	bool intersects(const Ray& ray, const Rect& rect, const Coord2& pos, gFloat& out_t, Coord2& out_norm) {
+	bool intersects(const Ray& ray, const Rect& rect, Coord2 pos, gFloat& out_t, Coord2& out_norm) {
 		const Rect r(rect + pos);
 		if (_is_rect_behind_ray(ray, r))
 			return false;
@@ -82,7 +82,7 @@ namespace geom {
 		}
 		return _find_rect_intersect(ray, r, true, out_t, &out_norm);
 	}
-	bool intersects(const Ray& ray, const Rect& rect, const Coord2& pos, gFloat& out_enter, gFloat& out_exit) {
+	bool intersects(const Ray& ray, const Rect& rect, Coord2 pos, gFloat& out_enter, gFloat& out_exit) {
 		const Rect r(rect + pos);
 		if (_is_rect_behind_ray(ray, r))
 			return false;
@@ -94,7 +94,7 @@ namespace geom {
 			return false;
 		return _find_rect_intersect(ray, r, false, out_exit); // It enters the rectangle, so it must also exit.
 	}
-	bool intersects(const Ray& ray, const Rect& rect, const Coord2& pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
+	bool intersects(const Ray& ray, const Rect& rect, Coord2 pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
 		const Rect r(rect + pos);
 		if (_is_rect_behind_ray(ray, r))
 			return false;

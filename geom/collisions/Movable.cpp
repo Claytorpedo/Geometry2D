@@ -75,7 +75,7 @@ namespace geom {
 		return false;
 	}
 
-	Coord2 Movable::move(ConstShapeRef collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap) {
+	Coord2 Movable::move(ConstShapeRef collider, Coord2 origin, Coord2 delta, const CollisionMap& collisionMap) {
 		const gFloat originalDist = delta.magnitude();
 		CollisionInfo info(collider, origin, delta / originalDist, originalDist);
 		if (delta.isZero())

@@ -11,7 +11,7 @@ bool Rect::isInside(const Rect& o) const noexcept {
 	       left()  >= o.left()  - constants::EPSILON && top()    >= o.top()    - constants::EPSILON;
 }
 
-Projection Rect::getProjection(const Coord2& axis) const noexcept {
+Projection Rect::getProjection(Coord2 axis) const noexcept {
 	gFloat proj{axis.dot(topLeft())};
 	gFloat min{proj};
 	gFloat max{proj};
@@ -33,7 +33,7 @@ Projection Rect::getProjection(const Coord2& axis) const noexcept {
 	return Projection{min, max};
 }
 
-Coord2 Rect::getClosestTo(const Coord2& point) const noexcept {
+Coord2 Rect::getClosestTo(Coord2 point) const noexcept {
 	gFloat minDist{(point - topLeft()).magnitude2()};
 	Coord2 closest{topLeft()};
 	gFloat testDist{(point - topRight()).magnitude2()};

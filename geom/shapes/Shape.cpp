@@ -20,7 +20,7 @@ gFloat Shape::side(Direction side) const {
 	return 0;
 }
 
-Projection Shape::getProjection(const Coord2& axis) const {
+Projection Shape::getProjection(Coord2 axis) const {
 	Polygon p(this->toPoly());
 	return p.getProjection(axis);
 }
@@ -29,6 +29,6 @@ Rect Shape::getAABB() const {
 	return Rect(left(), top(), right() - left(), bottom() - top());
 }
 
-Coord2 Shape::getClosestTo(const Coord2& point) const {
+Coord2 Shape::getClosestTo(Coord2 point) const {
 	return this->toPoly().getClosestTo(point);
 }

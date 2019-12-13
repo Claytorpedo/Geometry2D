@@ -10,7 +10,7 @@
 #include "../shapes/ShapeContainer.hpp"
 
 namespace geom {
-	bool intersects(const Ray& r, ConstShapeRef s, const Coord2& pos) {
+	bool intersects(const Ray& r, ConstShapeRef s, Coord2 pos) {
 		switch (s.type()) {
 		case ShapeType::RECTANGLE: return intersects(r, s.rect(), pos);
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos);
@@ -19,7 +19,7 @@ namespace geom {
 		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
-	bool intersects(const Ray& r, ConstShapeRef s, const Coord2& pos, gFloat& out_t) {
+	bool intersects(const Ray& r, ConstShapeRef s, Coord2 pos, gFloat& out_t) {
 		switch (s.type()) {
 		case ShapeType::RECTANGLE: return intersects(r, s.rect(), pos, out_t);
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_t);
@@ -28,7 +28,7 @@ namespace geom {
 		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
-	bool intersects(const Ray& r, ConstShapeRef s, const Coord2& pos, gFloat& out_t, Coord2& out_norm) {
+	bool intersects(const Ray& r, ConstShapeRef s, Coord2 pos, gFloat& out_t, Coord2& out_norm) {
 		switch (s.type()) {
 		case ShapeType::RECTANGLE: return intersects(r, s.rect(), pos, out_t, out_norm);
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_t, out_norm);
@@ -37,7 +37,7 @@ namespace geom {
 		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
-	bool intersects(const Ray& r, ConstShapeRef s, const Coord2& pos, gFloat& out_enter, gFloat& out_exit) {
+	bool intersects(const Ray& r, ConstShapeRef s, Coord2 pos, gFloat& out_enter, gFloat& out_exit) {
 		switch (s.type()) {
 		case ShapeType::RECTANGLE: return intersects(r, s.rect(), pos, out_enter, out_exit);
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_enter, out_exit);
@@ -46,7 +46,7 @@ namespace geom {
 		DBG_ERR("Unhandled shape type for ray intersection.");
 		return false;
 	}
-	bool intersects(const Ray& r, ConstShapeRef s, const Coord2& pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
+	bool intersects(const Ray& r, ConstShapeRef s, Coord2 pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
 		switch (s.type()) {
 		case ShapeType::RECTANGLE: return intersects(r, s.rect(), pos, out_enter, out_norm_enter, out_exit, out_norm_exit);
 		case ShapeType::POLYGON:   return intersects(r, s.poly(), pos, out_enter, out_norm_enter, out_exit, out_norm_exit);

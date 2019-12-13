@@ -23,7 +23,7 @@ namespace geom {
 		static const unsigned int COLLISION_ALG_MAX_DEPTH;
 
 		// Get the buffer amount to maintain to avoid moving to a collision state.
-		static inline gFloat getPushoutDistance(const Coord2& travelDir, const Coord2& collisionNormal) {
+		static inline gFloat getPushoutDistance(Coord2 travelDir, Coord2 collisionNormal) {
 			// buffer_dist / cos(theta) = hypotenuse; cos(theta) = norm * dir (norm should be reversed, but we can just negate the end product).
 			return -(COLLISION_BUFFER / collisionNormal.dot(travelDir));
 		}
@@ -55,7 +55,7 @@ namespace geom {
 		// Takes the collidable's bounding shape, its origin, the delta it is moving in, and the objects it can collide with.
 		// Calls onCollision when collisions occur, if any special action is to be taken.
 		// Returns the final position of the collider.
-		Coord2 move(ConstShapeRef collider, const Coord2& origin, const Coord2& delta, const CollisionMap& collisionMap);
+		Coord2 move(ConstShapeRef collider, Coord2 origin, Coord2 delta, const CollisionMap& collisionMap);
 	protected:
 		CollisionType type = CollisionType::DEFLECT;
 

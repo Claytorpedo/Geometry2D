@@ -9,9 +9,9 @@ namespace geom {
 	class Wall : public Collidable {
 	public:
 		Wall(const ShapeContainer& shape);
-		Wall(const ShapeContainer& shape, const Coord2& position);
+		Wall(const ShapeContainer& shape, Coord2 position);
 		~Wall();
-		const Coord2& getPosition() const;
+		Coord2 getPosition() const;
 		ConstShapeRef getCollider() const;
 	private:
 		ShapeContainer shape_;

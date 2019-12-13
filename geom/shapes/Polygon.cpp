@@ -9,7 +9,7 @@
 using namespace geom;
 
 namespace {
-	constexpr Coord2 computeEdgeNormal(const Coord2& first, const Coord2& second) noexcept {
+	constexpr Coord2 computeEdgeNormal(Coord2 first, Coord2 second) noexcept {
 		return Coord2(first.y - second.y, second.x - first.x).normalize();
 	}
 }
@@ -26,7 +26,7 @@ Polygon::Polygon(std::vector<Coord2> vertices, std::optional<std::vector<Coord2>
 	_find_bounds();
 }
 
-Projection Polygon::getProjection(const Coord2& axis) const {
+Projection Polygon::getProjection(Coord2 axis) const {
 	gFloat min = vertices_[0].dot(axis);
 	gFloat max = min;
 	for (std::size_t i = 1, size = vertices_.size(); i < size; ++i) {
@@ -39,7 +39,7 @@ Projection Polygon::getProjection(const Coord2& axis) const {
 	return Projection(min, max);
 }
 
-Coord2 Polygon::getClosestTo(const Coord2& point) const {
+Coord2 Polygon::getClosestTo(Coord2 point) const {
 	std::optional<gFloat> minDist;
 	Coord2 closest;
 	for (auto& vertex : vertices_) {
@@ -55,9 +55,9 @@ Coord2 Polygon::getClosestTo(const Coord2& point) const {
 Coord2 Polygon::getEdgeNorm(std::size_t index) const {
 	if (edge_normals_)
 		return (*edge_normals_)[index];
-	const Coord2& first = vertices_[index];
+	const Coord2 first = vertices_[index];
 	++index;
-	const Coord2& second = vertices_[index * (index < vertices_.size())]; // Wrap if necessary.
+	const Coord2 second = vertices_[index * (index < vertices_.size())]; // Wrap if necessary.
 	return computeEdgeNormal(first, second);
 }
 
@@ -67,15 +67,16 @@ void Polygon::computeNormals() {
 	edge_normals_.emplace();
 	const size_t size = vertices_.size();
 	edge_normals_->reserve(size);
+	Coord2 first, second;
 	for (size_t i = 0; i < size;) {
-		const Coord2& first = vertices_[i];
+		first = vertices_[i];
 		++i;
-		const Coord2& second = vertices_[i * (i < size)];
+		second = vertices_[i * (i < size)];
 		edge_normals_->emplace_back(computeEdgeNormal(first, second));
 	}
 }
 
-Polygon::VerticesInDirection Polygon::getVerticesInDirection(const Coord2& dir) const {
+Polygon::VerticesInDirection Polygon::getVerticesInDirection(Coord2 dir) const {
 	const int numVerts = static_cast<int>(vertices_.size());
 	// Look for where edge normals change from being acute with the given direction, to perpendicular or obtuse.
 	// The first and last vertices in the range will have only one acute edge normal.
@@ -119,7 +120,7 @@ Polygon::VerticesInDirection Polygon::getVerticesInDirection(const Coord2& dir) 
 	return result;
 }
 
-Polygon Polygon::extend(const Coord2& dir, gFloat dist, const VerticesInDirection& verticesInfo) const {
+Polygon Polygon::extend(Coord2 dir, gFloat dist, const VerticesInDirection& verticesInfo) const {
 	std::vector<Coord2> newVertices;
 	std::optional<std::vector<Coord2>> newEdgeNorms;
 	const int size = static_cast<int>(vertices_.size());
@@ -157,7 +158,7 @@ Polygon Polygon::extend(const Coord2& dir, gFloat dist, const VerticesInDirectio
 	return Polygon(std::move(newVertices), std::move(newEdgeNorms));
 }
 
-Polygon Polygon::clipExtend(const Coord2& dir, gFloat dist, const VerticesInDirection& verticesInfo) const {
+Polygon Polygon::clipExtend(Coord2 dir, gFloat dist, const VerticesInDirection& verticesInfo) const {
 	std::vector<Coord2> newVertices;
 	std::optional<std::vector<Coord2>> newEdgeNorms;
 	// Since we always duplicate when clipping, we will have last-to-first inclusive + 2x duplicates.
@@ -184,7 +185,7 @@ Polygon Polygon::clipExtend(const Coord2& dir, gFloat dist, const VerticesInDire
 	return Polygon(std::move(newVertices), std::move(newEdgeNorms));
 }
 
-void Polygon::translate(const Coord2& delta) noexcept {
+void Polygon::translate(Coord2 delta) noexcept {
 	for (auto& vertex : vertices_)
 		vertex += delta;
 	x_min_ += delta.x;
@@ -193,7 +194,7 @@ void Polygon::translate(const Coord2& delta) noexcept {
 	y_max_ += delta.y;
 }
 
-Polygon Polygon::translate(const Polygon& p, const Coord2& delta) {
+Polygon Polygon::translate(const Polygon& p, Coord2 delta) {
 	Polygon t(p);
 	t.translate(delta);
 	return t;

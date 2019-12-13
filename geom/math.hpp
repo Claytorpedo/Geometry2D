@@ -10,13 +10,13 @@
 namespace geom { class Ray; }
 namespace geom::math {
 	// Find the closest point on a line (defined by a bi-directional ray) to a given point.
-	[[nodiscard]] Coord2 closestPointOnLine(const Ray& ray, const Coord2& point) noexcept;
+	[[nodiscard]] Coord2 closestPointOnLine(const Ray& ray, Coord2 point) noexcept;
 	// Find the closest point on a line (made from two points) to a given point.
-	[[nodiscard]] Coord2 closestPointOnLine(const Coord2& line1, const Coord2& line2, const Coord2& point) noexcept;
+	[[nodiscard]] Coord2 closestPointOnLine(Coord2 line1, Coord2 line2, Coord2 point) noexcept;
 	// Find the closest distance to a line (defined by a bi-directional ray) to a given point.
-	[[nodiscard]] gFloat closestDistToLine(const Ray& ray, const Coord2& point) noexcept;
+	[[nodiscard]] gFloat closestDistToLine(const Ray& ray, Coord2 point) noexcept;
 	// Find the closest distance to a line (made from two points) to a given point.
-	[[nodiscard]] gFloat closestDistToLine(const Coord2& line1, const Coord2& line2, const Coord2& point) noexcept;
+	[[nodiscard]] gFloat closestDistToLine(Coord2 line1, Coord2 line2, Coord2 point) noexcept;
 
 	enum class AngleResult {
 		ACUTE,
@@ -24,10 +24,10 @@ namespace geom::math {
 		OBTUSE
 	};
 	// Find what kind of angle the minimum angle between two vectors is.
-	[[nodiscard]] AngleResult minAngle(const Coord2& vec1, const Coord2& vec2) noexcept;
+	[[nodiscard]] AngleResult minAngle(Coord2 vec1, Coord2 vec2) noexcept;
 
 	// Reflect a direction across a normal.
-	[[nodiscard]] constexpr Coord2 reflect(const Coord2& dir, const Coord2& norm) noexcept {
+	[[nodiscard]] constexpr Coord2 reflect(Coord2 dir, Coord2 norm) noexcept {
 		return dir - 2.0f * norm * dir.dot(norm);
 	}
 
@@ -42,7 +42,7 @@ namespace geom::math {
 		return abs < tolerance;
 	}
 	// Check if two vectors' values are almost the same (if their difference is less than the given tolerance). Tolerance is applied separately to both values.
-	[[nodiscard]] constexpr bool almostEquals(const Coord2& a, const Coord2& b, gFloat tolerance = constants::EPSILON) noexcept {
+	[[nodiscard]] constexpr bool almostEquals(Coord2 a, Coord2 b, gFloat tolerance = constants::EPSILON) noexcept {
 		return almostEquals(a.x, b.x, tolerance) && almostEquals(a.y, b.y, tolerance);
 	}
 

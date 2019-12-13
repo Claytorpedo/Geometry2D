@@ -21,7 +21,7 @@ namespace geom {
 
 	constexpr static gFloat MAX_TIME = 1.0f; // Max t for sweep tests. Using interval [0,1].
 
-	inline CollisionResult _circle_circle(const Circle& first, const Circle& second, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+	inline CollisionResult _circle_circle(const Circle& first, const Circle& second, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 		const Coord2 firstPos(first.center + offset);
 		const Coord2 separation(firstPos - second.center);
 		const gFloat dist2(separation.magnitude2());
@@ -55,19 +55,19 @@ namespace geom {
 		out_norm = (collisionPoint - second.center).normalize();
 		return CollisionResult::SWEEP;
 	}
-	CollisionResult collides(const Circle& first, const Coord2& firstPos, const Coord2& firstDelta, const Circle& second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_t) {
+	CollisionResult collides(const Circle& first, Coord2 firstPos, Coord2 firstDelta, const Circle& second, Coord2 secondPos, Coord2& out_norm, gFloat& out_t) {
 		if (firstDelta.isZero())
 			return overlaps(first, firstPos, second, secondPos, out_norm, out_t) ? CollisionResult::MTV : CollisionResult::NONE;
 		return _circle_circle(first, second, firstPos - secondPos, firstDelta, out_norm, out_t);
 	}
-	CollisionResult collides(const Circle& first, const Coord2& firstPos, const Coord2& firstDelta, const Circle& second, const Coord2& secondPos, const Coord2& secondDelta, Coord2& out_norm, gFloat& out_t) {
+	CollisionResult collides(const Circle& first, Coord2 firstPos, Coord2 firstDelta, const Circle& second, Coord2 secondPos, Coord2 secondDelta, Coord2& out_norm, gFloat& out_t) {
 		return collides(first, firstPos, firstDelta - secondDelta, second, secondPos, out_norm, out_t);
 	}
 
 	namespace { // Circle-poly sweep test.
 		// See if two circles will collide in the future, where a circle with an offset-center at firstPos travelling in deltaDir by deltaMag. FullRad2 is the square of both circles' radii.
-		inline CollisionResult _collides_with_vertex(const Coord2& circlePos, const Coord2& vertex,
-			const Coord2& deltaDir, const gFloat deltaMag2, const gFloat deltaMag, const gFloat radiusEps, Coord2& out_norm, gFloat& out_t) {
+		inline CollisionResult _collides_with_vertex(Coord2 circlePos, Coord2 vertex,
+			Coord2 deltaDir, const gFloat deltaMag2, const gFloat deltaMag, const gFloat radiusEps, Coord2& out_norm, gFloat& out_t) {
 			const Coord2 closestTo(math::closestPointOnLine(Ray(circlePos, deltaDir), vertex));
 			// Check if the closest point to the movement vector is "behind" the first circle's center.
 			if ((deltaDir.x >= 0 ? closestTo.x <= circlePos.x : closestTo.x > circlePos.x) &&
@@ -89,7 +89,7 @@ namespace geom {
 			return CollisionResult::SWEEP;
 		}
 		// See if the circle will collide with an edge of the polygon.
-		inline CollisionResult _collides_with_edge(const Coord2 circlePos, const Coord2& pointOnPushedOutEdge, const Coord2& edgeNorm, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+		inline CollisionResult _collides_with_edge(const Coord2 circlePos, Coord2 pointOnPushedOutEdge, Coord2 edgeNorm, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 			const gFloat closestDist((circlePos - pointOnPushedOutEdge).dot(edgeNorm));
 			if (closestDist < 0) // The edge is "behind" the circle.
 				return CollisionResult::NONE;
@@ -101,7 +101,7 @@ namespace geom {
 			return CollisionResult::SWEEP;
 		}
 		// Perform a sweep test by expanding the polygon by the circle's radius, and testing if the line segment made from the circle's motion collides with the polygon.
-		inline CollisionResult _circle_poly_sweep(const Circle& circle, const Polygon& poly, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+		inline CollisionResult _circle_poly_sweep(const Circle& circle, const Polygon& poly, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 			const int polySize = static_cast<int>(poly.size());
 			const Coord2 circlePos = circle.center + offset;
 			const gFloat radiusEps = circle.radius - constants::EPSILON; // Radius with eps subtracted. TODO: Get proper epsilon here.
@@ -145,19 +145,19 @@ namespace geom {
 			return _collides_with_vertex(circlePos, testVert, deltaDir, deltaMag2, deltaMag, radiusEps, out_norm, out_t);
 		}
 	}
-	inline CollisionResult _circle_poly(const Circle& circle, const Polygon& poly, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+	inline CollisionResult _circle_poly(const Circle& circle, const Polygon& poly, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 		// Do bounds test, and full MTV test if that passes.
 		if (overlaps(circle.getAABB() + offset, poly.getAABB()) && overlaps(circle, offset, poly, Coord2(0, 0), out_norm, out_t))
 			return CollisionResult::MTV;
 		return _circle_poly_sweep(circle, poly, offset, delta, out_norm, out_t);
 	}
-	inline CollisionResult _circle_rect(const Circle& circle, const Rect& rect, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+	inline CollisionResult _circle_rect(const Circle& circle, const Rect& rect, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 		// Do bounds test, and full MTV test if that passes.
 		if (overlaps(circle.getAABB() + offset, rect) && overlaps(circle, offset, rect, Coord2(0, 0), out_norm, out_t))
 			return CollisionResult::MTV;
 		return _circle_poly_sweep(circle, rect.toPoly(), offset, delta, out_norm, out_t);
 	}
-	inline CollisionResult _handle_circle_collisions(const Circle& circle, ConstShapeRef other, const Coord2& offset, const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+	inline CollisionResult _handle_circle_collisions(const Circle& circle, ConstShapeRef other, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 		switch (other.type()) {
 		case ShapeType::RECTANGLE:
 			return _circle_rect(circle, other.rect(), offset, delta, out_norm, out_t);
@@ -178,8 +178,8 @@ namespace geom {
 	// out_norm    - the normal of collision, or direction of separation for the case where the shapes are already overlapping.
 	// out_t       - the time of collision, or the distance to move for the case where the shapes are already overlapping.
 	// Returns the type of collision: NONE, a current MTV collision, or a future SWEEP collision on the interval [0, MAX].
-	inline CollisionResult _perform_hybrid_SAT(const Shape& first, const Shape& second, const std::vector<Coord2>& axes, const Coord2& offset,
-		const Coord2& delta, Coord2& out_norm, gFloat& out_t) {
+	inline CollisionResult _perform_hybrid_SAT(const Shape& first, const Shape& second, const std::vector<Coord2>& axes, Coord2 offset,
+		Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 		bool areCurrentlyOverlapping = true; // Start by assuming they are overlapping.
 		gFloat mtv_dist(-1), testDist, overlap1, overlap2;
 		gFloat speed, enterTime(-1), exitTime(MAX_TIME), testEnter, testExit;
@@ -242,8 +242,8 @@ namespace geom {
 		return CollisionResult::SWEEP;
 	}
 
-	CollisionResult collides(ConstShapeRef first, const Coord2& firstPos, const Coord2& firstDelta,
-	ConstShapeRef second, const Coord2& secondPos, Coord2& out_norm, gFloat& out_t) {
+	CollisionResult collides(ConstShapeRef first, Coord2 firstPos, Coord2 firstDelta,
+	ConstShapeRef second, Coord2 secondPos, Coord2& out_norm, gFloat& out_t) {
 		if (firstDelta.isZero()) // No movement, just do regular SAT.
 			return overlaps(first, firstPos, second, secondPos, out_norm, out_t) ? CollisionResult::MTV : CollisionResult::NONE;
 		const Coord2 offset(firstPos - secondPos);
@@ -259,8 +259,8 @@ namespace geom {
 		return _perform_hybrid_SAT(first.shape(), second.shape(), sat::getSeparatingAxes(first, second, offset), offset, firstDelta, out_norm, out_t);
 	}
 
-	CollisionResult collides(ConstShapeRef first, const Coord2& firstPos, const Coord2& firstDelta,
-	ConstShapeRef second, const Coord2& secondPos, const Coord2& secondDelta, Coord2& out_norm, gFloat& out_t) {
+	CollisionResult collides(ConstShapeRef first, Coord2 firstPos, Coord2 firstDelta,
+	ConstShapeRef second, Coord2 secondPos, Coord2 secondDelta, Coord2& out_norm, gFloat& out_t) {
 		return collides(first, firstPos, firstDelta - secondDelta, second, secondPos, out_norm, out_t);
 	}
 }

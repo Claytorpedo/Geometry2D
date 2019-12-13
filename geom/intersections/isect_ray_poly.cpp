@@ -7,12 +7,12 @@
 
 namespace geom {
 	namespace {
-		inline bool _is_poly_AABB_behind_ray(const Ray& r, const Polygon& p, const Coord2& pos) {
+		inline bool _is_poly_AABB_behind_ray(const Ray& r, const Polygon& p, Coord2 pos) {
 			return ((r.dir.x == 0 || (r.dir.x > 0 ? pos.x + p.right() < r.origin.x : pos.x + p.left() > r.origin.x)) &&
 				(r.dir.y == 0 || (r.dir.y > 0 ? pos.y + p.bottom() < r.origin.y : pos.y + p.top() > r.origin.y)));
 		}
 		// Find an intersection on a polygon in a given range, with an optional normal.
-		inline bool _find_poly_intersect(const Ray& r, const Polygon& p, const Coord2& pos, const std::size_t start, const std::size_t end, gFloat& out_t, Coord2* out_norm = nullptr) {
+		inline bool _find_poly_intersect(const Ray& r, const Polygon& p, Coord2 pos, const std::size_t start, const std::size_t end, gFloat& out_t, Coord2* out_norm = nullptr) {
 			const std::size_t polySize(p.size());
 			for (std::size_t i = start; i != end; i = (++i < polySize) ? i : 0) {
 				if (intersects_ignore_parallel(r, LineSegment(pos + p[i], pos + p[i + 1 < polySize ? i + 1 : 0]), out_t)) {
@@ -25,7 +25,7 @@ namespace geom {
 		}
 	}
 
-	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos) {
+	bool intersects(const Ray& r, const Polygon& p, Coord2 pos) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
 		for (std::size_t k = p.size() - 1, i = 0; i < p.size(); k = i++) {
@@ -34,7 +34,7 @@ namespace geom {
 		}
 		return false;
 	}
-	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_t) {
+	bool intersects(const Ray& r, const Polygon& p, Coord2 pos, gFloat& out_t) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
 		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
@@ -47,7 +47,7 @@ namespace geom {
 		}
 		return false;
 	}
-	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_t, Coord2& out_norm) {
+	bool intersects(const Ray& r, const Polygon& p, Coord2 pos, gFloat& out_t, Coord2& out_norm) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
 		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
@@ -64,7 +64,7 @@ namespace geom {
 		}
 		return false;
 	}
-	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_enter, gFloat& out_exit) {
+	bool intersects(const Ray& r, const Polygon& p, Coord2 pos, gFloat& out_enter, gFloat& out_exit) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
 		const auto vertexInfo = p.getVerticesInDirection(-r.dir);
@@ -74,7 +74,7 @@ namespace geom {
 			out_enter = 0; // Ray's origin is inside the polygon.
 		return true;
 	}
-	bool intersects(const Ray& r, const Polygon& p, const Coord2& pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
+	bool intersects(const Ray& r, const Polygon& p, Coord2 pos, gFloat& out_enter, Coord2& out_norm_enter, gFloat& out_exit, Coord2& out_norm_exit) {
 		if (_is_poly_AABB_behind_ray(r, p, pos))
 			return false; // The bounding box for the polygon is behind the ray.
 		const auto vertexInfo = p.getVerticesInDirection(-r.dir);

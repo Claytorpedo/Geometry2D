@@ -15,7 +15,7 @@ namespace geom {
 		// System for finding the separating axes for the given shapes.
 		// Determine the type of shape the first one is, then see if it forms a special case when paired with the second shape.
 		// Returns true if it encounteres a special case that handled both shapes.
-		inline bool _get_separating_axes(ConstShapeRef first, ConstShapeRef second, const Coord2& offset, std::vector<Coord2>& axes) {
+		inline bool _get_separating_axes(ConstShapeRef first, ConstShapeRef second, Coord2 offset, std::vector<Coord2>& axes) {
 			switch (first.type()) {
 			case ShapeType::RECTANGLE:
 				axes.push_back(Coord2(1, 0)); // Rectangles are axis-alligned.
@@ -46,7 +46,7 @@ namespace geom {
 			return false;
 		}
 		// Gets the separating axes for two shapes.
-		std::vector<Coord2> getSeparatingAxes(ConstShapeRef first, ConstShapeRef second, const Coord2& offset) {
+		std::vector<Coord2> getSeparatingAxes(ConstShapeRef first, ConstShapeRef second, Coord2 offset) {
 			std::vector<Coord2> axes;
 			if (_get_separating_axes(first, second, offset, axes))
 				return axes;

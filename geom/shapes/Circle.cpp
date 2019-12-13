@@ -7,12 +7,12 @@ using namespace geom;
 
 const std::size_t Circle::SEGS_IN_POLY = 20;
 
-Projection Circle::getProjection(const Coord2& axis) const noexcept {
+Projection Circle::getProjection(Coord2 axis) const noexcept {
 	gFloat proj(axis.dot(center));
 	return Projection(proj - radius, proj + radius);
 }
 
-Coord2 Circle::getClosestTo(const Coord2& point) const noexcept {
+Coord2 Circle::getClosestTo(Coord2 point) const noexcept {
 	const Coord2 dir((point - center).normalize());
 	return dir * radius;
 }
