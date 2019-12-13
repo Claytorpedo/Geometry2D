@@ -67,28 +67,26 @@ namespace geom {
 
 	// ---------------------------- No output point intersections --------------------------------------------
 
-	namespace {
-		inline char _compute_direction(Coord2 a, Coord2 b, Coord2 c ) {
+	// Faster test to see if two line segments intersect.
+	bool intersects(const LineSegment& a, const LineSegment& b) {
+		auto computeDirection = [](Coord2 a, Coord2 b, Coord2 c) {
 			const gFloat p = (c.x - a.x) * (b.y - a.y);
 			const gFloat q = (b.x - a.x) * (c.y - a.y);
 			return p < q ? -1 : p > q ? 1 : 0;
-		}
-		inline bool _is_on_segment(Coord2 a, Coord2 b, Coord2 c) {
-			return	(a.x <= c.x || b.x <= c.x) && (c.x <= a.x || c.x <= b.x) &&
-				    (a.y <= c.y || b.y <= c.y) && (c.y <= a.y || c.y <= b.y);
-		}
-	}
-	// Faster test to see if two line segments intersect.
-	bool intersects(const LineSegment& a, const LineSegment& b) {
-		const char d1 = _compute_direction(b.start, b.end, a.start);
-		const char d2 = _compute_direction(b.start, b.end, a.end);
-		const char d3 = _compute_direction(a.start, a.end, b.start);
-		const char d4 = _compute_direction(a.start, a.end, b.end);
+		};
+		auto fallsOnLine = [](Coord2 point, Coord2 a, Coord2 b) {
+			return (point.x <= b.x || a.x <= b.x) && (b.x <= point.x || b.x <= a.x) &&
+			       (point.y <= b.y || a.y <= b.y) && (b.y <= point.y || b.y <= a.y);
+		};
+		const int d1 = computeDirection(b.start, b.end, a.start);
+		const int d2 = computeDirection(b.start, b.end, a.end);
+		const int d3 = computeDirection(a.start, a.end, b.start);
+		const int d4 = computeDirection(a.start, a.end, b.end);
 		return (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) ||
-			(d1 == 0 && _is_on_segment(b.start, b.end, a.start)) ||
-			(d2 == 0 && _is_on_segment(b.start, b.end, a.end))   ||
-			(d3 == 0 && _is_on_segment(a.start, a.end, b.start)) ||
-			(d4 == 0 && _is_on_segment(a.start, a.end, b.end));
+			(d1 == 0 && fallsOnLine(b.start, b.end, a.start)) ||
+			(d2 == 0 && fallsOnLine(b.start, b.end, a.end))   ||
+			(d3 == 0 && fallsOnLine(a.start, a.end, b.start)) ||
+			(d4 == 0 && fallsOnLine(a.start, a.end, b.end));
 	}
 	// This is essentially just as fast as the output point version.
 	bool intersects_ignore_parallel(const Ray& r, const LineSegment& l) {
