@@ -1,4 +1,3 @@
-#pragma once
 #ifndef INCLUDE_GEOM_MOVABLE_HPP
 #define INCLUDE_GEOM_MOVABLE_HPP
 

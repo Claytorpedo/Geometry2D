@@ -1,4 +1,3 @@
-#pragma once
 #ifndef INCLUDE_GEOM_COLLISION_MAP_HPP
 #define INCLUDE_GEOM_COLLISION_MAP_HPP
 

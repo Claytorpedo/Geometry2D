@@ -1,4 +1,3 @@
-#pragma once
 #ifndef INCLUDE_GEOMETRY_HPP
 #define INCLUDE_GEOMETRY_HPP
 

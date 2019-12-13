@@ -1,4 +1,3 @@
-#pragma once
 #ifndef INCLUDE_GEOM_PROJECTION_HPP
 #define INCLUDE_GEOM_PROJECTION_HPP
 

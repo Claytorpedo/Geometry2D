@@ -1,4 +1,3 @@
-#pragma once
 #ifndef INCLUDE_GEOM_ISECT_RAY_POLY_HPP
 #define INCLUDE_GEOM_ISECT_RAY_POLY_HPP
 

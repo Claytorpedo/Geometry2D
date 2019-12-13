@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INCLUDE_GEOM_DEBUG_LOGGER_HPP
+#define INCLUDE_GEOM_DEBUG_LOGGER_HPP
 #if defined(DEBUG) || defined(_DEBUG)
 
 #include <iostream>
@@ -43,3 +44,4 @@
 #define DBG_LOG(x)  do {} while(0)
 #define DBG_CHECK(cond, type, str) do {} while(0)
 #endif // DEBUG || _DEBUG
+#endif // INCLUDE_GEOM_DEBUG_LOGGER_HPP
