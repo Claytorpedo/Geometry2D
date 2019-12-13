@@ -13,19 +13,19 @@ namespace geom {
 		constexpr Vec2() noexcept = default;
 		constexpr Vec2(T x, T y) noexcept : x{x}, y{y} {}
 
-		[[nodiscard]] constexpr Vec2 operator+(const Vec2& o) const noexcept { return Vec2{x + o.x, y + o.y}; }
-		[[nodiscard]] constexpr Vec2 operator-(const Vec2& o) const noexcept { return Vec2{x - o.x, y - o.y}; }
-		[[nodiscard]] constexpr Vec2 operator-() const noexcept { return Vec2{-x, -y}; }
-		[[nodiscard]] constexpr Vec2 operator*(T t) const noexcept { return Vec2{x * t, y * t}; }
-		[[nodiscard]] constexpr Vec2 operator/(T t) const noexcept { return Vec2{x / t, y / t}; }
+		constexpr Vec2 operator+(const Vec2& o) const noexcept { return Vec2{x + o.x, y + o.y}; }
+		constexpr Vec2 operator-(const Vec2& o) const noexcept { return Vec2{x - o.x, y - o.y}; }
+		constexpr Vec2 operator-() const noexcept { return Vec2{-x, -y}; }
+		constexpr Vec2 operator*(T t) const noexcept { return Vec2{x * t, y * t}; }
+		constexpr Vec2 operator/(T t) const noexcept { return Vec2{x / t, y / t}; }
 
 		constexpr Vec2& operator+=(const Vec2& o) noexcept { x += o.x; y += o.y; return *this; }
 		constexpr Vec2& operator-=(const Vec2& o) noexcept { x -= o.x; y -= o.y; return *this; }
 		constexpr Vec2& operator*=(T t) noexcept { x *= t; y *= t; return *this; }
 		constexpr Vec2& operator/=(T t) noexcept { x /= t; y /= t; return *this; }
 
-		[[nodiscard]] constexpr bool operator==(const Vec2& o) const { return x == o.x && y == o.y; }
-		[[nodiscard]] constexpr bool isZero() const { return x == 0 && y == 0; }
+		constexpr bool operator==(const Vec2& o) const { return x == o.x && y == o.y; }
+		constexpr bool isZero() const { return x == 0 && y == 0; }
 
 		// Determine whether vector o is to the left (> 0) or right (< 0) of the first vector.
 		[[nodiscard]] constexpr T cross(const Vec2& o) const noexcept { return x * o.y - y * o.x; }
@@ -52,17 +52,17 @@ namespace geom {
 
 		// See if the vector is "inside" vectors a and b.
 		// Considers vectors parallel with a or b to be inside.
-		[[nodiscard]] constexpr bool isInside(const Vec2& a, const Vec2& b) const noexcept {
+		constexpr bool isInside(const Vec2& a, const Vec2& b) const noexcept {
 			return (a.cross(*this) * a.cross(b) >= 0) && (b.cross(*this) * b.cross(a) >= 0);
 		}
 
 		template <typename U>
-		[[nodiscard]] constexpr Vec2<U> convert(U(*conversionFunction)(T)) const noexcept {
+		constexpr Vec2<U> convert(U(*conversionFunction)(T)) const noexcept {
 			return Vec2<U>(conversionFunction(x), conversionFunction(y));
 		}
 	};
 
-	template <typename T> [[nodiscard]] constexpr Vec2<T> operator*(T t, const Vec2<T>& v) noexcept { return v * t; }
+	template <typename T> constexpr Vec2<T> operator*(T t, const Vec2<T>& v) noexcept { return v * t; }
 }
 
 #endif // INCLUDE_GEOM_VECTOR2D_HPP

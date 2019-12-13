@@ -46,7 +46,7 @@ namespace geom {
 			bool is_last_edge_perpendicular = false;
 		};
 		// Find the region of vertices in a given direction (for instance, to extend the polygon in that direction).
-		[[nodiscard]] VerticesInDirection getVerticesInDirection(Coord2 dir) const;
+		VerticesInDirection getVerticesInDirection(Coord2 dir) const;
 
 		// Extend a polygon by projecting it along a direction by dist.
 		[[nodiscard]] Polygon extend(Coord2 dir, gFloat dist) const { return extend(dir, dist, getVerticesInDirection(dir)); }
@@ -63,9 +63,9 @@ namespace geom {
 		// For accessing the values of the vertices of the polygon. Note no safety checks.
 		inline Coord2 operator[](std::size_t index) const noexcept { return vertices_[index]; }
 		// Get the number of vertices in the polygon.
-		[[nodiscard]] std::size_t size() const noexcept { return vertices_.size(); }
+		std::size_t size() const noexcept { return vertices_.size(); }
 		// Check if the polygon has any vertices.
-		[[nodiscard]] bool isEmpty() const noexcept { return vertices_.empty(); }
+		bool isEmpty() const noexcept { return vertices_.empty(); }
 
 	private:
 		Polygon(std::vector<Coord2> vertices, std::optional<std::vector<Coord2>> edgeNormals);

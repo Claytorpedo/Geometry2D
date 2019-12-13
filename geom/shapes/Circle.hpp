@@ -19,14 +19,14 @@ namespace geom {
 		constexpr Circle(gFloat center_x, gFloat center_y, gFloat radius) noexcept : center(center_x, center_y), radius(radius) {}
 		constexpr Circle(Coord2 center, gFloat radius) noexcept : center(center), radius(radius) {}
 
-		[[nodiscard]] inline gFloat left()   const noexcept override { return center.x - radius; }
-		[[nodiscard]] inline gFloat right()  const noexcept override { return center.x + radius; }
-		[[nodiscard]] inline gFloat top()    const noexcept override { return center.y - radius; }
-		[[nodiscard]] inline gFloat bottom() const noexcept override { return center.y + radius; }
+		inline gFloat left()   const noexcept override { return center.x - radius; }
+		inline gFloat right()  const noexcept override { return center.x + radius; }
+		inline gFloat top()    const noexcept override { return center.y - radius; }
+		inline gFloat bottom() const noexcept override { return center.y + radius; }
 
-		[[nodiscard]] Projection getProjection(Coord2 axis) const noexcept override;
-		[[nodiscard]] Coord2 getClosestTo(Coord2 point) const noexcept override; // Gets closest point on the circle.
-		[[nodiscard]] Polygon toPoly() const override;
+		Projection getProjection(Coord2 axis) const noexcept override;
+		Coord2 getClosestTo(Coord2 point) const noexcept override; // Gets closest point on the circle.
+		Polygon toPoly() const override;
 	};
 }
 #endif // INCLUDE_GEOM_CIRCLE_HPP
