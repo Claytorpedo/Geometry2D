@@ -32,7 +32,7 @@ namespace geom {
 	bool intersects(const Ray& r, const Circle& c, Coord2 pos, gFloat& out_t, Coord2& out_norm) {
 		if (!intersects(r, c, pos, out_t))
 			return false;
-		out_norm = out_t == 0.0f ? Coord2(0, 0) : ((r.origin + r.dir*out_t) - (c.center + pos)).normalize();
+		out_norm = out_t == 0.0f ? Coord2{} : ((r.origin + r.dir * out_t) - (c.center + pos)).normalize();
 		return true;
 	}
 	bool intersects(const Ray& r, const Circle& c, Coord2 pos, gFloat& out_enter, gFloat& out_exit) {
