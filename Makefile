@@ -61,12 +61,6 @@ DEBUG_FLAGS := -DDEBUG -g
 #Release mode flags.
 RELEASE_FLAGS := -DNDEBUG -O2
 
-#Set THREADED=TRUE to compile thread-safe version.
-ifeq ($(THREADED), TRUE)
- test: LINK_FLAGS += -pthread
- all test: COMP_FLAGS += -DTHREADED
-endif
-
 #------------------------------------------------------------------
 #Tests
 #------------------------------------------------------------------

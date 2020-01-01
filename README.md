@@ -36,8 +36,5 @@ Include `Geometry.hpp`. The library uses namespace `geom` (EG: `geom::Rect` or `
 
 Link the library with `-LGeometry/lib/ -lgeom`.
 
-If using the library with a multithreaded application, compile with the option `THREADED=TRUE`,
-or `#define THREADED` *before* including `Geometry.hpp` in your project.
-
 ## Examples
 For some examples of this project, see [CollisionPlayground2D](https://github.com/Claytorpedo/CollisionPlayground2D).
