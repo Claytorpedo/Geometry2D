@@ -1,14 +1,12 @@
 #include "Rectangle.hpp"
 
 #include "Polygon.hpp"
-#include "../constants.hpp"
 #include "../primitives/Projection.hpp"
 
 using namespace geom;
 
 bool Rect::isInside(const Rect& o) const noexcept {
-	return right() <= o.right() + constants::EPSILON && bottom() <= o.bottom() + constants::EPSILON &&
-	       left()  >= o.left()  - constants::EPSILON && top()    >= o.top()    - constants::EPSILON;
+	return right() <= o.right() && bottom() <= o.bottom() && left() >= o.left() && top() >= o.top();
 }
 
 Projection Rect::getProjection(Coord2 axis) const noexcept {
