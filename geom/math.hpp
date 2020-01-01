@@ -2,7 +2,6 @@
 #define INCLUDE_GEOM_MATH_HPP
 
 #include "units.hpp"
-#include "constants.hpp"
 
 #include <algorithm>
 #include <limits>

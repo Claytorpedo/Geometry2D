@@ -1,8 +1,6 @@
 #include "intersections.hpp"
 
-#include "../units.hpp"
 #include "../math.hpp"
-#include "../constants.hpp"
 #include "../primitives/LineSegment.hpp"
 #include "../primitives/Ray.hpp"
 #include "../shapes/Rectangle.hpp"
