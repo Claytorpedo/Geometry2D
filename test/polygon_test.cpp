@@ -168,7 +168,7 @@ bool _polygons_equal(Polygon p, Polygon o) {
 	std::size_t offset{ 0 };
 	bool found = false;
 	for (std::size_t i = 0; i < o.size(); ++i) {
-		if (geom::math::almostEquals(p[0], o[i])) {
+		if (geom::math::almostEqual(p[0].x, o[i].x) && geom::math::almostEqual(p[0].y, o[i].y)) {
 			found = true;
 			offset = i;
 		}
@@ -181,7 +181,7 @@ bool _polygons_equal(Polygon p, Polygon o) {
 	std::size_t second;
 	for (std::size_t i = 1; i < p.size(); ++i) {
 		second = i + offset >= o.size() ? (i + offset) - o.size() : i + offset;
-		if ( !geom::math::almostEquals(p[i], o[second]) ) {
+		if (!geom::math::almostEqual(p[i].x, o[second].x) || !geom::math::almostEqual(p[i].y, o[second].y)) {
 			warnPoly(p, i);
 			return false;
 		}
@@ -189,7 +189,7 @@ bool _polygons_equal(Polygon p, Polygon o) {
 	// Test normals.
 	for (std::size_t i = 0; i < p.size(); ++i) {
 		second = i + offset >= o.size() ? (i + offset) - o.size() : i + offset;
-		if (!geom::math::almostEquals(p.getEdgeNorm(i), o.getEdgeNorm(second))) {
+		if (!geom::math::almostEqual(p.getEdgeNorm(i).x, o.getEdgeNorm(second).x) || !geom::math::almostEqual(p.getEdgeNorm(i).y, o.getEdgeNorm(second).y)) {
 			WARN("Error: Polygon o does not contain the edge normal (" << p.getEdgeNorm(i).x << ", " << p.getEdgeNorm(i).y << ").");
 			printf("Got (%f, %f)\n", o.getEdgeNorm(i).x, o.getEdgeNorm(i).y);
 			printf("Polygon p:\n");

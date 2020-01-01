@@ -8,7 +8,7 @@
 
 #include "../Geometry.hpp"
 
-#define ApproxEps(x) Approx(x).margin(0.00001)
+#define ApproxEps(x) Approx(x).epsilon(std::numeric_limits<geom::gFloat>::epsilon() * 100).margin(std::numeric_limits<geom::gFloat>::epsilon() * 100)
 #define ApproxCollides(x) Approx(x).margin(geom::Movable::COLLISION_BUFFER) // For collision resolution, where perfect accuracy isn't as important.
 
 namespace shapes { // Some shapes we'll use in various tests.

@@ -11,24 +11,24 @@ namespace geom {
 	// ------------------------------- Point intersections --------------------------------------------------
 
 	bool intersects(const Rect& r, Coord2 p) {
-		return (p.x >= (r.left()   - constants::EPSILON) &&
-		        p.x <= (r.right()  + constants::EPSILON) &&
-		        p.y >= (r.top()    - constants::EPSILON) &&
-		        p.y <= (r.bottom() + constants::EPSILON));
+		return (p.x >= r.left() &&
+		        p.x <= r.right() &&
+		        p.y >= r.top() &&
+		        p.y <= r.bottom());
 	}
 	bool intersects(const LineSegment& l, Coord2 p) {
 		// Check bounding box.
-		if ((p.x + constants::EPSILON) < l.min_x() || (p.x - constants::EPSILON) > l.max_x() ||
-			(p.y + constants::EPSILON) < l.min_y() || (p.y - constants::EPSILON) > l.max_y()) {
-				return false;
+		if (p.x < l.min_x() || p.x > l.max_x() ||
+			p.y < l.min_y() || p.y > l.max_y()) {
+			return false;
 		}
 		const gFloat denom = l.end.x - l.start.x;
-		if (std::abs(denom) < constants::EPSILON) {
+		if (math::almostZero(denom)) {
 			// Vertical line. Bounding box check guarantees intersection.
 			return true;
 		}
 		const gFloat numer = l.end.y - l.start.y;
-		if (std::abs(numer) < constants::EPSILON) {
+		if (math::almostZero(numer)) {
 			// Horizontal line. Bounding box check guarantees intersection.
 			return true;
 		}
@@ -38,31 +38,29 @@ namespace geom {
 		const gFloat intercept = l.start.y - slope * l.start.x; // b = y - mx
 		const gFloat q = slope * p.x + intercept; // y = mx + b
 		// Check with line equation.
-		return std::abs(q - p.y) < constants::EPSILON;
+		return math::almostEqual(q, p.y);
 	}
 
 	bool intersects(const Ray& r, Coord2 p) {
 		// Bounds test. Point must be either at origin, or away from the origin in the direction of the ray.
-		if ((r.dir.y >= 0 ? ((p.y + constants::EPSILON) < r.origin.y) : ((p.y - constants::EPSILON) > r.origin.y)) ||
-			(r.dir.x >= 0 ? ((p.x + constants::EPSILON) < r.origin.x) : ((p.x - constants::EPSILON) > r.origin.x))) {
-				return false;
+		if ((r.dir.y >= 0 ? p.y < r.origin.y : p.y > r.origin.y) ||
+			(r.dir.x >= 0 ? p.x < r.origin.x : p.x > r.origin.x)) {
+			return false;
 		}
-		if (std::abs(r.dir.x) < constants::EPSILON) {
+		if (math::almostZero(r.dir.x)) {
 			// Vertical ray.
-			return std::abs(p.x - r.origin.x) < constants::EPSILON &&
-				(r.dir.y > 0 ? (p.y >= r.origin.y) : (p.y <= r.origin.y) );
+			return math::almostEqual(p.x, r.origin.x) && (r.dir.y > 0 ? (p.y >= r.origin.y) : (p.y <= r.origin.y));
 		}
-		if (std::abs(r.dir.y) < constants::EPSILON) {
+		if (math::almostZero(r.dir.y)) {
 			// Horizontal ray.
-			return std::abs(p.y - r.origin.y) < constants::EPSILON &&
-				(r.dir.x > 0 ? (p.x >= r.origin.x) : (p.x <= r.origin.x) );
+			return  math::almostEqual(p.y, r.origin.y) && (r.dir.x > 0 ? (p.x >= r.origin.x) : (p.x <= r.origin.x) );
 		}
 		// Check for a point on the line created by the ray.
 		// We've already bounds checked, and checked for division by zero.
 		const gFloat slope = r.dir.y / r.dir.x;
 		const gFloat intercept = r.origin.y - slope * r.origin.x; // b = y - mx
 		const gFloat q = slope * p.x + intercept; // y = mx + b
-		return std::abs(q - p.y) < constants::EPSILON; 
+		return math::almostEqual(q, p.y);
 	}
 
 	// ---------------------------- No output point intersections --------------------------------------------
@@ -114,7 +112,7 @@ namespace geom {
 
 		// Check if either or both segments are a point.
 		if (a.isPoint()) {
-			if (math::almostEquals(a.start.x, b.start.x) && math::almostEquals(a.start.y, b.start.y)) {
+			if (math::almostEqual(a.start.x, b.start.x) && math::almostEqual(a.start.y, b.start.y)) {
 				// This catches the case where o is also a point.
 				out_intersection = a.start;
 				return true;

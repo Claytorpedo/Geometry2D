@@ -4,6 +4,10 @@
 #include "units.hpp"
 #include "constants.hpp"
 
+#include <algorithm>
+#include <limits>
+#include <type_traits>
+
 // TODO: How we do floating point comparisons with tolerances here needs more consideration.
 // I should consider moving this to a separate math library project as well...
 namespace geom { class Ray; }
@@ -30,19 +34,22 @@ namespace geom::math {
 		return dir - 2.0f * norm * dir.dot(norm);
 	}
 
-	// Check if a value is almost zero (if the given value is between positive and negative tolerance exclusive).
-	constexpr bool almostZero(gFloat t, gFloat tolerance = constants::EPSILON) noexcept {
-		return -tolerance < t && t < tolerance;
+	// Test if two floats are almost equal.
+	// absEps is to catch cases near zero (especially denormals), while
+	// relEps is for the general case and is computed to be relative to the magnitude of the inputs.
+	// For most use cases, could probably use something larger than floating point epsilon.
+	template <typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+	constexpr bool almostEqual(T a, T b, T absEps = std::numeric_limits<T>::epsilon(), T relEps = std::numeric_limits<T>::epsilon()) noexcept {
+		// Based on https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition
+		const T diff = std::abs(a - b);
+		return diff <= absEps || diff <= relEps * std::max(std::abs(a), std::abs(b));
 	}
-	// Check if two values are almost the same (if their difference is less than the given tolerance).
-	constexpr bool almostEquals(gFloat a, gFloat b, gFloat tolerance = constants::EPSILON) noexcept {
-		const gFloat diff = a - b;
-		const gFloat abs = diff < 0 ? -diff : diff; // std::abs is not yet constexpr.
-		return abs < tolerance;
-	}
-	// Check if two vectors' values are almost the same (if their difference is less than the given tolerance). Tolerance is applied separately to both values.
-	constexpr bool almostEquals(Coord2 a, Coord2 b, gFloat tolerance = constants::EPSILON) noexcept {
-		return almostEquals(a.x, b.x, tolerance) && almostEquals(a.y, b.y, tolerance);
+
+	// Test if a float is almost zero.
+	// For most use cases, could probably use something larger than floating point epsilon.
+	template <typename T, typename = std::enable_if_t<std::is_floating_point_v<T>>>
+	constexpr bool almostZero(T t, T absEps = std::numeric_limits<T>::epsilon()) noexcept {
+		return std::abs(t) < absEps;
 	}
 
 	// Check if a value is between two bounds (inclusive).
