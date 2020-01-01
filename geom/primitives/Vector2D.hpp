@@ -7,16 +7,16 @@ namespace geom {
 	template <typename T>
 	class Vec2 {
 	public:
-		T x{0}, y{0};
+		T x{ 0 }, y{ 0 };
 
 		constexpr Vec2() noexcept = default;
-		constexpr Vec2(T x, T y) noexcept : x{x}, y{y} {}
+		constexpr Vec2(T x, T y) noexcept : x{ x }, y{ y } {}
 
-		constexpr Vec2 operator+(const Vec2& o) const noexcept { return Vec2{x + o.x, y + o.y}; }
-		constexpr Vec2 operator-(const Vec2& o) const noexcept { return Vec2{x - o.x, y - o.y}; }
-		constexpr Vec2 operator-() const noexcept { return Vec2{-x, -y}; }
-		constexpr Vec2 operator*(T t) const noexcept { return Vec2{x * t, y * t}; }
-		constexpr Vec2 operator/(T t) const noexcept { return Vec2{x / t, y / t}; }
+		constexpr Vec2 operator+(const Vec2& o) const noexcept { return Vec2{ x + o.x, y + o.y }; }
+		constexpr Vec2 operator-(const Vec2& o) const noexcept { return Vec2{ x - o.x, y - o.y }; }
+		constexpr Vec2 operator-() const noexcept { return Vec2{ -x, -y }; }
+		constexpr Vec2 operator*(T t) const noexcept { return Vec2{ x * t, y * t }; }
+		constexpr Vec2 operator/(T t) const noexcept { return Vec2{ x / t, y / t }; }
 
 		constexpr Vec2& operator+=(const Vec2& o) noexcept { x += o.x; y += o.y; return *this; }
 		constexpr Vec2& operator-=(const Vec2& o) noexcept { x -= o.x; y -= o.y; return *this; }
@@ -35,17 +35,17 @@ namespace geom {
 
 		[[nodiscard]] constexpr Vec2 normalize() const noexcept {
 			const T mag = magnitude();
-			return mag == 0 ? Vec2{} : Vec2{x / mag, y / mag};
+			return mag == 0 ? Vec2{} : Vec2{ x / mag, y / mag };
 		}
 
 		// Counter-clockwise (non-normalized) normal to the vector (rotate 90 degrees counter-clockwise).
-		[[nodiscard]] constexpr Vec2 perpCCW() const noexcept { return Vec2{-y, x}; }
+		[[nodiscard]] constexpr Vec2 perpCCW() const noexcept { return Vec2{ -y, x }; }
 		// Clockwise (non-normalized) normal to the vector (rotate 90 degrees clockwise).
-		[[nodiscard]] constexpr Vec2 perpCW() const noexcept { return Vec2{y, -x}; }
+		[[nodiscard]] constexpr Vec2 perpCW() const noexcept { return Vec2{ y, -x }; }
 
 		// Project along projDir by dist (use dist if this is a unit vector).
-		[[nodiscard]] constexpr Vec2 project(const Vec2& projDir, const T dist = {0}) const noexcept {
-			const T dot{projDir.dot(dist == 0 ? *this : *this * dist)};
+		[[nodiscard]] constexpr Vec2 project(const Vec2& projDir, const T dist = 0) const noexcept {
+			const T dot = projDir.dot(dist == 0 ? *this : *this * dist);
 			return projDir * dot;
 		}
 
