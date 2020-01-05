@@ -7,8 +7,6 @@
 #include <limits>
 #include <type_traits>
 
-// TODO: How we do floating point comparisons with tolerances here needs more consideration.
-// I should consider moving this to a separate math library project as well...
 namespace geom { class Ray; }
 namespace geom::math {
 	// Find the closest point on a line (defined by a bi-directional ray) to a given point.
@@ -53,9 +51,20 @@ namespace geom::math {
 
 	// Check if a value is between two bounds (inclusive).
 	template<typename T>
-	constexpr bool isBetween(const T& val, const T& bound_one, const T& bound_two) noexcept {
-		return bound_one <= bound_two ? bound_one <= val && val <= bound_two : bound_two <= val && val <= bound_one;
+	constexpr bool isBetween(T val, T bound_one, T bound_two) noexcept {
+		if (bound_one > bound_two)
+			bound_one = std::exchange(bound_two, bound_one);
+		return bound_one <= val && val <= bound_two;
 	}
+
+	// Clamp a value between two bounds (inclusive).
+	template<typename T>
+	constexpr T clamp(T val, T bound_one, T bound_two) noexcept {
+		if (bound_one > bound_two)
+			bound_one = std::exchange(bound_two, bound_one);
+		return val < bound_one ? bound_one : val > bound_two ? bound_two : val;
+	}
+
 }
 
 #endif // INCLUDE_GEOM_MATH_HPP

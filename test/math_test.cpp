@@ -728,6 +728,56 @@ TEST_CASE("Reflecting a direction across a normal.", "[geom_math]") {
 	}
 }
 
+TEST_CASE("Clamping a value by two bounds.", "[geom_math]") {
+	SECTION("The smaller bound is given first.") {
+		CHECK(geom::math::clamp(0.0f, 0.0f, 1.0f) == 0.0f);
+		CHECK(geom::math::clamp(0.5f, 0.0f, 1.0f) == 0.5f);
+		CHECK(geom::math::clamp(1.0f, 0.0f, 1.0f) == 1.0f);
+		CHECK(geom::math::clamp(1.5f, 0.0f, 1.0f) == 1.0f);
+		CHECK(geom::math::clamp(-1.0f, 0.0f, 1.0f) == 0.0f);
+
+		CHECK(geom::math::clamp(0.5f, -1.0f, 0.0f) == 0.0f);
+		CHECK(geom::math::clamp(-0.5f, -1.0f, 0.0f) == -0.5f);
+		CHECK(geom::math::clamp(-10.0f, -1.0f, 0.0f) == -1.0f);
+
+		CHECK(geom::math::clamp(5.0f, -2.5f, -1.5f) == -1.5f);
+		CHECK(geom::math::clamp(-2.0f, -2.5f, -1.5f) == -2.0f);
+		CHECK(geom::math::clamp(-3.0f, -2.5f, -1.5f) == -2.5f);
+
+		CHECK(geom::math::clamp(5.0f, 1.0f, 2.0f) == 2.0f);
+		CHECK(geom::math::clamp(1.5f, 1.0f, 2.0f) == 1.5f);
+		CHECK(geom::math::clamp(0.0f, 1.0f, 2.0f) == 1.0f);
+	}
+	SECTION("The larger bound is given first.") {
+		CHECK(geom::math::clamp(0.0f, 1.0f, 0.0f) == 0.0f);
+		CHECK(geom::math::clamp(0.5f, 1.0f, 0.0f) == 0.5f);
+		CHECK(geom::math::clamp(1.0f, 1.0f, 0.0f) == 1.0f);
+		CHECK(geom::math::clamp(1.5f, 1.0f, 0.0f) == 1.0f);
+		CHECK(geom::math::clamp(-1.0f, 1.0f, 0.0f) == 0.0f);
+
+		CHECK(geom::math::clamp(0.5f, 0.0f, -1.0f) == 0.0f);
+		CHECK(geom::math::clamp(-0.5f, 0.0f, -1.0f) == -0.5f);
+		CHECK(geom::math::clamp(-10.0f, 0.0f, -1.0f) == -1.0f);
+
+		CHECK(geom::math::clamp(5.0f, -1.5f, -2.5f) == -1.5f);
+		CHECK(geom::math::clamp(-2.0f, -1.5f, -2.5f) == -2.0f);
+		CHECK(geom::math::clamp(-3.0f, -1.5f, -2.5f) == -2.5f);
+
+		CHECK(geom::math::clamp(5.0f, 2.0f, 1.0f) == 2.0f);
+		CHECK(geom::math::clamp(1.5f, 2.0f, 1.0f) == 1.5f);
+		CHECK(geom::math::clamp(0.0f, 2.0f, 1.0f) == 1.0f);
+	}
+	SECTION("Both bounds are the same.") {
+		CHECK(geom::math::clamp(0.0f, 1.0f, 1.0f) == 1.0f);
+		CHECK(geom::math::clamp(1.0f, 1.0f, 1.0f) == 1.0f);
+		CHECK(geom::math::clamp(2.0f, 1.0f, 1.0f) == 1.0f);
+		CHECK(geom::math::clamp(2.0f, -1.0f, -1.0f) == -1.0f);
+		CHECK(geom::math::clamp(-1.0f, -1.0f, -1.0f) == -1.0f);
+		CHECK(geom::math::clamp(-2.0f, -1.0f, -1.0f) == -1.0f);
+	}
+}
+
+
 TEST_CASE("Checking if a value is between two bounds.", "[geom_math]") {
 	SECTION("The smaller bound is given first.") {
 		CHECK(geom::math::isBetween(0.0f, 0.0f, 1.0f));
