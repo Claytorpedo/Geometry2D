@@ -25,9 +25,9 @@ namespace geom {
 		const Coord2 firstPos(first.center + offset);
 		const Coord2 separation(firstPos - second.center);
 		const gFloat dist2(separation.magnitude2());
-		const gFloat fullRad(first.radius + second.radius - constants::EPSILON); // Radius of both minus eps.
+		const gFloat fullRad(first.radius + second.radius);
 		const gFloat fullRad2(fullRad * fullRad);
-		if (dist2 <= fullRad2) { // They are currently overlapping.
+		if (dist2 < fullRad2) { // They are currently overlapping.
 			const gFloat dist(std::sqrt(dist2));
 			out_t = first.radius + second.radius - dist;
 			out_norm = separation / dist; // Normalize.
