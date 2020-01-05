@@ -50,6 +50,7 @@ namespace geom::math {
 	}
 
 	// Check if a value is between two bounds (inclusive).
+	// Bounds can be given in any order.
 	template<typename T>
 	constexpr bool isBetween(T val, T bound_one, T bound_two) noexcept {
 		if (bound_one > bound_two)
@@ -58,6 +59,7 @@ namespace geom::math {
 	}
 
 	// Clamp a value between two bounds (inclusive).
+	// Bounds can be given in any order.
 	template<typename T>
 	constexpr T clamp(T val, T bound_one, T bound_two) noexcept {
 		if (bound_one > bound_two)
