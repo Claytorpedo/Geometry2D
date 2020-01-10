@@ -59,12 +59,9 @@ namespace geom {
 		void translate(Coord2 delta) noexcept;
 		[[nodiscard]] static Polygon translate(const Polygon& p, Coord2 delta);
 
-		// For accessing the values of the vertices of the polygon. Note no safety checks.
-		inline Coord2 operator[](std::size_t index) const noexcept { return vertices_[index]; }
+		Coord2 operator[](std::size_t index) const noexcept { return vertices_[index]; }
 		// Get the number of vertices in the polygon.
 		std::size_t size() const noexcept { return vertices_.size(); }
-		// Check if the polygon has any vertices.
-		bool isEmpty() const noexcept { return vertices_.empty(); }
 
 	private:
 		Polygon(std::vector<Coord2> vertices, std::optional<std::vector<Coord2>> edgeNormals);
