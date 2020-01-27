@@ -14,12 +14,6 @@ namespace geom {
 		// Keep a small space buffer around a polygon when moving towards it, to avoid moving into a currently-colliding state.
 		// Acts as if making the polygon slightly larger.
 		static const gFloat COLLISION_BUFFER;
-		// Minimum movement to consider when looking to see if the collider is stuck in a wedge (if moving more than this, considered not stuck).
-		static const gFloat WEDGE_MOVE_THRESH;
-		// Number of attempts to resolve a situation where shapes are already overlapping.
-		static const unsigned int COLLISION_DEBUG_MAX_ATTEMPTS;
-		// How many loops the collision algorithm can perform before stopping.
-		static const unsigned int COLLISION_ALG_MAX_DEPTH;
 
 		// Get the buffer amount to maintain to avoid moving to a collision state.
 		static inline gFloat getPushoutDistance(Coord2 travelDir, Coord2 collisionNormal) {
@@ -31,7 +25,7 @@ namespace geom {
 			DEFLECT, // Collisions result in deflecting along edges.
 			REVERSE, // Collisions result in reversing direction.
 			REFLECT, // Collisions result in reflecting/bouncing off edges.
-			_DEBUG_  // There is an error that must be resolved (the movable is overlapping another collidable).
+			MTV      // Perform MTV collisions by moving the shape by its full movement vector and then resolving collisions.
 		};
 
 		struct CollisionInfo {
@@ -69,15 +63,12 @@ namespace geom {
 		CollisionResult _find_closest_collision(const CollisionMap& collisionMap, CollisionInfo& info) const;
 		// Handle movement. Returns true if movement has finished, false if there may be more to do.
 		bool _move(CollisionInfo& info, const CollisionMap& collisionMap);
-		// Algorithm for deflecting-type collisions.
 		void _move_deflect(CollisionInfo& info, const CollisionMap& collisionMap);
-		// Algorithm for reversing-type collisions.
 		void _move_reverse(CollisionInfo& info, const CollisionMap& collisionMap);
-		// Algorithm for reflecting-type (or "bouncing") collisions
 		void _move_reflect(CollisionInfo& info, const CollisionMap& collisionMap);
+		void _move_MTV(CollisionInfo& info, Coord2 delta, const CollisionMap& collisionMap);
 		// Attempt to fix currently-overlaping collisions.
-		// Returns true if the situation is known to be resolved (collider is no-longer colliding). False indicates an unknown state (may or may not be resolved).
-		bool _debug_collision(CollisionInfo& info, const CollisionMap& collisionMap);
+		void _resolve_collision(CollisionInfo& info, const CollisionMap& collisionMap);
 	};
 }
 #endif // INCLUDE_GEOM_MOVABLE_HPP
