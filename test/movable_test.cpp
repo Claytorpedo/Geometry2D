@@ -727,18 +727,16 @@ SCENARIO("A movable resolves MTV collisions with a stationary collidable.", "[mo
 				}
 			}
 		}
-		/*GIVEN("The stationary collidable is an octagon.") {
+		GIVEN("The stationary collidable is an octagon.") {
 			map.add(Polygon(shapes::octagon));
-			WHEN("The mover's edge hits a face of the polygon.") {
-				mover.position = Coord2(0.3f, -3.1f);
-				const Coord2 delta(0, 0.5f);
+			WHEN("The mover moves to the center of the octogon.") {
+				mover.position = Coord2(-0.5f, -3);
+				const Coord2 delta(0, 2.5f);
 				mover.move(delta, map);
-				THEN("It is pushed out of an edge.") {
-					const Coord2 dest = Coord2(0.3f, -2.6f) + Coord2(1, -3).normalize() * (std::sin(constants::PI / 6) * 0.1f + Movable::COLLISION_BUFFER);
-					CHECK(mover.position.x == ApproxEps(dest.x));
-					CHECK(mover.position.y == ApproxEps(dest.y));
+				THEN("It is pushed out in some direction such that the collision is resolved.") {
+					CHECK(!geom::overlaps(mover.getCollider(), mover.getPosition(), Polygon(shapes::octagon), {}));
 				}
 			}
-		}*/
+		}
 	}
 }
