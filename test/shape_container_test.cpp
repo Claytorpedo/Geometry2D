@@ -89,3 +89,43 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		}
 	}
 }
+
+SCENARIO("In place construction.", "[ShapeContainer]") {
+	GIVEN("A rectangle.") {
+		ShapeContainer shape(std::in_place_type_t<Rect>{}, 1.0f, 2.0f, 3.0f, 4.0f);
+		THEN("It was constructed properly.") {
+			CHECK(shape.type() == ShapeType::RECTANGLE);
+			CHECK(shape.rect().left() == 1);
+			CHECK(shape.rect().right() == 4);
+			CHECK(shape.rect().top() == 2);
+			CHECK(shape.rect().bottom() == 6);
+		}
+	}
+	GIVEN("A polygon.") {
+		std::vector<Coord2> poly;
+		poly.reserve(5);
+		poly.push_back({ 0, 0 });
+		poly.push_back({ 1, 1 });
+		poly.push_back({ 2, 1 });
+		poly.push_back({ 2, 0 });
+		poly.push_back({ 1, -1 });
+		ShapeContainer shape(std::in_place_type_t<Polygon>{}, std::move(poly), true);
+		THEN("It was constructed properly.") {
+			CHECK(shape.type() == ShapeType::POLYGON);
+			CHECK(shape.poly().left() == 0);
+			CHECK(shape.poly().right() == 2);
+			CHECK(shape.poly().top() == -1);
+			CHECK(shape.poly().bottom() == 1);
+		}
+	}
+	GIVEN("A circle.") {
+		ShapeContainer shape(std::in_place_type_t<Circle>{}, 1.0f, 2.0f, 3.0f);
+		THEN("It was constructed properly.") {
+			CHECK(shape.type() == ShapeType::CIRCLE);
+			CHECK(shape.circle().left() == -2);
+			CHECK(shape.circle().right() == 4);
+			CHECK(shape.circle().top() == -1);
+			CHECK(shape.circle().bottom() == 5);
+		}
+	}
+}
