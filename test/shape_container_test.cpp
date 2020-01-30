@@ -88,6 +88,36 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 			CHECK(ref.rect().bottom() == ApproxEps(1));
 		}
 	}
+	GIVEN("A ShapeRef to a ShapeContainer.") {
+		ShapeContainer poly{ Polygon{shapes::octagon} };
+		ShapeRef ref = poly;
+		WHEN("It is converted to a ShapeContainer.") {
+			ShapeContainer copied{ ref };
+			THEN("It is copied.") {
+				const Polygon& p1 = ref.poly();
+				Polygon& p2 = copied.poly();
+				CHECK(p1[0].x == 0);
+				CHECK(p1[0].y == 2);
+				CHECK(p1[7].x == -1.5f);
+				CHECK(p1[7].y == 1.5f);
+				CHECK(p2[0].x == 0);
+				CHECK(p2[0].y == 2);
+				CHECK(p2[7].x == -1.5f);
+				CHECK(p2[7].y == 1.5f);
+
+				copied.poly().translate({ 1,1 });
+
+				CHECK(p1[0].x == 0);
+				CHECK(p1[0].y == 2);
+				CHECK(p1[7].x == -1.5f);
+				CHECK(p1[7].y == 1.5f);
+				CHECK(p2[0].x == 1);
+				CHECK(p2[0].y == 3);
+				CHECK(p2[7].x == -0.5f);
+				CHECK(p2[7].y == 2.5f);
+			}
+		}
+	}
 }
 
 SCENARIO("In place construction.", "[ShapeContainer]") {

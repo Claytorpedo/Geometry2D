@@ -105,6 +105,24 @@ namespace geom {
 			ShapeRef::setShape(::std::get<Contained>(shape_));
 		}
 
+		explicit ShapeContainer(ConstShapeRef shape) noexcept : ShapeRef{ shape.type() } {
+			switch (shape.type()) {
+			case ShapeType::RECTANGLE:
+				shape_ = shape.rect();
+				ShapeRef::setShape(::std::get<Rect>(shape_));
+				break;
+			case ShapeType::POLYGON:
+				shape_ = shape.poly();
+				ShapeRef::setShape(::std::get<Polygon>(shape_));
+				break;
+			case ShapeType::CIRCLE:
+				shape = shape.circle();
+				ShapeRef::setShape(::std::get<Circle>(shape_));
+				break;
+			}
+			setShape();
+		}
+
 		ShapeContainer(const ShapeContainer& o) noexcept : ShapeRef{o.type_}, shape_{o.shape_} {
 			setShape();
 		}
