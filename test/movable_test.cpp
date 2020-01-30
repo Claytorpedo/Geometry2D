@@ -19,7 +19,7 @@ struct MovableTest : public Movable {
 
 class CollisionMapTest : public CollisionMap {
 public:
-	CollisionMapTest() {}
+	CollisionMapTest() = default;
 	CollisionMapTest(std::vector<Collidable*> obstacles) : obstacles_(obstacles) {}
 	~CollisionMapTest() override {
 		clear();
@@ -731,10 +731,42 @@ SCENARIO("A movable resolves MTV collisions with a stationary collidable.", "[mo
 			map.add(Polygon(shapes::octagon));
 			WHEN("The mover moves to the center of the octogon.") {
 				mover.position = Coord2(-0.5f, -3);
-				const Coord2 delta(0, 2.5f);
-				mover.move(delta, map);
+				mover.move({ 0, 2.5f }, map);
 				THEN("It is pushed out in some direction such that the collision is resolved.") {
 					CHECK(!geom::overlaps(mover.getCollider(), mover.getPosition(), Polygon(shapes::octagon), {}));
+				}
+			}
+		}
+		GIVEN("The stationary collidable is a circle.") {
+			map.add(Circle(1));
+			WHEN("The mover glances the side of the circle.") {
+				mover.position = Coord2(0.5f, 2);
+				mover.move({ 0, -2.5f }, map);
+				THEN("It is pushed out.") {
+					CHECK(mover.position.x == ApproxEps(1 + Movable::COLLISION_BUFFER));
+					CHECK(mover.position.y == ApproxEps(-0.5f));
+				}
+			}
+		}
+	}
+	GIVEN("The movable is a circle.") {
+		MovableTest mover(Movable::CollisionType::MTV, Circle{ 1.0f });
+		GIVEN("The stationary collidable is also a circle.") {
+			map.add(Circle(2));
+			WHEN("They overlap and don't move.") {
+				mover.move({ 0, 0 }, map);
+				THEN("Nothing happens. Collisions are only resolved when there is movement.") {
+					CHECK(geom::overlaps(mover.getCollider(), mover.getPosition(), Circle(2), {}));
+					CHECK(mover.position.x == 0);
+					CHECK(mover.position.y == 0);
+				}
+			}
+			WHEN("The mover moves into the top of the other circle.") {
+				mover.position = { 0, -4 };
+				mover.move({ 0, 1.5f }, map);
+				THEN("It is pushed back out the top.") {
+					CHECK(mover.position.x == 0);
+					CHECK(mover.position.y == ApproxEps(-3 - Movable::COLLISION_BUFFER));
 				}
 			}
 		}
