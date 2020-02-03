@@ -250,7 +250,7 @@ endif
 HELP_REGEX = ^ *$(IGNORE_REGEX)([.a-zA-Z_-]+):.*?\#\# .*$$
 .PHONY: help
 help:           ## Display this help.
-	@grep -P '$(HELP_REGEX)' $(MAKEFILE_LIST) | sed 's/^ *//' | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -P '$(HELP_REGEX)' $(firstword $(MAKEFILE_LIST)) | sed 's/^ *//' | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 # Include all dependency files. Use "-" flavour because they might not exist yet (e.g. new file being compiled).
 -include $(DEPS)
