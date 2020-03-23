@@ -49,6 +49,9 @@ namespace geom {
 			return projDir * dot;
 		}
 
+		template <typename U>
+		explicit constexpr operator Vec2<U>() const noexcept { return {static_cast<U>(x), static_cast<U>(y)}; }
+
 		// See if the vector is "inside" vectors a and b.
 		// Considers vectors parallel with a or b to be inside.
 		constexpr bool isInside(const Vec2& a, const Vec2& b) const noexcept {
