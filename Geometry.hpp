@@ -1,8 +1,6 @@
 #ifndef INCLUDE_GEOMETRY_HPP
 #define INCLUDE_GEOMETRY_HPP
 
-#include "geom/debug_logger.hpp"
-
 #include "geom/units.hpp"
 #include "geom/constants.hpp"
 #include "geom/math.hpp"
