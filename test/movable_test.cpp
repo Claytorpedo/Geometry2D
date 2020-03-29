@@ -699,7 +699,6 @@ SCENARIO("A movable resolves MTV collisions with a stationary collidable.", "[mo
 			}
 			WHEN("The mover hits the other rect at an angle.") {
 				mover.position = Coord2(-2, -1);
-				Coord2 dir = Coord2(1, 1).normalize();
 				mover.move(Coord2(1.4f, 1.4f), map);
 				THEN("It is pushed out the left side.") {
 					CHECK(mover.position.x == ApproxEps(-1 - Movable::COLLISION_BUFFER));
