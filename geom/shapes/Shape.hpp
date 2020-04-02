@@ -2,7 +2,6 @@
 #define INCLUDE_GEOM_SHAPE_HPP
 
 #include "../units.hpp"
-#include "../primitives/Direction.hpp"
 
 // Parent class for geometry objects.
 namespace geom {
@@ -33,9 +32,6 @@ namespace geom {
 		virtual Rect getAABB() const;
 		// Find the closest vertex/point to a given point.
 		virtual Coord2 getClosestTo(Coord2 point) const;
-
-		// Get x or y coodrinate in a given direction.
-		gFloat side(Direction side) const;
 	};
 }
 #endif // INCLUDE_GEOM_SHAPE_HPP

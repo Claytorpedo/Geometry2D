@@ -110,9 +110,6 @@
     <ClInclude Include="..\..\geom\intersections\sat.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\geom\primitives\Direction.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\geom\primitives\LineSegment.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

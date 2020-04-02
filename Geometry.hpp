@@ -8,7 +8,6 @@
 #include "geom/primitives/Ray.hpp"
 #include "geom/primitives/LineSegment.hpp"
 #include "geom/primitives/Projection.hpp"
-#include "geom/primitives/Direction.hpp"
 #include "geom/primitives/Vector2D.hpp"
 
 #include "geom/shapes/ShapeContainer.hpp"

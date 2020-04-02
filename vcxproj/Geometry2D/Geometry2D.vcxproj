@@ -119,7 +119,6 @@
     <ClInclude Include="..\..\geom\intersections\overlaps.hpp" />
     <ClInclude Include="..\..\geom\intersections\sat.hpp" />
     <ClInclude Include="..\..\geom\math.hpp" />
-    <ClInclude Include="..\..\geom\primitives\Direction.hpp" />
     <ClInclude Include="..\..\geom\primitives\LineSegment.hpp" />
     <ClInclude Include="..\..\geom\primitives\Projection.hpp" />
     <ClInclude Include="..\..\geom\primitives\Ray.hpp" />
