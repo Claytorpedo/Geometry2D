@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "Collidable.hpp"
 #include "../units.hpp"
 
 namespace geom {
+class Collidable;
 class CollisionMap {
 public:
 	virtual ~CollisionMap() = default;
