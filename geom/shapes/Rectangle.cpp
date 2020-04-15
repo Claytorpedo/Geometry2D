@@ -5,10 +5,6 @@
 
 using namespace geom;
 
-bool Rect::isInside(const Rect& o) const noexcept {
-	return right() <= o.right() && bottom() <= o.bottom() && left() >= o.left() && top() >= o.top();
-}
-
 Projection Rect::getProjection(Coord2 axis) const noexcept {
 	gFloat proj{axis.dot(topLeft())};
 	gFloat min{proj};
@@ -45,10 +41,8 @@ Coord2 Rect::getClosestTo(Coord2 point) const noexcept {
 		closest = bottomRight();
 	}
 	testDist = (point - bottomLeft()).magnitude2();
-	if (testDist < minDist) {
-		minDist = testDist;
+	if (testDist < minDist)
 		closest = bottomLeft();
-	}
 	return closest;
 }
 

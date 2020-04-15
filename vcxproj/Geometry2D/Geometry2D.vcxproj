@@ -50,6 +50,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -119,6 +122,7 @@
     <ClInclude Include="..\..\geom\intersections\overlaps.hpp" />
     <ClInclude Include="..\..\geom\intersections\sat.hpp" />
     <ClInclude Include="..\..\geom\math.hpp" />
+    <ClInclude Include="..\..\geom\primitives\Box2.hpp" />
     <ClInclude Include="..\..\geom\primitives\LineSegment.hpp" />
     <ClInclude Include="..\..\geom\primitives\Projection.hpp" />
     <ClInclude Include="..\..\geom\primitives\Ray.hpp" />
