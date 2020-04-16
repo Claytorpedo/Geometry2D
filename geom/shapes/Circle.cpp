@@ -3,7 +3,7 @@
 #include "Polygon.hpp"
 #include "../constants.hpp"
 
-using namespace geom;
+namespace ctp {
 
 const std::size_t Circle::SEGS_IN_POLY = 20;
 
@@ -28,4 +28,5 @@ Polygon Circle::toPoly() const {
 		vertices.push_back(center + pos);
 	}
 	return Polygon(vertices);
+}
 }

@@ -6,12 +6,12 @@
 #include "../constants.hpp"
 #include "../math.hpp"
 
-using namespace geom;
+namespace ctp {
 
 namespace {
-	constexpr Coord2 computeEdgeNormal(Coord2 first, Coord2 second) noexcept {
-		return Coord2(first.y - second.y, second.x - first.x).normalize();
-	}
+constexpr Coord2 computeEdgeNormal(Coord2 first, Coord2 second) noexcept {
+	return Coord2(first.y - second.y, second.x - first.x).normalize();
+}
 }
 
 Polygon::Polygon(std::vector<Coord2> vertices, bool computeEdgeNormals) : vertices_(std::move(vertices)) {
@@ -112,8 +112,7 @@ Polygon::VerticesInDirection Polygon::getVerticesInDirection(Coord2 dir) const {
 	if (isFirstEdgeAcute) {
 		result.first_index = k + 1;
 		result.is_first_edge_perpendicular = currEdge == math::AngleResult::PERPENDICULAR;
-	}
-	else {
+	} else {
 		result.last_index = k + 1;
 		result.is_last_edge_perpendicular = prevEdge == math::AngleResult::PERPENDICULAR;
 	}
@@ -130,7 +129,7 @@ Polygon Polygon::extend(Coord2 dir, gFloat dist, const VerticesInDirection& vert
 		newEdgeNorms.emplace();
 		newEdgeNorms->reserve(numVerts);
 	}
-	const Coord2 translation(dir*dist);
+	const Coord2 translation(dir * dist);
 	for (int i = 0; i < size; ++i) {
 		// Extend vertices in the region first-to-last inclusive. Duplicate first/last vertices if required.
 		if (i == verticesInfo.first_index && !verticesInfo.is_first_edge_perpendicular) {
@@ -170,7 +169,7 @@ Polygon Polygon::clipExtend(Coord2 dir, gFloat dist, const VerticesInDirection& 
 		newEdgeNorms->reserve(numVerts);
 		newEdgeNorms->emplace_back(dir.perpCCW());
 	}
-	const Coord2 translation(dir*dist);
+	const Coord2 translation(dir * dist);
 	for (int i = verticesInfo.first_index, size = static_cast<int>(vertices_.size()); i != verticesInfo.last_index; i = (++i < size) ? i : 0) {
 		newVertices.emplace_back(vertices_[i] + translation);
 		if (newEdgeNorms)
@@ -215,4 +214,5 @@ void Polygon::_find_bounds() {
 		if (y_max_ < vertices_[i].y)
 			y_max_ = vertices_[i].y;
 	}
+}
 }

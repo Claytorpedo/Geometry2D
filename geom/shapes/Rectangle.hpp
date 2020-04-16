@@ -4,7 +4,7 @@
 #include "Shape.hpp"
 #include "../primitives/Box2.hpp"
 
-namespace geom {
+namespace ctp {
 class Rect : public Box2<gFloat>, public Shape {
 public:
 	using Box2::Box2;

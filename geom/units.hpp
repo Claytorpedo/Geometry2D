@@ -3,9 +3,9 @@
 
 #include "primitives/Vector2D.hpp"
 
-namespace geom {
-	using gFloat = float;
+namespace ctp {
+using gFloat = float;
 
-	using Coord2 = geom::Vec2<gFloat>;
+using Coord2 = Vec2<gFloat>;
 }
 #endif // INCLUDE_GEOM_UNITS_HPP

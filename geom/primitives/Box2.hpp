@@ -3,7 +3,7 @@
 
 #include "Vector2D.hpp"
 
-namespace geom {
+namespace ctp {
 template <typename T>
 struct Box2 {
 	T x{}, y{}, w{}, h{};

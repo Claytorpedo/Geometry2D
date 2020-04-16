@@ -1,12 +1,7 @@
 #include "catch.hpp"
 #include "definitions.hpp"
 
-using geom::gFloat;
-using geom::Coord2;
-using geom::Rect;
-using geom::Polygon;
-using geom::Circle;
-using geom::CollisionResult;
+using namespace ctp;
 
 SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sweep]") {
 	gFloat out_t;
@@ -18,14 +13,14 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 			GIVEN("The stationary shape is a triangle.") {
 				Polygon stationary(shapes::tri);
 				THEN("It should collide immediately and not move at all.") {
-					REQUIRE(geom::collides(collider, Coord2(0, 0), Coord2(0, -10), stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(collider, Coord2(0, 0), Coord2(0, -10), stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_t == ApproxEps(0));
 				}
 			}
 			GIVEN("The stationary shape is a rectangle.") {
 				Rect stationary(-1, 0, 1, 1);
 				THEN("It should collide immediately and not move at all.") {
-					REQUIRE(geom::collides(collider, Coord2(0, 0), Coord2(-10, 0), stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(collider, Coord2(0, 0), Coord2(-10, 0), stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_t == ApproxEps(0));
 				}
 			}
@@ -35,7 +30,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Polygon stationary = Polygon(shapes::octagon);
 				Coord2 stationaryPos(10, 0);
 				THEN("The collider should move the distance between them.") {
-					REQUIRE(geom::collides(collider, Coord2(0, 0), Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(collider, Coord2(0, 0), Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_t == ApproxEps(0.7f));
 				}
 			}
@@ -43,7 +38,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Polygon stationary = Polygon(shapes::tri);
 				Coord2 stationaryPos(3, -4);
 				THEN("The collider should move the distance between them.") {
-					REQUIRE(geom::collides(collider, Coord2(0, 0), Coord2(6, -8), stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(collider, Coord2(0, 0), Coord2(6, -8), stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_t == ApproxEps(0.5f));
 				}
 			}
@@ -59,7 +54,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving up into the triangle.") {
 					Coord2 delta(0, -10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -68,7 +63,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving right into the triangle.") {
 					Coord2 delta(10, 0);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -77,7 +72,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving up-right into the triangle.") {
 					Coord2 delta(10, -10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -91,7 +86,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving left into the rectangle.") {
 					Coord2 delta(-10, 0);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -100,7 +95,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-left into the rectangle.") {
 					Coord2 delta(-10, 10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -109,7 +104,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving up-left into the rectangle.") {
 					Coord2 delta(-1, -100);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -124,7 +119,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 					Coord2 expected_norm(1, 0);
 					Coord2 delta(-10, 0);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.9f));
@@ -138,7 +133,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 					Coord2 expected_norm((stationary[1] - stationary[0]).perpCCW().normalize());
 					Coord2 delta(6, -8);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.5f));
@@ -157,7 +152,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving left into the triangle.") {
 					Coord2 delta(-10, 0);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -166,7 +161,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down into the triangle.") {
 					Coord2 delta(0, 10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -175,7 +170,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-left into the triangle.") {
 					Coord2 delta(-10, 10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -189,7 +184,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving right into the octagon.") {
 					Coord2 delta(10, 0);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -198,7 +193,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-right into the octagon.") {
 					Coord2 delta(10, 10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -207,7 +202,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving up-right into the octagon.") {
 					Coord2 delta(1, -100);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -223,7 +218,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 					Coord2 expected_norm((collider[1] - collider[0]).perpCW().normalize());
 					Coord2 delta(-6, 8);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.5f));
@@ -241,7 +236,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving right into the edge.") {
 					Coord2 delta(10, 0);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -250,7 +245,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-right into the edge.") {
 					Coord2 delta(10, 10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -259,7 +254,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving up-right into the edge.") {
 					Coord2 delta(1, -100);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -273,7 +268,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving left into the edge.") {
 					Coord2 delta(-10, 0);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -282,7 +277,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down into the edge.") {
 					Coord2 delta(0, 10);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -291,7 +286,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-left into the edge.") {
 					Coord2 delta(-1, 100);
 					THEN("It should collide immediately and not move at all.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0));
@@ -307,7 +302,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 					Coord2 delta(-10, 10);
 					Coord2 expected_norm(1, 0);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.1f));
@@ -321,7 +316,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving right into the edge.") {
 					Coord2 delta(10, 0);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.4f));
@@ -330,7 +325,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-right into the edge.") {
 					Coord2 delta(8, 6);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.5f));
@@ -345,7 +340,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				WHEN("Moving down-left into the triangle.") {
 					Coord2 delta(-8, 6);
 					THEN("The collider should move the distance between them.") {
-						REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+						REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 						CHECK(out_norm.x == ApproxEps(expected_norm.x));
 						CHECK(out_norm.y == ApproxEps(expected_norm.y));
 						CHECK(out_t == ApproxEps(0.5f));
@@ -362,7 +357,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 			Coord2 expected_norm((collider[2] - collider[1]).perpCW().normalize());
 			Coord2 delta(0, 1);
 			THEN("The collider should move the distance between them.") {
-				REQUIRE(geom::collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(collider, Coord2(0, 0), delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(1 - ((1.0 / 1000) * 0.1))); // very slightly less than 1
@@ -378,7 +373,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(10, 0);
 				Coord2 expected_norm((collider[2] - collider[1]).perpCW().normalize());
 				THEN("It should collide immediately and not move at all.") {
-					REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(0));
@@ -389,7 +384,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(0, -10);
 				Coord2 expected_norm((collider[0] - collider[2]).perpCW().normalize());
 				THEN("It should move the distance between them.") {
-					REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(0.8f));
@@ -406,7 +401,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(10, 0);
 				Coord2 expected_norm(-1, 0);
 				THEN("They collide immediately and not move at all.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(0));
@@ -417,7 +412,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(10, 0);
 				Coord2 expected_norm(-1, 0);
 				THEN("It should move the distance between them.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(0.8f));
@@ -428,7 +423,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(10, 0);
 				Coord2 expected_norm((Coord2(5 - std::sqrt(45.0f), 18) - stationaryPos).normalize());
 				THEN("It should move the distance between them, and the normal should be the vector between the circles' centers.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps((15.0f - std::sqrt(45.0f))/10.0f));
@@ -442,7 +437,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(-1, 0);
 				Coord2 expected_norm(1, 0);
 				THEN("Any movement towards the octagon causes a collision.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(0));
@@ -455,7 +450,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				gFloat dist((circlePos - Coord2(1.5f, -1.5f)).dot(expected_norm) - 5); // Distance between circle and edge.
 				gFloat expected_t(dist / delta.dot(-expected_norm)); // Compute triangle to edge.
 				THEN("Any movement towards the octagon causes a collision.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(expected_t));
@@ -466,7 +461,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(0, 5.001f);
 				Coord2 expected_norm(0, -1);
 				THEN("It collides with the vertex.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(5.0f / 5.001f));
@@ -478,7 +473,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(norm * -10.001f);
 				Coord2 expected_norm(norm);
 				THEN("It collides with the edge.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(10.0f / 10.001f));
@@ -493,7 +488,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				gFloat closestDist(circlePos.dot(expected_norm) - circle.radius); // Closest distance from circle to edge line.
 				gFloat expected_t(closestDist / delta.dot(-expected_norm)); // Solve triangle: hypotenuese = adjacent / [cosTheta (and total delta)].
 				THEN("It collides with the edge.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(expected_t));
@@ -507,7 +502,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 expected_norm(collisionPoint.normalize());
 				gFloat expected_t((collisionPoint.y - circlePos.y) / 10);
 				THEN("It collides with the leftmost vertex.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(expected_t));
@@ -521,7 +516,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 expected_norm(collisionPoint.normalize());
 				gFloat expected_t((collisionPoint.y - circlePos.y) / 10);
 				THEN("It collides with the rightmost vertex.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(expected_t));
@@ -535,7 +530,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				gFloat closestDist((circlePos - Coord2(2, 0)).dot(expected_norm) - circle.radius); // Closest distance from circle to edge line.
 				gFloat expected_t(closestDist / delta.dot(-expected_norm)); // Solve triangle.
 				THEN("It collides with the octagon's edge.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, octagon, octagonPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(expected_t));
@@ -549,7 +544,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				gFloat closestDist((circlePos - Coord2(2, 0)).dot(-expected_norm) - circle.radius); // Closest distance from circle to edge line.
 				gFloat expected_t(closestDist / (-delta).dot(expected_norm)); // Solve triangle.
 				THEN("It gives the same result, with the normal reversed.") {
-					REQUIRE(geom::collides(octagon, octagonPos, delta, circle, circlePos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(octagon, octagonPos, delta, circle, circlePos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(expected_t));
@@ -563,7 +558,7 @@ SCENARIO("One shape is moving to collide with a stationary one.", "[collides][sw
 				Coord2 delta(-10, 0);
 				Coord2 expected_norm(1, 0);
 				THEN("They collide.") {
-					REQUIRE(geom::collides(circle, circlePos, delta, rect, rectPos, out_norm, out_t) == CollisionResult::SWEEP);
+					REQUIRE(collides(circle, circlePos, delta, rect, rectPos, out_norm, out_t) == CollisionResult::SWEEP);
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_t == ApproxEps(0.1f));
@@ -582,15 +577,15 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 colliderPos(0, 0), stationaryPos(0, 0);
 			THEN("They give the same MTV, regardless of the direction of movement (if any).") {
 				// We don't know which normal will be chosen, as all axes are the MTV.
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_t == ApproxEps(1));
 			}
 		}
@@ -598,23 +593,23 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 colliderPos(-0.99f, 0), stationaryPos(0, 0);
 			Coord2 expected_norm(-1, 0);
 			THEN("They give the same MTV, regardless of the direction of movement (if any).") {
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
@@ -628,23 +623,23 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 colliderPos(-1.5f, -3), stationaryPos(0, 0);
 			Coord2 expected_norm(0, -1);
 			THEN("They give the same MTV, regardless of the direction of movement (if any).") {
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(1));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(1));
@@ -657,23 +652,23 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 colliderPos(0.01f, 0), stationaryPos(10, 0);
 			Coord2 expected_norm(-1, 0);
 			THEN("They give the same MTV, regardless of the direction of movement (if any).") {
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
@@ -687,23 +682,23 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 colliderPos(6.99f, 0), stationaryPos(0, 0);
 			Coord2 expected_norm(1, 0);
 			THEN("They give the same MTV, regardless of the direction of movement (if any).") {
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(10, -90), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
-				REQUIRE(geom::collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, Coord2(0, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.01f));
@@ -715,7 +710,7 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 delta(4, 3);
 			Coord2 expected_norm(norm);
 			THEN("It is an MTV collision.") {
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.1f));
@@ -730,7 +725,7 @@ SCENARIO("One shape is moving, but it is currently overlapping another one.", "[
 			Coord2 delta(10, 10);
 			Coord2 expected_norm(1, 0);
 			THEN("The MTV is out of that edge.") {
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::MTV);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.1f));
@@ -747,22 +742,22 @@ SCENARIO("One shape is moving, and will not collide with another one.", "[collid
 		Coord2 colliderPos(0, 0), stationaryPos(0, 0);
 		WHEN("They move away from each other.") {
 			THEN("They will not collide.") {
-				CHECK(geom::collides(collider, colliderPos, Coord2(0, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(collider, colliderPos, Coord2(10, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, Coord2(0, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, Coord2(10, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 			}
 		}
 		WHEN("They slide along an edge.") {
 			Coord2 delta(10, 10);
 			THEN("They will not collide.") {
-				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(collider, colliderPos, -delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, -delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 			}
 		}
 		WHEN("They are not moving.") {
 			Coord2 delta(0, 0);
 			THEN("They will not collide.")
-				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 	}
 	GIVEN("Two polygons that are not touching.") {
@@ -771,31 +766,31 @@ SCENARIO("One shape is moving, and will not collide with another one.", "[collid
 		Coord2 colliderPos(5, 2), stationaryPos(-5, 2);
 		WHEN("They move away from each other.") {
 			THEN("They will not collide.") {
-				CHECK(geom::collides(collider, colliderPos, Coord2(0, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(collider, colliderPos, Coord2(10, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, Coord2(0, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, Coord2(10, 0), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, Coord2(10, -10), stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 			}
 		}
 		WHEN("They move towards each other, but fall short of a collision.") {
 			Coord2 delta(-5, 0);
 			THEN("They will not collide.")
-				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("They move until they are touching, but not overlapping.") {
 			Coord2 delta(-10, 0);
 			THEN("They will not collide.")
-				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("They \"glance\" each other, but never overlap.") {
 			Coord2 colliderPos2(11, 12), stationaryPos2(1, 2);
 			Coord2 delta(-20, -20);
 			THEN("They will not collide.")
-				CHECK(geom::collides(collider, colliderPos2, delta, stationary, stationaryPos2, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos2, delta, stationary, stationaryPos2, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("They are not moving.") {
 			Coord2 delta(0, 0);
 			THEN("They will not collide.")
-				CHECK(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 	}
 	GIVEN("Two circles.") {
@@ -804,19 +799,19 @@ SCENARIO("One shape is moving, and will not collide with another one.", "[collid
 			Coord2 colliderPos(-2, 20), stationaryPos(5, 20);
 			Coord2 delta(-20, 0);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The collider is on the right side of the circle, and moves rightwards, away from it.") {
 			Coord2 colliderPos(5, 0), stationaryPos(-2, 0);
 			Coord2 delta(50, 0);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The collider brushes past the other circle, but does not overlap it.") {
 			Coord2 colliderPos(-2, 13), stationaryPos(5, 20);
 			Coord2 delta(-10, 0);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 	}
 	GIVEN("A cricle and an octagon.") {
@@ -826,44 +821,44 @@ SCENARIO("One shape is moving, and will not collide with another one.", "[collid
 			Coord2 colliderPos(7, 0), stationaryPos(0, 0);
 			Coord2 delta(20, 0);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The moving circle is very close to a vertex on the octagon on it's right side, and moves away from it.") {
 			Coord2 colliderPos(7.01f, 0), stationaryPos(0, 0);
 			Coord2 delta(0, 10);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The moving circle is very close to a vertex on the octagon on it's left side, and moves away from it.") {
 			Coord2 colliderPos(-7.01f, 0), stationaryPos(0, 0);
 			Coord2 delta(0, 10);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The circle moves past a vertex of the octagon, but doesn't overlap with it.") {
 			Coord2 colliderPos(7, -5), stationaryPos(0, 0);
 			Coord2 delta(0, 10);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The circle moves along an ege of the octagon, but doesn't overlap with it.") {
 			Coord2 colliderPos(-1.5f, -5.7705f), stationaryPos(0, 2);
 			Coord2 delta(15, 5);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The circle moves until it is touching, but not overlapping, a vertex.") {
 			Coord2 colliderPos(0, -10), stationaryPos(0, 2);
 			Coord2 delta(0, 5);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The circle moves until it is touching, but not overlapping, an edge.") {
 			Coord2 norm(Coord2(0.5f, -1.5f).normalize());
 			Coord2 colliderPos(Coord2(0.9f, 0.3f) + norm * 15), stationaryPos(0, 2);
 			Coord2 delta(norm * -10);
 			THEN("They don't collide.")
-				REQUIRE(geom::collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
+				REQUIRE(collides(collider, colliderPos, delta, stationary, stationaryPos, out_norm, out_t) == CollisionResult::NONE);
 		}
 	}
 }
@@ -881,22 +876,22 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 		WHEN("They move away from each other.") {
 			Coord2 p1Delta(10, 0), p2Delta(-10, 0);
 			THEN("They will not collide.") {
-				CHECK(geom::collides(p1, pos1, Coord2(10, 0), p2, pos2, Coord2(-10, 0), out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(p1, pos1, Coord2(0, -10), p2, pos2, Coord2(0, 10), out_norm, out_t) == CollisionResult::NONE);
-				CHECK(geom::collides(p1, pos1, Coord2(10, -10), p2, pos2, Coord2(-10, 10), out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, Coord2(10, 0), p2, pos2, Coord2(-10, 0), out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, Coord2(0, -10), p2, pos2, Coord2(0, 10), out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, Coord2(10, -10), p2, pos2, Coord2(-10, 10), out_norm, out_t) == CollisionResult::NONE);
 			}
 		}
 		WHEN("They move towards each other.") {
 			THEN("They will collide.") {
-				REQUIRE(geom::collides(p1, pos1, Coord2(-10, 0), p2, pos2, Coord2(10, 0), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(-10, 0), p2, pos2, Coord2(10, 0), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0));
-				REQUIRE(geom::collides(p1, pos1, Coord2(0, 10), p2, pos2, Coord2(0, -10), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(0, 10), p2, pos2, Coord2(0, -10), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0));
-				REQUIRE(geom::collides(p1, pos1, Coord2(-10, 10), p2, pos2, Coord2(10, -10), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(-10, 10), p2, pos2, Coord2(10, -10), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0));
@@ -905,17 +900,17 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 		WHEN("They slide along an edge.") {
 			Coord2 p1Delta(10, 10), p2Delta(-10, -10);
 			THEN("They will not collide.")
-				CHECK(geom::collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("They move at the same speed.") {
 			Coord2 p1Delta(10, 0), p2Delta(10, 0);
 			THEN("They will not collide.")
-				CHECK(geom::collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
 		}
 		WHEN("The delta of one overtakes the delta of the other.") {
 			Coord2 p1Delta(10, 0), p2Delta(20, 0);
 			THEN("They will collide effectively immediately.") {
-				REQUIRE(geom::collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0));
@@ -924,7 +919,7 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 		WHEN("They are not moving.") {
 			Coord2 p1Delta(0, 0), p2Delta(0, 0);
 			THEN("They will not collide.")
-				CHECK(geom::collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
 		}
 	}
 	GIVEN("Two shapes a distance apart.") {
@@ -934,19 +929,19 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 		WHEN("They move towards each other.") {
 			Coord2 expected_norm(-1, 0);
 			THEN("They will collide, the time determined by how fast they cover the distance between them.") {
-				REQUIRE(geom::collides(p1, pos1, Coord2(10, 0), p2, pos2, Coord2(-10, 0), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(10, 0), p2, pos2, Coord2(-10, 0), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.4f));
-				REQUIRE(geom::collides(p1, pos1, Coord2(10, 0), p2, pos2, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(10, 0), p2, pos2, Coord2(0, 0), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.8f));
-				REQUIRE(geom::collides(p1, pos1, Coord2(100, 0), p2, pos2, Coord2(0, 1), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(100, 0), p2, pos2, Coord2(0, 1), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.08f));
-				REQUIRE(geom::collides(p1, pos1, Coord2(100, 0), p2, pos2, Coord2(20, 0), out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(p1, pos1, Coord2(100, 0), p2, pos2, Coord2(20, 0), out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps(0.1f));
@@ -955,7 +950,7 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 		WHEN("They move until they touch, but don't overlap.") {
 			Coord2 p1Delta(4, 0), p2Delta(-4, 0);
 			THEN("They do not collide.")
-				CHECK(geom::collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
+				CHECK(collides(p1, pos1, p1Delta, p2, pos2, p2Delta, out_norm, out_t) == CollisionResult::NONE);
 		}
 	}
 	GIVEN("Two overlapping shapes.") {
@@ -963,19 +958,19 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 		Coord2 pos1(0, 0), pos2(-0.5f, 0);
 		Coord2 expected_norm(1, 0);
 		THEN("They get the same MTV, regardless of deltas.") {
-			REQUIRE(geom::collides(p1, pos1, Coord2(1000, 1), p2, pos2, Coord2(1000, 1), out_norm, out_t) == CollisionResult::MTV);
+			REQUIRE(collides(p1, pos1, Coord2(1000, 1), p2, pos2, Coord2(1000, 1), out_norm, out_t) == CollisionResult::MTV);
 			CHECK(out_norm.x == ApproxEps(expected_norm.x));
 			CHECK(out_norm.y == ApproxEps(expected_norm.y));
 			CHECK(out_t == ApproxEps(0.5f));
-			REQUIRE(geom::collides(p1, pos1, Coord2(0, 0), p2, pos2, Coord2(10, 10), out_norm, out_t) == CollisionResult::MTV);
+			REQUIRE(collides(p1, pos1, Coord2(0, 0), p2, pos2, Coord2(10, 10), out_norm, out_t) == CollisionResult::MTV);
 			CHECK(out_norm.x == ApproxEps(expected_norm.x));
 			CHECK(out_norm.y == ApproxEps(expected_norm.y));
 			CHECK(out_t == ApproxEps(0.5f));
-			REQUIRE(geom::collides(p1, pos1, Coord2(10, 10), p2, pos2, Coord2(0, 0), out_norm, out_t) == CollisionResult::MTV);
+			REQUIRE(collides(p1, pos1, Coord2(10, 10), p2, pos2, Coord2(0, 0), out_norm, out_t) == CollisionResult::MTV);
 			CHECK(out_norm.x == ApproxEps(expected_norm.x));
 			CHECK(out_norm.y == ApproxEps(expected_norm.y));
 			CHECK(out_t == ApproxEps(0.5f));
-			REQUIRE(geom::collides(p1, pos1, Coord2(0, 0), p2, pos2, Coord2(0, 0), out_norm, out_t) == CollisionResult::MTV);
+			REQUIRE(collides(p1, pos1, Coord2(0, 0), p2, pos2, Coord2(0, 0), out_norm, out_t) == CollisionResult::MTV);
 			CHECK(out_norm.x == ApproxEps(expected_norm.x));
 			CHECK(out_norm.y == ApproxEps(expected_norm.y));
 			CHECK(out_t == ApproxEps(0.5f));
@@ -988,7 +983,7 @@ SCENARIO("Hybrid SAT with both shapes moving.", "[collides]") {
 			Coord2 delta1(10, 10), delta2(-10, -10);
 			Coord2 expected_norm(Coord2(-1, -1).normalize());
 			THEN("They will collide, the time determined by how fast they cover the distance between them.") {
-				REQUIRE(geom::collides(c1, pos1, delta1, c2, pos2, delta2, out_norm, out_t) == CollisionResult::SWEEP);
+				REQUIRE(collides(c1, pos1, delta1, c2, pos2, delta2, out_norm, out_t) == CollisionResult::SWEEP);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
 				CHECK(out_t == ApproxEps((std::sqrt(200) - 10) / (std::sqrt(200.0f)*2.0f))); // Distance between / speed.

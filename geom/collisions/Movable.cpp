@@ -12,14 +12,14 @@
 #include "../collisions/CollisionMap.hpp"
 #include "../intersections/overlaps.hpp"
 
-using namespace geom;
+namespace ctp {
 namespace {
-	// Minimum movement to consider when looking to see if the collider is stuck in a wedge (if moving more than this, considered not stuck).
-	constexpr gFloat WEDGE_MOVE_THRESH = 0.0001f;
-	// Number of attempts to resolve a situation where shapes are already overlapping.
-	constexpr int MTV_RESOLUTION_MAX_ATTAMTPS = 3;
-	// How many loops the collision algorithm can perform before stopping.
-	constexpr int COLLISION_ALG_MAX_DEPTH = 25;
+// Minimum movement to consider when looking to see if the collider is stuck in a wedge (if moving more than this, considered not stuck).
+constexpr gFloat WEDGE_MOVE_THRESH = 0.0001f;
+// Number of attempts to resolve a situation where shapes are already overlapping.
+constexpr int MTV_RESOLUTION_MAX_ATTAMTPS = 3;
+// How many loops the collision algorithm can perform before stopping.
+constexpr int COLLISION_ALG_MAX_DEPTH = 25;
 }
 
 const gFloat Movable::COLLISION_BUFFER = 0.001f;
@@ -32,21 +32,21 @@ Coord2 Movable::move(ConstShapeRef collider, Coord2 origin, Coord2 delta, const 
 	if (delta.isZero())
 		return origin; // Nowhere to move.
 	switch (type) {
-		case CollisionType::NONE:
-			info.currentPosition += delta;
-			break;
-		case CollisionType::DEFLECT:
-			_move_deflect(info, collisionMap);
-			break;
-		case CollisionType::REVERSE:
-			_move_reverse(info, collisionMap);
-			break;
-		case CollisionType::REFLECT:
-			_move_reflect(info, collisionMap);
-			break;
-		case CollisionType::MTV:
-			_move_MTV(info, delta, collisionMap);
-			break;
+	case CollisionType::NONE:
+		info.currentPosition += delta;
+		break;
+	case CollisionType::DEFLECT:
+		_move_deflect(info, collisionMap);
+		break;
+	case CollisionType::REVERSE:
+		_move_reverse(info, collisionMap);
+		break;
+	case CollisionType::REFLECT:
+		_move_reflect(info, collisionMap);
+		break;
+	case CollisionType::MTV:
+		_move_MTV(info, delta, collisionMap);
+		break;
 	}
 	return info.currentPosition;
 }
@@ -168,7 +168,7 @@ void Movable::_move_reflect(Movable::CollisionInfo& info, const CollisionMap& co
 	DBG_WARN("Maximum movement attempts (" << COLLISION_ALG_MAX_DEPTH << ") used. Stopping reflect algorithm.");
 }
 
-void geom::Movable::_move_MTV(CollisionInfo& info, Coord2 delta, const CollisionMap& collisionMap) {
+void Movable::_move_MTV(CollisionInfo& info, Coord2 delta, const CollisionMap& collisionMap) {
 	std::vector<Coord2> positions;
 	positions.reserve(MTV_RESOLUTION_MAX_ATTAMTPS + 1); // Keep track of current position, in case we oscillate between positions.
 	positions.push_back(info.currentPosition);
@@ -225,4 +225,5 @@ void Movable::_resolve_collision(CollisionInfo& info, const CollisionMap& collis
 		}
 	}
 	DBG_WARN("Max debug attempts (" << MTV_RESOLUTION_MAX_ATTAMTPS << ") used. MTV collision may not be resolved.");
+}
 }

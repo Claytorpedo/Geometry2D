@@ -3,14 +3,14 @@
 
 #include "../units.hpp"
 
-namespace geom {
-	class ConstShapeRef;
+namespace ctp {
+class ConstShapeRef;
 
-	class Collidable {
-	public:
-		virtual ~Collidable() = default;
-		virtual Coord2 getPosition() const = 0;
-		virtual ConstShapeRef getCollider() const = 0;
-	};
+class Collidable {
+public:
+	virtual ~Collidable() = default;
+	virtual Coord2 getPosition() const = 0;
+	virtual ConstShapeRef getCollider() const = 0;
+};
 }
 #endif // INCLUDE_GEOM_COLLIDABLE_HPP

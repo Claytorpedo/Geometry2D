@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "definitions.hpp"
 
-using namespace geom;
+using namespace ctp;
 
 SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 	GIVEN("A rectangle and circle ShapeContainer.") {
@@ -89,10 +89,10 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		}
 	}
 	GIVEN("A ShapeRef to a ShapeContainer.") {
-		ShapeContainer poly{ Polygon{shapes::octagon} };
+		ShapeContainer poly{Polygon{shapes::octagon}};
 		ShapeRef ref = poly;
 		WHEN("It is converted to a ShapeContainer.") {
-			ShapeContainer copied{ ref };
+			ShapeContainer copied{ref};
 			THEN("It is copied.") {
 				const Polygon& p1 = ref.poly();
 				Polygon& p2 = copied.poly();
@@ -105,7 +105,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 				CHECK(p2[7].x == -1.5f);
 				CHECK(p2[7].y == 1.5f);
 
-				copied.poly().translate({ 1,1 });
+				copied.poly().translate({1,1});
 
 				CHECK(p1[0].x == 0);
 				CHECK(p1[0].y == 2);
@@ -134,11 +134,11 @@ SCENARIO("In place construction.", "[ShapeContainer]") {
 	GIVEN("A polygon.") {
 		std::vector<Coord2> poly;
 		poly.reserve(5);
-		poly.push_back({ 0, 0 });
-		poly.push_back({ 1, 1 });
-		poly.push_back({ 2, 1 });
-		poly.push_back({ 2, 0 });
-		poly.push_back({ 1, -1 });
+		poly.push_back({0, 0});
+		poly.push_back({1, 1});
+		poly.push_back({2, 1});
+		poly.push_back({2, 0});
+		poly.push_back({1, -1});
 		ShapeContainer shape(std::in_place_type_t<Polygon>{}, std::move(poly), true);
 		THEN("It was constructed properly.") {
 			CHECK(shape.type() == ShapeType::POLYGON);

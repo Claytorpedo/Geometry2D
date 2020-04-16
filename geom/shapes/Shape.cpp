@@ -6,7 +6,7 @@
 #include "../units.hpp"
 #include "../primitives/Projection.hpp"
 
-using namespace geom;
+namespace ctp {
 
 Projection Shape::getProjection(Coord2 axis) const {
 	Polygon p(this->toPoly());
@@ -19,4 +19,5 @@ Rect Shape::getAABB() const {
 
 Coord2 Shape::getClosestTo(Coord2 point) const {
 	return this->toPoly().getClosestTo(point);
+}
 }

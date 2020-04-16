@@ -3,8 +3,7 @@
 #include "Polygon.hpp"
 #include "../primitives/Projection.hpp"
 
-using namespace geom;
-
+namespace ctp {
 Projection Rect::getProjection(Coord2 axis) const noexcept {
 	gFloat proj{axis.dot(topLeft())};
 	gFloat min{proj};
@@ -54,4 +53,5 @@ Polygon Rect::toPoly() const {
 	vertices.emplace_back(bottomRight());
 	vertices.emplace_back(topRight());
 	return Polygon{std::move(vertices)};
+}
 }

@@ -2,7 +2,7 @@
 
 #include "primitives/Ray.hpp"
 
-using namespace geom;
+namespace ctp {
 
 Coord2 math::closestPointOnLine(const Ray& ray, Coord2 point) noexcept {
 	return ray.origin + (point - ray.origin).dot(ray.dir) * ray.dir;
@@ -25,4 +25,5 @@ math::AngleResult math::minAngle(Coord2 vec1, Coord2 vec2) noexcept {
 	if (dot > 0)
 		return AngleResult::ACUTE;
 	return AngleResult::OBTUSE;
+}
 }

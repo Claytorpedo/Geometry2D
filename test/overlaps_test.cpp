@@ -1,34 +1,30 @@
 #include "catch.hpp"
 #include "definitions.hpp"
 
-using geom::gFloat;
-using geom::Coord2;
-using geom::Rect;
-using geom::Polygon;
-using geom::Circle;
+using namespace ctp;
 
 TEST_CASE("Rectangle overlap.", "[overlaps]") {
 	Rect r(0, 0, 1, 1);
 	Rect o(0, 0, 1, 1);
-	CHECK(geom::overlaps(r, o));
+	CHECK(overlaps(r, o));
 	o = Rect(-1, 0, 1, 1);
-	CHECK_FALSE(geom::overlaps(r, o));
+	CHECK_FALSE(overlaps(r, o));
 	o = Rect(-10, 0, 10, 1);
-	CHECK_FALSE(geom::overlaps(r, o));
+	CHECK_FALSE(overlaps(r, o));
 	o = Rect(-10, 0, 10.1f, 1);
-	CHECK(geom::overlaps(r, o));
+	CHECK(overlaps(r, o));
 	o = Rect(0.9f, -0.9f, 1, 1);
-	CHECK(geom::overlaps(r, o));
+	CHECK(overlaps(r, o));
 	o = Rect(0.5f, -1, 1, 1);
-	CHECK_FALSE(geom::overlaps(r, o));
+	CHECK_FALSE(overlaps(r, o));
 	o = Rect(0.5f, 0.5f, 0.25f, 0.25f);
-	CHECK(geom::overlaps(r, o));
+	CHECK(overlaps(r, o));
 	r = Rect(-10, -10, 5, 5);
-	CHECK_FALSE(geom::overlaps(r, o));
+	CHECK_FALSE(overlaps(r, o));
 	o = Rect(-10, -5, 1, 1);
-	CHECK_FALSE(geom::overlaps(r, o));
+	CHECK_FALSE(overlaps(r, o));
 	o = Rect(-10, -5.1f, 1, 1);
-	CHECK(geom::overlaps(r, o));
+	CHECK(overlaps(r, o));
 }
 
 SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
@@ -38,33 +34,33 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 		GIVEN("A second triangle.") {
 			Polygon o(shapes::tri);
 			THEN("They don't overlap until we move them together.") {
-				CHECK_FALSE(geom::overlaps(p, o));
+				CHECK_FALSE(overlaps(p, o));
 				o.translate({ 0, 1 });
-				CHECK(geom::overlaps(p, o));
+				CHECK(overlaps(p, o));
 				o.translate({ 1.9f, 1.5f });
-				CHECK(geom::overlaps(p, o));
+				CHECK(overlaps(p, o));
 				o.translate({ 0.1f, 0 });
-				CHECK_FALSE(geom::overlaps(p, o));
+				CHECK_FALSE(overlaps(p, o));
 			}
 		}
 		GIVEN("An identical triangle.") {
 			Polygon o(shapes::rightTri);
 			THEN("They overlap.")
-				CHECK(geom::overlaps(p, o));
+				CHECK(overlaps(p, o));
 		}
 		GIVEN("A triangle inside the first one.") {
 			std::vector<Coord2> inside;
 			for (std::size_t i = 0; i < shapes::rightTri.size(); ++i) inside.push_back(shapes::rightTri[i] * 0.5f);
 			Polygon o(inside);
 			THEN("They overlap.") {
-				CHECK(geom::overlaps(p, o));
+				CHECK(overlaps(p, o));
 				o.translate({ 0.5f, 0.5f });
-				CHECK(geom::overlaps(p, o));
+				CHECK(overlaps(p, o));
 			}
 		}
 		GIVEN("A triangle only sharing an edge.") {
 			Polygon o(shapes::edgeTri);
-			CHECK_FALSE(geom::overlaps(p, o));
+			CHECK_FALSE(overlaps(p, o));
 		}
 	}
 	GIVEN("Two large triangles.") {
@@ -72,27 +68,27 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 		Polygon q(points1);
 		std::vector<Coord2> points2 = { Coord2(-1000000, -2000000), Coord2(1000000, 0), Coord2(3000000, -1000000) };
 		Polygon r(points2);
-		CHECK_FALSE(geom::overlaps(q, r));
+		CHECK_FALSE(overlaps(q, r));
 		std::vector<Coord2> points3 = { Coord2(-1000000, -2000000), Coord2(1000000, 1), Coord2(3000000, -1000000) };
 		r = Polygon(points3);
-		CHECK(geom::overlaps(q, r));
+		CHECK(overlaps(q, r));
 	}
 	GIVEN("A triangle and a rectangle.") {
 		Polygon p(shapes::edgeTriR);
 		Rect o(0, 0, 1, 1);
-		CHECK(geom::overlaps(p, o));
+		CHECK(overlaps(p, o));
 		o += Coord2(1, 0);
-		CHECK_FALSE(geom::overlaps(p, o));
+		CHECK_FALSE(overlaps(p, o));
 		o += Coord2(-0.5f, 1);
-		CHECK_FALSE(geom::overlaps(p, o));
+		CHECK_FALSE(overlaps(p, o));
 		o += Coord2(0, -0.1f);
-		CHECK(geom::overlaps(p, o));
+		CHECK(overlaps(p, o));
 		o = Rect(0, 0, 2, 2);
-		CHECK(geom::overlaps(p, o));
+		CHECK(overlaps(p, o));
 		o += Coord2(-0.5f, -0.5f);
-		CHECK(geom::overlaps(p, o));
+		CHECK(overlaps(p, o));
 		p.translate({ 0, -1.5f });
-		CHECK_FALSE(geom::overlaps(p, o));
+		CHECK_FALSE(overlaps(p, o));
 	}
 	GIVEN("Convex polygons.") {
 		GIVEN("An octagon and an arbitrary convex polygon.") {
@@ -100,47 +96,47 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			Polygon o(shapes::octagon);
 			WHEN("They have a lot of overlap.") {
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, o));
+					CHECK(overlaps(p, o));
 			}
 			WHEN("The octagon is nearly out the left side.") {
 				o.translate({ -1.9f, 0 });
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, o));
+					CHECK(overlaps(p, o));
 			}
 			WHEN("The octagon is nearly out of the right side.") {
 				o.translate({ 4.9f, 0 });
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, o));
+					CHECK(overlaps(p, o));
 			}
 			WHEN("The octagon is only touching the left side.") {
 				o.translate({ -2, 0 });
 				THEN("Touching polygons are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, o));
+					CHECK_FALSE(overlaps(p, o));
 			}
 			WHEN("The octagon is only touching the right side.") {
 				o.translate({ 5, 0 });
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, o));
+					CHECK_FALSE(overlaps(p, o));
 			}
 			WHEN("They are significantly apart.") {
 				o.translate({ 20, 50 });
 				THEN("They do not overlap.")
-					CHECK_FALSE(geom::overlaps(p, o));
+					CHECK_FALSE(overlaps(p, o));
 			}
 			WHEN("The octagon is nearly out of the top.") {
 				o.translate({ 1, -3.9f });
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, o));
+					CHECK(overlaps(p, o));
 			}
 			WHEN("The octagon is only touching the top.") {
 				o.translate({ 1, -4 });
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, o));
+					CHECK_FALSE(overlaps(p, o));
 			}
 			WHEN("The octagon is edged out of the top left.") {
 				o.translate({ -0.66f, -3.9f });
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, o));
+					CHECK_FALSE(overlaps(p, o));
 			}
 		}
 		GIVEN("An octagon and a smaller octagon.") {
@@ -150,12 +146,12 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			Polygon o(inside);
 			WHEN("One is completely inside the other.") {
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, o));
+					CHECK(overlaps(p, o));
 			}
 			WHEN("One is inside the other, sharing edges.") {
 				o.translate({ -1, 0 });
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, o));
+					CHECK(overlaps(p, o));
 			}
 		}
 	}
@@ -166,16 +162,16 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			WHEN("The circles have significant overlap.") {
 				c2.center = Coord2(0, 8);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(c, c2));
+					CHECK(overlaps(c, c2));
 			}
 			WHEN("Their edges are touching.") {
 				c2.center = Coord2(10, 0);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, c2));
+					CHECK_FALSE(overlaps(c, c2));
 			}
 			WHEN("Their centers are the same position.") {
 				THEN("They are overlapping.")
-					CHECK(geom::overlaps(c, c2));
+					CHECK(overlaps(c, c2));
 			}
 		}
 		GIVEN("A rectangle.") {
@@ -183,27 +179,27 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			WHEN("The circle is overlapping an edge.") {
 				r += Coord2(-1, 4.9f);
 				THEN("They are overlapping.")
-					CHECK(geom::overlaps(c, r));
+					CHECK(overlaps(c, r));
 			}
 			WHEN("The circle is overlapping a corner.") {
 				r += Coord2(1, 1).normalize() * 4.9f;
 				THEN("They are overlapping.")
-					CHECK(geom::overlaps(c, r));
+					CHECK(overlaps(c, r));
 			}
 			WHEN("The circle is touching an edge, but not overlapping.") {
 				r += Coord2(-1, 5);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, r));
+					CHECK_FALSE(overlaps(c, r));
 			}
 			WHEN("The circle is close to a corner, but not touching.") {
 				r += Coord2(1, 1).normalize() * 5.1f;
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, r));
+					CHECK_FALSE(overlaps(c, r));
 			}
 			WHEN("The circle is touching a corner, but not overlapping.") {
 				r += Coord2(1, 1).normalize() * 5.0f;
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, r));
+					CHECK_FALSE(overlaps(c, r));
 			}
 		}
 		GIVEN("An octagon.") {
@@ -211,16 +207,16 @@ SCENARIO("Testing two shapes for overlap.", "[overlaps]") {
 			WHEN("The circle is touching a vertex, but not overlapping.") {
 				p.translate({ 7, 0 });
 				THEN("They don't overlap.")
-					CHECK_FALSE(geom::overlaps(c, p));
+					CHECK_FALSE(overlaps(c, p));
 			}
 			WHEN("The circle is overlapping a vertex.") {
 				p.translate({ 6.9f, 0 });
 				THEN("They overlap.")
-					CHECK(geom::overlaps(c, p));
+					CHECK(overlaps(c, p));
 			}
 			WHEN("The circle is in the middle of the octagon.") {
 				THEN("They overlap.")
-					CHECK(geom::overlaps(c, p));
+					CHECK(overlaps(c, p));
 			}
 		}
 	}
@@ -234,20 +230,20 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 			Polygon o(shapes::tri);
 			Coord2 pos2(0, 0);
 			THEN("They don't overlap until we move them together.") {
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2));
 				pos2 = Coord2(0, 1);
-				CHECK(geom::overlaps(p, pos1, o, pos2));
+				CHECK(overlaps(p, pos1, o, pos2));
 				pos2 = Coord2(1.9f, 2.5f);
-				CHECK(geom::overlaps(p, pos1, o, pos2));
+				CHECK(overlaps(p, pos1, o, pos2));
 				pos1 = Coord2(-0.1f, 0);
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2));
 			}
 		}
 		GIVEN("An identical triangle.") {
 			Polygon o(shapes::rightTri);
 			Coord2 pos2(0, 0);
 			THEN("They overlap.")
-				CHECK(geom::overlaps(p, pos1, o, pos2));
+				CHECK(overlaps(p, pos1, o, pos2));
 		}
 		GIVEN("A triangle inside the first one.") {
 			std::vector<Coord2> inside;
@@ -255,15 +251,15 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 			Polygon o(inside);
 			Coord2 pos2(0, 0);
 			THEN("They overlap.") {
-				CHECK(geom::overlaps(p, pos1, o, pos2));
+				CHECK(overlaps(p, pos1, o, pos2));
 				pos2 = Coord2(0.5f, 0.5f);
-				CHECK(geom::overlaps(p, pos1, o, pos2));
+				CHECK(overlaps(p, pos1, o, pos2));
 			}
 		}
 		GIVEN("A triangle only sharing an edge.") {
 			Polygon o(shapes::edgeTri);
 			Coord2 pos2(0, 0);
-			CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+			CHECK_FALSE(overlaps(p, pos1, o, pos2));
 		}
 	}
 	GIVEN("Two large triangles.") {
@@ -273,32 +269,32 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 		std::vector<Coord2> points2 = { Coord2(-1000000, -2000000), Coord2(1000000, 0), Coord2(3000000, -1000000) };
 		Polygon r(points2);
 		Coord2 posR(0, 0);
-		CHECK_FALSE(geom::overlaps(q, posQ, r, posR));
+		CHECK_FALSE(overlaps(q, posQ, r, posR));
 		std::vector<Coord2> points3 = { Coord2(-1000000, -2000000), Coord2(1000000, 1), Coord2(3000000, -1000000) };
 		r = Polygon(points3);
-		CHECK(geom::overlaps(q, posQ, r, posR));
+		CHECK(overlaps(q, posQ, r, posR));
 	}
 	GIVEN("A triangle and a rectangle.") {
 		Polygon p(shapes::edgeTriR);
 		Coord2 pos1(0, 0);
 		Rect o(0, 0, 1, 1);
 		Coord2 pos2(0, 0);
-		CHECK(geom::overlaps(p, pos1, o, pos2));
+		CHECK(overlaps(p, pos1, o, pos2));
 		pos1 = Coord2(0.5f, 0);
 		pos2 = Coord2(1.5f, 0);
-		CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+		CHECK_FALSE(overlaps(p, pos1, o, pos2));
 		pos2 = Coord2(1, 1);
-		CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+		CHECK_FALSE(overlaps(p, pos1, o, pos2));
 		pos2 = Coord2(1, 0.9f);
-		CHECK(geom::overlaps(p, pos1, o, pos2));
+		CHECK(overlaps(p, pos1, o, pos2));
 		o = Rect(0, 0, 2, 2);
 		pos1 = Coord2(0, 0);
 		pos2 = Coord2(0, 0);
-		CHECK(geom::overlaps(p, pos1, o, pos2));
+		CHECK(overlaps(p, pos1, o, pos2));
 		pos1 = Coord2(0.5f, 0.5f);
-		CHECK(geom::overlaps(p, pos1, o, pos2));
+		CHECK(overlaps(p, pos1, o, pos2));
 		pos1 = Coord2(0.5f, -1);
-		CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+		CHECK_FALSE(overlaps(p, pos1, o, pos2));
 	}
 	GIVEN("Convex polygons.") {
 		GIVEN("An octagon and an arbitrary convex polygon.") {
@@ -308,47 +304,47 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 			WHEN("They have a lot of overlap.") {
 				Coord2 pos2(0, 0);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, pos1, o, pos2));
+					CHECK(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is nearly out the left side.") {
 				Coord2 pos2(-1.9f, 0);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, pos1, o, pos2));
+					CHECK(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is nearly out of the right side.") {
 				Coord2 pos2(4.9f, 0);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, pos1, o, pos2));
+					CHECK(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is only touching the left side.") {
 				Coord2 pos2(-2, 0);
 				THEN("Touching polygons are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+					CHECK_FALSE(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is only touching the right side.") {
 				Coord2 pos2(5, 0);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+					CHECK_FALSE(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("They are significantly apart.") {
 				Coord2 pos2(20, 50);
 				THEN("They do not overlap.")
-					CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+					CHECK_FALSE(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is nearly out of the top.") {
 				Coord2 pos2(1, -3.9f);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, pos1, o, pos2));
+					CHECK(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is only touching the top.") {
 				Coord2 pos2(1, -4);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+					CHECK_FALSE(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("The octagon is edged out of the top left.") {
 				Coord2 pos2(-0.66f, -3.9f);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(p, pos1, o, pos2));
+					CHECK_FALSE(overlaps(p, pos1, o, pos2));
 			}
 		}
 		GIVEN("An octagon and a smaller octagon.") {
@@ -360,12 +356,12 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 			WHEN("One is completely inside the other.") {
 				Coord2 pos2(0, 0);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, pos1, o, pos2));
+					CHECK(overlaps(p, pos1, o, pos2));
 			}
 			WHEN("One is inside the other, sharing edges.") {
 				Coord2 pos2(-1, 0);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(p, pos1, o, pos2));
+					CHECK(overlaps(p, pos1, o, pos2));
 			}
 		}
 	}
@@ -377,19 +373,19 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 				Coord2 pos1(0, -4);
 				Coord2 pos2(0, 4);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(c, pos1, c2, pos2));
+					CHECK(overlaps(c, pos1, c2, pos2));
 			}
 			WHEN("Their edges are touching.") {
 				Coord2 pos1(-5, 0);
 				Coord2 pos2(5, 0);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, pos1, c2, pos2));
+					CHECK_FALSE(overlaps(c, pos1, c2, pos2));
 			}
 			WHEN("Their centers are the same position.") {
 				Coord2 pos1(10, 11);
 				Coord2 pos2(10, 11);
 				THEN("They are overlapping.")
-					CHECK(geom::overlaps(c, pos1, c2, pos2));
+					CHECK(overlaps(c, pos1, c2, pos2));
 			}
 		}
 		GIVEN("A rectangle.") {
@@ -398,34 +394,34 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 				Coord2 pos1(1, 0);
 				Coord2 pos2(0, 4.9f);
 				THEN("They are overlapping.")
-					CHECK(geom::overlaps(c, pos1, r, pos2));
+					CHECK(overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is overlapping a corner.") {
 				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * 2.0f);
 				Coord2 pos2(dir * 6.9f);
 				THEN("They are overlapping.")
-					CHECK(geom::overlaps(c, pos1, r, pos2));
+					CHECK(overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is touching an edge, but not overlapping.") {
 				Coord2 pos1(1, 0);
 				Coord2 pos2(0, 5);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, pos1, r, pos2));
+					CHECK_FALSE(overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is close to a corner, but not touching.") {
 				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * -3.1f);
 				Coord2 pos2(dir * 2.0f);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, pos1, r, pos2));
+					CHECK_FALSE(overlaps(c, pos1, r, pos2));
 			}
 			WHEN("The circle is touching a corner, but not overlapping.") {
 				Coord2 dir{ Coord2(1, 1).normalize() };
 				Coord2 pos1(dir * -3.0f);
 				Coord2 pos2(dir * 2.0f);
 				THEN("They are not overlapping.")
-					CHECK_FALSE(geom::overlaps(c, pos1, r, pos2));
+					CHECK_FALSE(overlaps(c, pos1, r, pos2));
 			}
 		}
 		GIVEN("An octagon.") {
@@ -434,19 +430,19 @@ SCENARIO("Testing two shapes for overlap with given positions.", "[overlaps]") {
 				Coord2 pos1(-1, 0);
 				Coord2 pos2(6, 0);
 				THEN("They don't overlap.")
-					CHECK_FALSE(geom::overlaps(c, pos1, p, pos2));
+					CHECK_FALSE(overlaps(c, pos1, p, pos2));
 			}
 			WHEN("The circle is overlapping a vertex.") {
 				Coord2 pos1(-1, 0);
 				Coord2 pos2(5.9f, 0);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(c, pos1, p, pos2));
+					CHECK(overlaps(c, pos1, p, pos2));
 			}
 			WHEN("The circle is in the middle of the octagon.") {
 				Coord2 pos1(1, 2);
 				Coord2 pos2(1, 2);
 				THEN("They overlap.")
-					CHECK(geom::overlaps(c, pos1, p, pos2));
+					CHECK(overlaps(c, pos1, p, pos2));
 			}
 		}
 	}
@@ -462,7 +458,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle from the right.") {
 			pos1 = Coord2(0.8f, 0);
 			THEN("The rectangle is separated out of the triangle to the right.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(1, 0);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -472,7 +468,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle from the top.") {
 			pos1 = Coord2(0, -0.8f);
 			THEN("The rectangle is separated out of the triangle upwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(0, -1);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -482,7 +478,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle along the hypotenuse.") {
 			pos1 = Coord2(-0.4f, 0.4f);
 			THEN("The rectangle is separated out of the triangle left-downwards") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(-1, 1).normalize());
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -492,7 +488,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle along the bottom.") {
 			pos1 = Coord2(0.5f, 0.8f);
 			THEN("The rectangle is separated out of the triangle downwards") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(0, 1);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -507,7 +503,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle from the right.") {
 			pos1 = Coord2(0.8f, 0);
 			THEN("The rectangle is separated out of the triangle to the right.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(1, 0);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -517,7 +513,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle from the top.") {
 			pos1 = Coord2(0, -99.8f);
 			THEN("The rectangle is separated out of the triangle upwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(0, -1);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -527,7 +523,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle along the hypotenuse.") {
 			pos1 = Coord2(-99.4f, 0.4f);
 			THEN("The rectangle is separated out of the triangle left-downwards") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(-1, 1).normalize());
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -537,7 +533,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The rectangle slightly overlaps the triangle along the bottom.") {
 			pos1 = Coord2(-50, 0.8f);
 			THEN("The rectangle is separated out of the triangle downwards") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(0, 1);
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -547,7 +543,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The triangle is just below the rectangle's top-left corner.") {
 			pos2 = Coord2(0, 0.1f);
 			THEN("The rectangle is separated out of the triangle rightwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(1, 0));
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -557,7 +553,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The triangle is just below the rectangle's bottom-left corner.") {
 			pos2 = Coord2(0, 99.1f);
 			THEN("The rectangle is separated out of the triangle upwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(0, -1));
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -567,7 +563,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The triangle is just to the right of the rectangle's top-right corner.") {
 			pos2 = Coord2(99.1f, 0);
 			THEN("The rectangle is separated out of the triangle left-downwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(-1, 1).normalize());
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -577,7 +573,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The triangle is just below the rectangle's bottom-right corner.") {
 			pos2 = Coord2(99, 99.1f);
 			THEN("The rectangle is separated out of the triangle upwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(0, -1));
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -587,7 +583,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The triangle is just above the rectangle's center.") {
 			pos2 = Coord2(49.5f, 49.1f);
 			THEN("The rectangle is separated out of the triangle downwards.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(0, 1));
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -604,7 +600,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The small triangle overlaps the large one along its hypotenuse.") {
 			pos1 = Coord2(50, 50);
 			THEN("The small triangle is separated left-downward.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(-1, 1).normalize());
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -614,7 +610,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The small triangle overlaps the large one inside its hypotenuse.") {
 			pos1 = Coord2(51, 50);
 			THEN("The small triangle is separated left-downward.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm(Coord2(-1, 1).normalize());
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -631,7 +627,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				Coord2 pos2(0, 4);
 				THEN("The first circle is separated upwards.") {
 					Coord2 expected_norm(0, -1);
-					REQUIRE(geom::overlaps(c, pos1, c2, pos2, out_norm, out_dist));
+					REQUIRE(overlaps(c, pos1, c2, pos2, out_norm, out_dist));
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_dist == ApproxEps(2.0f));
@@ -641,7 +637,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				Coord2 pos1(10, 11);
 				Coord2 pos2(10, 11);
 				THEN("They are separated (in any direction).") {
-					REQUIRE(geom::overlaps(c, pos1, c2, pos2, out_norm, out_dist));
+					REQUIRE(overlaps(c, pos1, c2, pos2, out_norm, out_dist));
 					CHECK((out_norm.x != 0.0f || out_norm.y != 0.0f)); // Not a zero vector.
 					CHECK(out_dist == ApproxEps(10.0f));
 				}
@@ -653,7 +649,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				Coord2 pos1(1, 0);
 				Coord2 pos2(0, 4.9f);
 				THEN("The circle is pushed out upwards by the edge normal.") {
-					REQUIRE(geom::overlaps(c, pos1, r, pos2, out_norm, out_dist));
+					REQUIRE(overlaps(c, pos1, r, pos2, out_norm, out_dist));
 					CHECK(out_norm.x == ApproxEps(0));
 					CHECK(out_norm.y == ApproxEps(-1));
 					CHECK(out_dist == ApproxEps(0.1f));
@@ -665,7 +661,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				Coord2 pos2(dir * 6.9f);
 				THEN("The circle is pushed out diagonally, along its axis with the corner.") {
 					Coord2 expected_norm(-dir);
-					REQUIRE(geom::overlaps(c, pos1, r, pos2, out_norm, out_dist));
+					REQUIRE(overlaps(c, pos1, r, pos2, out_norm, out_dist));
 					CHECK(out_norm.x == ApproxEps(expected_norm.x));
 					CHECK(out_norm.y == ApproxEps(expected_norm.y));
 					CHECK(out_dist == ApproxEps(0.1f));
@@ -678,7 +674,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 				Coord2 pos1(-1, 0);
 				Coord2 pos2(5.9f, 0);
 				THEN("The circle is pushed out left, along its axis with the vertex..") {
-					REQUIRE(geom::overlaps(c, pos1, p, pos2, out_norm, out_dist));
+					REQUIRE(overlaps(c, pos1, p, pos2, out_norm, out_dist));
 					CHECK(out_norm.x == ApproxEps(-1));
 					CHECK(out_norm.y == ApproxEps(0));
 					CHECK(out_dist == ApproxEps(0.1f));
@@ -692,7 +688,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 					Coord2 dir{ Coord2(0.5f, 1.5f).normalize() };
 					gFloat cosTheta(Coord2(0, 1).dot(dir));
 					gFloat outDist = 5.0f + cosTheta * 2.0f; // Radius + cosTheta * octagon_height.
-					REQUIRE(geom::overlaps(c, pos1, p, pos2, out_norm, out_dist));
+					REQUIRE(overlaps(c, pos1, p, pos2, out_norm, out_dist));
 					CHECK((out_norm.x != 0.0f || out_norm.y != 0.0f)); // Not a zero vector.
 					CHECK(out_dist == ApproxEps(outDist));
 				}
@@ -706,7 +702,7 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("They octagon overlaps the arbitrary shape's left side.") {
 			Coord2 pos1{ 4, 0 };
 			THEN("The octagon is separated out to the right.") {
-				REQUIRE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				REQUIRE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 				Coord2 expected_norm{ 1, 0 };
 				CHECK(out_norm.x == ApproxEps(expected_norm.x));
 				CHECK(out_norm.y == ApproxEps(expected_norm.y));
@@ -717,27 +713,27 @@ SCENARIO("Two shapes are overlapping, and need to be separated (by the minimum t
 		WHEN("The octagon is only touching the left side.") {
 			Coord2 pos1(-2, 0);
 			THEN("Touching shapes are not overlapping.")
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 		}
 		WHEN("The octagon is only touching the right side.") {
 			Coord2 pos1(5, 0);
 			THEN("They are not overlapping.")
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 		}
 		WHEN("They are significantly apart.") {
 			Coord2 pos1(20, 50);
 			THEN("They do not overlap.")
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 		}
 		WHEN("The octagon is only touching the top.") {
 			Coord2 pos1(1, -4);
 			THEN("They are not overlapping.")
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 		}
 		WHEN("The octagon is edged out of the top left.") {
 			Coord2 pos1(-0.66f, -3.9f);
 			THEN("They are not overlapping.")
-				CHECK_FALSE(geom::overlaps(p, pos1, o, pos2, out_norm, out_dist));
+				CHECK_FALSE(overlaps(p, pos1, o, pos2, out_norm, out_dist));
 		}
 	}
 }

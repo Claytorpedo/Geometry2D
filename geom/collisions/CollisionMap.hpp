@@ -5,8 +5,9 @@
 
 #include "../units.hpp"
 
-namespace geom {
+namespace ctp {
 class Collidable;
+
 class CollisionMap {
 public:
 	virtual ~CollisionMap() = default;
@@ -17,6 +18,5 @@ public:
 		return getColliding(collider, Coord2(0, 0));
 	}
 };
-
 }
 #endif // INCLUDE_GEOM_COLLISION_MAP_HPP
