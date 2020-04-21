@@ -32,7 +32,7 @@ Run `make help` for a list of options.
 
 ## Using the library
 
-Include `Geometry.hpp`. The library uses namespace `geom` (EG: `geom::Rect` or `geom::Circle`).
+Include `Geometry.hpp`. The library uses namespace `ctp` (EG: `ctp::Rect` or `ctp::Circle`).
 
 Link the library with `-LGeometry/lib/ -lgeom`.
 
