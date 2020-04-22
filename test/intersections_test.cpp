@@ -127,13 +127,13 @@ TEST_CASE("Line segment and coordinate intersections.", "[isect][lineseg][coord]
 TEST_CASE("Ray and coordinate intersections.", "[isect][ray][coord]") {
 	SECTION("Coordinates on a diagonal ray.") {
 		SECTION("Diagonal ray from origin.") {
-			Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+			Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 			CHECK(intersects(r, Coord2(0, 0)));
 			CHECK(intersects(r, Coord2(1, 1)));
 			CHECK(intersects(r, Coord2(100000.5f, 100000.5f)));
 		}
 		SECTION("Diagonal ray not from origin.") {
-			Ray r(Coord2(10, 5), Coord2(-1, -0.5f).normalize());
+			Ray r{Coord2(10, 5), Coord2(-1, -0.5f).normalize()};
 			CHECK(intersects(r, Coord2(10, 5)));
 			CHECK(intersects(r, Coord2(0, 0)));
 			CHECK(intersects(r, Coord2(0, 0)));
@@ -142,13 +142,13 @@ TEST_CASE("Ray and coordinate intersections.", "[isect][ray][coord]") {
 	}
 	SECTION("Coordinates on a vertical ray.") {
 		SECTION("Down ray from origin.") {
-			Ray r(Coord2(0, 0), Coord2(0, 1));
+			Ray r{Coord2(0, 0), Coord2(0, 1)};
 			CHECK(intersects(r, Coord2(0, 0)));
 			CHECK(intersects(r, Coord2(0, 1)));
 			CHECK(intersects(r, Coord2(0, 10000000)));
 		}
 		SECTION("Up ray not from origin.") {
-			Ray r(Coord2(10, 2), Coord2(0, -1));
+			Ray r{Coord2(10, 2), Coord2(0, -1)};
 			CHECK(intersects(r, Coord2(10, 2)));
 			CHECK(intersects(r, Coord2(10, 1)));
 			CHECK(intersects(r, Coord2(10, -1000000)));
@@ -156,13 +156,13 @@ TEST_CASE("Ray and coordinate intersections.", "[isect][ray][coord]") {
 	}
 	SECTION("Coordinates on a horizontal ray.") {
 		SECTION("Right ray from origin.") {
-			Ray r(Coord2(0, 0), Coord2(1, 0));
+			Ray r{Coord2(0, 0), Coord2(1, 0)};
 			CHECK(intersects(r, Coord2(0, 0)));
 			CHECK(intersects(r, Coord2(1, 0)));
 			CHECK(intersects(r, Coord2(10000000, 0)));
 		}
 		SECTION("Left ray not from origin.") {
-			Ray r(Coord2(12, 4), Coord2(-1, 0));
+			Ray r{Coord2(12, 4), Coord2(-1, 0)};
 			CHECK(intersects(r, Coord2(12, 4)));
 			CHECK(intersects(r, Coord2(11, 4)));
 			CHECK(intersects(r, Coord2(-10000000, 4)));
@@ -170,13 +170,13 @@ TEST_CASE("Ray and coordinate intersections.", "[isect][ray][coord]") {
 	}
 	SECTION("Coordinates off a diagonal ray.") {
 		SECTION("Diagonal ray from origin.") {
-			Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+			Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 			CHECK_FALSE(intersects(r, Coord2(1, 0)));
 			CHECK_FALSE(intersects(r, Coord2(0, 1)));
 			CHECK_FALSE(intersects(r, Coord2(100000, 100000.5f)));
 		}
 		SECTION("Diagonal ray not from origin.") {
-			Ray r(Coord2(10, 5), Coord2(-1, -0.5f).normalize());
+			Ray r{Coord2(10, 5), Coord2(-1, -0.5f).normalize()};
 			CHECK_FALSE(intersects(r, Coord2(12, 6)));
 			CHECK_FALSE(intersects(r, Coord2(9, 5)));
 			CHECK_FALSE(intersects(r, Coord2(9, 3)));
@@ -185,13 +185,13 @@ TEST_CASE("Ray and coordinate intersections.", "[isect][ray][coord]") {
 	}
 	SECTION("Coordinates off a vertical ray.") {
 		SECTION("Down ray from origin.") {
-			Ray r(Coord2(0, 0), Coord2(0, 1));
+			Ray r{Coord2(0, 0), Coord2(0, 1)};
 			CHECK_FALSE(intersects(r, Coord2(1, 0)));
 			CHECK_FALSE(intersects(r, Coord2(0, -0.5f)));
 			CHECK_FALSE(intersects(r, Coord2(0.5f, 10000000)));
 		}
 		SECTION("Up ray not from origin.") {
-			Ray r(Coord2(10, 2), Coord2(0, -1));
+			Ray r{Coord2(10, 2), Coord2(0, -1)};
 			CHECK_FALSE(intersects(r, Coord2(10, 2.5f)));
 			CHECK_FALSE(intersects(r, Coord2(10.5f, 1)));
 			CHECK_FALSE(intersects(r, Coord2(9.5f, -1000000)));
@@ -199,13 +199,13 @@ TEST_CASE("Ray and coordinate intersections.", "[isect][ray][coord]") {
 	}
 	SECTION("Coordinates off a horizontal ray.") {
 		SECTION("Right ray from origin.") {
-			Ray r(Coord2(0, 0), Coord2(1, 0));
+			Ray r{Coord2(0, 0), Coord2(1, 0)};
 			CHECK_FALSE(intersects(r, Coord2(-0.5f, 0)));
 			CHECK_FALSE(intersects(r, Coord2(1, 0.5f)));
 			CHECK_FALSE(intersects(r, Coord2(10000000, -0.5f)));
 		}
 		SECTION("Left ray not from origin.") {
-			Ray r(Coord2(12, 4), Coord2(-1, 0));
+			Ray r{Coord2(12, 4), Coord2(-1, 0)};
 			CHECK_FALSE(intersects(r, Coord2(12.5f, 4)));
 			CHECK_FALSE(intersects(r, Coord2(12, 3.5f)));
 			CHECK_FALSE(intersects(r, Coord2(-10000000, -4)));
@@ -280,7 +280,7 @@ TEST_CASE("Line segment intersections.", "[isect][lineseg]") {
 }
 TEST_CASE("Ray and line segment intersections, ignoring parallel intersections.", "[isect][ray][lineseg]") {
 	SECTION("Ray and a point.") {
-		Ray r(Coord2(0, 0), Coord2(1, 2).normalize());
+		Ray r{Coord2(0, 0), Coord2(1, 2).normalize()};
 		CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(1, 2, 1, 2)));
 		CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, 0, 0)));
 		CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(1, 1.5f, 1, 1.5f)));
@@ -288,7 +288,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 	SECTION("Parallel line segments and rays.") {
 		SECTION("Horizontal line segments and rays.") {
 			SECTION("Right ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, -1, 0)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-0.1f, 0, -10, 0)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(5, 0, 1, 0)));
@@ -296,7 +296,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(50, 0.1f, 100, 0.1f)));
 			}
 			SECTION("Left ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(-10, 10), Coord2(-1, 0).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, 10, -100, 10)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-100, 10, -1000, 10)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-100, 10.1f, -1000, 10.1f)));
@@ -304,7 +304,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 		}
 		SECTION("Vertical line segments and rays.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, 0, 1)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, -0.1f, -10, 0)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 5, 0, 1)));
@@ -312,7 +312,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0.1f, 50, 0.1f, 100)));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(0, -1).normalize());
+				Ray r{Coord2(10, -10), Coord2(0, -1).normalize()};
 				LineSegment s(10, 10, 10, -100);
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(2, 0, -10, 6)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, -100, 10, -1000)));
@@ -321,7 +321,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 		}
 		SECTION("Diagonal line segments and rays.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, -1, -1)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-0.1f, -0.1f, -10, -10)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(5, 5, 1, 1)));
@@ -329,7 +329,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(50.1f, 50, 100.1f, 100)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(10, 10), Coord2(-1, 2).normalize());
+				Ray r{Coord2(10, 10), Coord2(-1, 2).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(15, 0, 0, 30)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 30, -35, 100)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0.1f, 30, -34.9f, 100)));
@@ -339,14 +339,14 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 	SECTION("Perpendicular line segments and rays.") {
 		SECTION("Horizontal ray.") {
 			SECTION("Rightwards ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				CHECK(intersects_ignore_parallel(r, LineSegment(0, 0, 0, -1)));
 				CHECK(intersects_ignore_parallel(r, LineSegment(0, 10, 0, -10)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-0.1f, 10, -0.1f, 10)));
 				CHECK(intersects_ignore_parallel(r, LineSegment(1000, 10, 1000, -10)));
 			}
 			SECTION("Leftwards ray not from origin.") {
-				Ray r = Ray(Coord2(-10, -10), Coord2(-1, 0).normalize());
+				Ray r = Ray{Coord2(-10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, -10, -10, 10)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-9.9f, -10, -9.9f, 10)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-1000, 10, -1000, -20)));
@@ -354,14 +354,14 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 		}
 		SECTION("Vertical ray.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 0, -1, 0)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, 0, -10, 0)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, -0.1f, 10, -0.1f)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, 1000, -10, 1000)));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(-10, -10), Coord2(0, -1).normalize());
+				Ray r{Coord2(-10, -10), Coord2(0, -1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, -10, -10, -10)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, -9.9f, -10, -9.9f)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, -1000, -10, -1000)));
@@ -369,7 +369,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 		}
 		SECTION("Diagonal ray.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 0, -5, 5)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(5, -5, -5, 5)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(5, -5, 0.1f, -0.1f)));
@@ -377,7 +377,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 1000, 1000, 0)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(1, -2).normalize());
+				Ray r{Coord2(-10, 10), Coord2(1, -2).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, -5, 0, 0)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-20, 5.1f, 0, 15.1f)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, -2000, 4000, 0)));
@@ -387,14 +387,14 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 	SECTION("Diagonal line segment and ray intersections.") {
 		SECTION("Horizontal ray.") {
 			SECTION("Right ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, -1, 1000, 1)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(1000, 1, 0, -1)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, -4000, 1, 4000)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-2, -4000, 1, 4000)));
 			}
 			SECTION("Left ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 20, -20, -40)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-65, 140, 15, -20)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-64.9f, 140, 15.1f, -20)));
@@ -402,14 +402,14 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 		}
 		SECTION("Vertical ray.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-1, 0, 1, 1000)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(1, 1000, -1, 0)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-4000, 0, 4000, 1)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-4000, -2, 4000, 1)));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(20, 0, -40, -20)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(100, -85, -20, 15)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(140, -64.9f, -20, 15.1f)));
@@ -417,7 +417,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 		}
 		SECTION("Diagonal ray.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, 0, 10, 0)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(800, 0, 800, 1000)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-0.1f, -10, -0.1f, -10)));
@@ -425,7 +425,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections."
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, 100, 100, 55)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(1, -2).normalize());
+				Ray r{Coord2(-10, 10), Coord2(1, -2).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, -5, 0, 0)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-20, 5.1f, 0, 15.1f)));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, -2000, 4000, 0)));
@@ -547,7 +547,7 @@ TEST_CASE("Line segment intersections with coordinate of intersection output.", 
 TEST_CASE("Ray and line segment intersections with distance of intersection output.", "[isect][ray][lineseg]") {
 	gFloat out_t;
 	SECTION("Ray and a point.") {
-		Ray r(Coord2(0, 0), Coord2(1, 2).normalize());
+		Ray r{Coord2(0, 0), Coord2(1, 2).normalize()};
 		REQUIRE(intersects(r, LineSegment(1, 2, 1, 2), out_t));
 		CHECK(out_t == ApproxEps(std::sqrt(5)));
 		REQUIRE(intersects(r, LineSegment(0, 0, 0, 0), out_t));
@@ -557,7 +557,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 	SECTION("Parallel line segments and rays.") {
 		SECTION("Horizontal line segments and rays.") {
 			SECTION("Right ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 0, -1, 0), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects(r, LineSegment(-0.1f, 0, -10, 0), out_t));
@@ -568,7 +568,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK_FALSE(intersects(r, LineSegment(50, 0.1f, 100, 0.1f), out_t));
 			}
 			SECTION("Left ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(-10, 10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(10, 10, -100, 10), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(-100, 10, -1000, 10), out_t));
@@ -578,7 +578,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 		}
 		SECTION("Vertical line segments and rays.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 0, 0, 1), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects(r, LineSegment(0, -0.1f, -10, 0), out_t));
@@ -589,7 +589,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK_FALSE(intersects(r, LineSegment(0.1f, 50, 0.1f, 100), out_t));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(0, -1).normalize());
+				Ray r{Coord2(10, -10), Coord2(0, -1).normalize()};
 				REQUIRE(intersects(r, LineSegment(10, 10, 10, -100), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(10, -100, 10, -1000), out_t));
@@ -599,7 +599,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 		}
 		SECTION("Diagonal line segments and rays.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 0, -1, -1), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects(r, LineSegment(-0.1f, -0.1f, -10, -10), out_t));
@@ -610,7 +610,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK_FALSE(intersects(r, LineSegment(50.1f, 50, 100.1f, 100), out_t));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(10, 10), Coord2(-1, 2).normalize());
+				Ray r{Coord2(10, 10), Coord2(-1, 2).normalize()};
 				REQUIRE(intersects(r, LineSegment(15, 0, 0, 30), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(0, 30, -35, 100), out_t));
@@ -622,7 +622,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 	SECTION("Perpendicular line segments and rays.") {
 		SECTION("Horizontal ray.") {
 			SECTION("Rightwards ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 0, 0, -1), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(0, 10, 0, -10), out_t));
@@ -632,7 +632,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK(out_t == ApproxEps(1000));
 			}
 			SECTION("Leftwards ray not from origin.") {
-				Ray r = Ray(Coord2(-10, -10), Coord2(-1, 0).normalize());
+				Ray r = Ray{Coord2(-10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(-10, -10, -10, 10), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects(r, LineSegment(-9.9f, -10, -9.9f, 10), out_t));
@@ -642,7 +642,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 		}
 		SECTION("Vertical ray.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 0, -1, 0), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(10, 0, -10, 0), out_t));
@@ -652,7 +652,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK(out_t == ApproxEps(1000));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(-10, -10), Coord2(0, -1).normalize());
+				Ray r{Coord2(-10, -10), Coord2(0, -1).normalize()};
 				REQUIRE(intersects(r, LineSegment(10, -10, -10, -10), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects(r, LineSegment(10, -9.9f, -10, -9.9f), out_t));
@@ -662,7 +662,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 		}
 		SECTION("Diagonal ray.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 0, -5, 5), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(5, -5, -5, 5), out_t));
@@ -673,7 +673,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK(out_t == ApproxEps(std::sqrt(500000)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(1, -2).normalize());
+				Ray r{Coord2(-10, 10), Coord2(1, -2).normalize()};
 				REQUIRE(intersects(r, LineSegment(-10, -5, 0, 0), out_t));
 				CHECK(out_t == ApproxEps(std::sqrt(180)));
 				CHECK_FALSE(intersects(r, LineSegment(-20, 5.1f, 0, 15.1f), out_t));
@@ -685,7 +685,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 	SECTION("Diagonal line segment and ray intersections.") {
 		SECTION("Horizontal ray.") {
 			SECTION("Right ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, -1, 1000, 1), out_t));
 				CHECK(out_t == ApproxEps(500));
 				REQUIRE(intersects(r, LineSegment(1000, 1, 0, -1), out_t));
@@ -695,7 +695,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK_FALSE(intersects(r, LineSegment(-2, -4000, 1, 4000), out_t));
 			}
 			SECTION("Left ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(0, 20, -20, -40), out_t));
 				CHECK(out_t == ApproxEps(20));
 				REQUIRE(intersects(r, LineSegment(-65, 140, 15, -20), out_t));
@@ -705,7 +705,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 		}
 		SECTION("Vertical ray.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects(r, LineSegment(-1, 0, 1, 1000), out_t));
 				CHECK(out_t == ApproxEps(500));
 				REQUIRE(intersects(r, LineSegment(1, 1000, -1, 0), out_t));
@@ -715,7 +715,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK_FALSE(intersects(r, LineSegment(-4000, -2, 4000, 1), out_t));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects(r, LineSegment(20, 0, -40, -20), out_t));
 				CHECK(out_t == ApproxEps(20));
 				REQUIRE(intersects(r, LineSegment(100, -85, -20, 15), out_t));
@@ -725,7 +725,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 		}
 		SECTION("Diagonal ray.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects(r, LineSegment(-10, 0, 10, 0), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects(r, LineSegment(800, 0, 800, 1000), out_t));
@@ -736,7 +736,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 				CHECK(out_t == ApproxEps(std::sqrt(9800)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(1, -2).normalize());
+				Ray r{Coord2(-10, 10), Coord2(1, -2).normalize()};
 				REQUIRE(intersects(r, LineSegment(-10, -5, 0, 0), out_t));
 				CHECK(out_t == ApproxEps(std::sqrt(180)));
 				CHECK_FALSE(intersects(r, LineSegment(-20, 5.1f, 0, 15.1f), out_t));
@@ -750,7 +750,7 @@ TEST_CASE("Ray and line segment intersections with distance of intersection outp
 TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, with distance of intersection output.", "[isect][ray][lineseg]") {
 	gFloat out_t;
 	SECTION("Ray and a point.") {
-		Ray r(Coord2(0, 0), Coord2(1, 2).normalize());
+		Ray r{Coord2(0, 0), Coord2(1, 2).normalize()};
 		CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(1, 2, 1, 2), out_t));
 		CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, 0, 0), out_t));
 		CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(1, 1.5f, 1, 1.5f), out_t));
@@ -758,7 +758,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 	SECTION("Parallel line segments and rays.") {
 		SECTION("Horizontal line segments and rays.") {
 			SECTION("Right ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, -1, 0), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-0.1f, 0, -10, 0), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(5, 0, 1, 0), out_t));
@@ -766,7 +766,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(50, 0.1f, 100, 0.1f), out_t));
 			}
 			SECTION("Left ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(-10, 10), Coord2(-1, 0).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, 10, -100, 10), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-100, 10, -1000, 10), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-100, 10.1f, -1000, 10.1f), out_t));
@@ -774,7 +774,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 		}
 		SECTION("Vertical line segments and rays.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, 0, 1), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, -0.1f, -10, 0), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 5, 0, 1), out_t));
@@ -782,7 +782,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0.1f, 50, 0.1f, 100), out_t));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(0, -1).normalize());
+				Ray r{Coord2(10, -10), Coord2(0, -1).normalize()};
 				LineSegment s(10, 10, 10, -100);
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(2, 0, -10, 6), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, -100, 10, -1000), out_t));
@@ -791,7 +791,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 		}
 		SECTION("Diagonal line segments and rays.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 0, -1, -1), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-0.1f, -0.1f, -10, -10), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(5, 5, 1, 1), out_t));
@@ -799,7 +799,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(50.1f, 50, 100.1f, 100), out_t));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(10, 10), Coord2(-1, 2).normalize());
+				Ray r{Coord2(10, 10), Coord2(-1, 2).normalize()};
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(15, 0, 0, 30), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0, 30, -35, 100), out_t));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(0.1f, 30, -34.9f, 100), out_t));
@@ -809,7 +809,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 	SECTION("Perpendicular line segments and rays.") {
 		SECTION("Horizontal ray.") {
 			SECTION("Rightwards ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 0, 0, -1), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 10, 0, -10), out_t));
@@ -819,7 +819,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK(out_t == ApproxEps(1000));
 			}
 			SECTION("Leftwards ray not from origin.") {
-				Ray r = Ray(Coord2(-10, -10), Coord2(-1, 0).normalize());
+				Ray r = Ray{Coord2(-10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, -10, -10, 10), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-9.9f, -10, -9.9f, 10), out_t));
@@ -829,7 +829,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 		}
 		SECTION("Vertical ray.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 0, -1, 0), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, 0, -10, 0), out_t));
@@ -839,7 +839,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK(out_t == ApproxEps(1000));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(-10, -10), Coord2(0, -1).normalize());
+				Ray r{Coord2(-10, -10), Coord2(0, -1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(10, -10, -10, -10), out_t));
 				CHECK(out_t == ApproxEps(0));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(10, -9.9f, -10, -9.9f), out_t));
@@ -849,7 +849,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 		}
 		SECTION("Diagonal ray.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 0, -5, 5), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(5, -5, -5, 5), out_t));
@@ -860,7 +860,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK(out_t == ApproxEps(std::sqrt(500000)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(1, -2).normalize());
+				Ray r{Coord2(-10, 10), Coord2(1, -2).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, -5, 0, 0), out_t));
 				CHECK(out_t == ApproxEps(std::sqrt(180)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-20, 5.1f, 0, 15.1f), out_t));
@@ -872,7 +872,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 	SECTION("Diagonal line segment and ray intersections.") {
 		SECTION("Horizontal ray.") {
 			SECTION("Right ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 0).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, -1, 1000, 1), out_t));
 				CHECK(out_t == ApproxEps(500));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(1000, 1, 0, -1), out_t));
@@ -882,7 +882,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-2, -4000, 1, 4000), out_t));
 			}
 			SECTION("Left ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(0, 20, -20, -40), out_t));
 				CHECK(out_t == ApproxEps(20));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-65, 140, 15, -20), out_t));
@@ -892,7 +892,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 		}
 		SECTION("Vertical ray.") {
 			SECTION("Down ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(0, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(0, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-1, 0, 1, 1000), out_t));
 				CHECK(out_t == ApproxEps(500));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(1, 1000, -1, 0), out_t));
@@ -902,7 +902,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-4000, -2, 4000, 1), out_t));
 			}
 			SECTION("Up ray not from origin.") {
-				Ray r(Coord2(10, -10), Coord2(-1, 0).normalize());
+				Ray r{Coord2(10, -10), Coord2(-1, 0).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(20, 0, -40, -20), out_t));
 				CHECK(out_t == ApproxEps(20));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(100, -85, -20, 15), out_t));
@@ -912,7 +912,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 		}
 		SECTION("Diagonal ray.") {
 			SECTION("Diagonal ray from origin.") {
-				Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+				Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, 0, 10, 0), out_t));
 				CHECK(out_t == ApproxEps(0));
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(800, 0, 800, 1000), out_t));
@@ -923,7 +923,7 @@ TEST_CASE("Ray and line segment intersections, ignoring parallel intersections, 
 				CHECK(out_t == ApproxEps(std::sqrt(9800)));
 			}
 			SECTION("Diagonal ray not from origin.") {
-				Ray r(Coord2(-10, 10), Coord2(1, -2).normalize());
+				Ray r{Coord2(-10, 10), Coord2(1, -2).normalize()};
 				REQUIRE(intersects_ignore_parallel(r, LineSegment(-10, -5, 0, 0), out_t));
 				CHECK(out_t == ApproxEps(std::sqrt(180)));
 				CHECK_FALSE(intersects_ignore_parallel(r, LineSegment(-20, 5.1f, 0, 15.1f), out_t));

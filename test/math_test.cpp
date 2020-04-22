@@ -188,7 +188,7 @@ SCENARIO("Getting the closest point on a line to a point, from a line made with 
 
 SCENARIO("Getting the closest point on a line to a point, from a line made by a ray.", "[geom_math]") {
 	GIVEN("A horizontal line through origin.") {
-		Ray r(Coord2(0, 0), Coord2(1, 0));
+		Ray r{Coord2(0, 0), Coord2(1, 0)};
 		GIVEN("A point on the line.") {
 			Coord2 p(10, 0);
 			THEN("The closest point is the point itself.") {
@@ -218,7 +218,7 @@ SCENARIO("Getting the closest point on a line to a point, from a line made by a 
 		}
 	}
 	GIVEN("A vertical line through orign.") {
-		Ray r(Coord2(0, 0), Coord2(0, 1));
+		Ray r{Coord2(0, 0), Coord2(0, 1)};
 		GIVEN("A point on the line.") {
 			Coord2 p(0, -10);
 			THEN("The closest point is the point itself.") {
@@ -248,7 +248,7 @@ SCENARIO("Getting the closest point on a line to a point, from a line made by a 
 		}
 	}
 	GIVEN("A diagonal line through origin.") {
-		Ray r(Coord2(0, 0), Coord2(-1, -1).normalize());
+		Ray r{Coord2(0, 0), Coord2(-1, -1).normalize()};
 		GIVEN("A point on the line.") {
 			Coord2 p(10, 10);
 			THEN("The closest point is the point itself.") {
@@ -278,7 +278,7 @@ SCENARIO("Getting the closest point on a line to a point, from a line made by a 
 		}
 	}
 	GIVEN("A horizontal line not through origin.") {
-		Ray r(Coord2(5, 5), Coord2(-1, 0));
+		Ray r{Coord2(5, 5), Coord2(-1, 0)};
 		GIVEN("A point on the line.") {
 			Coord2 p(10, 5);
 			THEN("The closest point is the point itself.") {
@@ -308,7 +308,7 @@ SCENARIO("Getting the closest point on a line to a point, from a line made by a 
 		}
 	}
 	GIVEN("A vertical line not through orign.") {
-		Ray r(Coord2(-1, 0), Coord2(0, 1));
+		Ray r{Coord2(-1, 0), Coord2(0, 1)};
 		GIVEN("A point on the line.") {
 			Coord2 p(-1, -10);
 			THEN("The closest point is the point itself.") {
@@ -338,7 +338,7 @@ SCENARIO("Getting the closest point on a line to a point, from a line made by a 
 		}
 	}
 	GIVEN("A diagonal line not through origin.") {
-		Ray r(Coord2(5, 0), Coord2(1, 1).normalize());
+		Ray r{Coord2(5, 0), Coord2(1, 1).normalize()};
 		GIVEN("A point on the line.") {
 			Coord2 p(2, -3);
 			THEN("The closest point is the point itself.") {
@@ -519,7 +519,7 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 }
 SCENARIO("Getting the closest distance to a line from a point, from a line made with a ray.", "[geom_math]") {
 	GIVEN("A horizontal line through origin.") {
-		Ray r(Coord2(0,0), Coord2(1, 0));
+		Ray r{Coord2(0,0), Coord2(1, 0)};
 		GIVEN("A point on the line.") {
 			Coord2 p(10, 0);
 			THEN("The distance is zero.") {
@@ -543,7 +543,7 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 		}
 	}
 	GIVEN("A vertical line through orign.") {
-		Ray r(Coord2(0, 0), Coord2(0, 1));
+		Ray r{Coord2(0, 0), Coord2(0, 1)};
 		GIVEN("A point on the line.") {
 			Coord2 p(0, -10);
 			THEN("The distance is zero.") {
@@ -567,7 +567,7 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 		}
 	}
 	GIVEN("A diagonal line through origin.") {
-		Ray r(Coord2(0, 0), Coord2(1, 1).normalize());
+		Ray r{Coord2(0, 0), Coord2(1, 1).normalize()};
 		GIVEN("A point on the line.") {
 			Coord2 p(10, 10);
 			THEN("The distance is zero.") {
@@ -592,7 +592,7 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 		}
 	}
 	GIVEN("A horizontal line not through origin.") {
-		Ray r(Coord2(5, 5), Coord2(1, 0));
+		Ray r{Coord2(5, 5), Coord2(1, 0)};
 		GIVEN("A point on the line.") {
 			Coord2 p(10, 5);
 			THEN("The distance is zero.") {
@@ -616,7 +616,7 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 		}
 	}
 	GIVEN("A vertical line not through orign.") {
-		Ray r(Coord2(-1, 0), Coord2(0, -1));
+		Ray r{Coord2(-1, 0), Coord2(0, -1)};
 		GIVEN("A point on the line.") {
 			Coord2 p(-1, -10);
 			THEN("The distance is zero.") {
@@ -640,7 +640,7 @@ SCENARIO("Getting the closest distance to a line from a point, from a line made 
 		}
 	}
 	GIVEN("A diagonal line not through origin.") {
-		Ray r(Coord2(5, 0), Coord2(-1, -1).normalize());
+		Ray r{Coord2(5, 0), Coord2(-1, -1).normalize()};
 		GIVEN("A point on the line.") {
 			Coord2 p(2, -3);
 			THEN("The distance is zero.") {
