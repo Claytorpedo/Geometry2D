@@ -71,7 +71,7 @@ namespace { // Circle-poly sweep test.
 // See if two circles will collide in the future, where a circle with an offset-center at firstPos travelling in deltaDir by deltaMag. FullRad2 is the square of both circles' radii.
 inline CollisionResult _collides_with_vertex(Coord2 circlePos, Coord2 vertex,
 	Coord2 deltaDir, const gFloat deltaMag2, const gFloat deltaMag, const gFloat radiusEps, Coord2& out_norm, gFloat& out_t) {
-	const Coord2 closestTo(math::closestPointOnLine(Ray(circlePos, deltaDir), vertex));
+	const Coord2 closestTo(math::closestPointOnLine(Ray{circlePos, deltaDir}, vertex));
 	// Check if the closest point to the movement vector is "behind" the first circle's center.
 	if ((deltaDir.x >= 0 ? closestTo.x <= circlePos.x : closestTo.x > circlePos.x) &&
 		(deltaDir.y >= 0 ? closestTo.y <= circlePos.y : closestTo.y > circlePos.y))

@@ -15,7 +15,7 @@ gFloat math::closestDistToLine(const Ray& ray, Coord2 point) noexcept {
 	return std::abs((point - ray.origin).dot(ray.dir.perpCCW()));
 }
 gFloat math::closestDistToLine(Coord2 line1, Coord2 line2, Coord2 point) noexcept {
-	return closestDistToLine(Ray(line1, (line2 - line1).normalize()), point);
+	return closestDistToLine(Ray{line1, (line2 - line1).normalize()}, point);
 }
 
 math::AngleResult math::minAngle(Coord2 vec1, Coord2 vec2) noexcept {
