@@ -24,9 +24,6 @@
     <ClCompile Include="..\..\geom\collisions\Movable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\geom\collisions\Wall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\geom\intersections\intersections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

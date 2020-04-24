@@ -91,7 +91,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\geom\collisions\collisions.cpp" />
     <ClCompile Include="..\..\geom\collisions\Movable.cpp" />
-    <ClCompile Include="..\..\geom\collisions\Wall.cpp" />
     <ClCompile Include="..\..\geom\intersections\intersections.cpp" />
     <ClCompile Include="..\..\geom\intersections\isect_ray_circle.cpp" />
     <ClCompile Include="..\..\geom\intersections\isect_ray_poly.cpp" />
