@@ -16,28 +16,28 @@ namespace ctp::sat {
 // Returns true if it encounteres a special case that handled both shapes.
 bool _get_separating_axes(ConstShapeRef first, ConstShapeRef second, Coord2 offset, std::vector<Coord2>& axes) {
 	switch (first.type()) {
-	case ShapeType::RECTANGLE:
+	case ShapeType::Rectangle:
 		axes.push_back(Coord2(1, 0)); // Rectangles are axis-alligned.
 		axes.push_back(Coord2(0, 1));
-		if (second.type() == ShapeType::RECTANGLE) // Rectangles will share axes.
+		if (second.type() == ShapeType::Rectangle) // Rectangles will share axes.
 			return true;
 		break;
-	case ShapeType::POLYGON:
+	case ShapeType::Polygon:
 		axes.reserve(axes.size() + first.poly().size());
 		for (std::size_t i = 0; i < first.poly().size(); ++i)
 			axes.push_back(first.poly().getEdgeNorm(i));
 		break;
-	case ShapeType::CIRCLE:
+	case ShapeType::Circle:
 	{
 		const Coord2 firstPos(first.circle().center + offset);
-		if (second.type() == ShapeType::CIRCLE) { // Only one axis for two circles.
+		if (second.type() == ShapeType::Circle) { // Only one axis for two circles.
 			const Coord2 axis = firstPos - second.circle().center;
 			axes.push_back(axis.x == 0 && axis.y == 0 ? Coord2(0, 1) : axis.normalize());
 			return true;
 		}
 		// Get axis from circle to the cloeset point/vertex on the other shape.
 		const Coord2 axis = second.shape().getClosestTo(firstPos) - firstPos;
-		if (axis.x != 0 || axis.y != 0) // If this is a zero vector, they are already overlapping, and can use other axes for the MTV.
+		if (axis.x != 0 || axis.y != 0) // If this is a zero vector, they are already overlapping, and can use other axes for the MinimumTranslationVector.
 			axes.push_back(axis.normalize());
 	}
 	break;

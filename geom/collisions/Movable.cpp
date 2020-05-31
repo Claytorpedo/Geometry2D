@@ -32,19 +32,19 @@ Coord2 Movable::move(ConstShapeRef collider, Coord2 origin, Coord2 delta, const 
 	if (delta.isZero())
 		return origin; // Nowhere to move.
 	switch (type) {
-	case CollisionType::NONE:
+	case CollisionType::None:
 		info.currentPosition += delta;
 		break;
-	case CollisionType::DEFLECT:
+	case CollisionType::Deflect:
 		_move_deflect(info, collisionMap);
 		break;
-	case CollisionType::REVERSE:
+	case CollisionType::Reverse:
 		_move_reverse(info, collisionMap);
 		break;
-	case CollisionType::REFLECT:
+	case CollisionType::Reflect:
 		_move_reflect(info, collisionMap);
 		break;
-	case CollisionType::MTV:
+	case CollisionType::MinimumTranslationVector:
 		_move_MTV(info, delta, collisionMap);
 		break;
 	}
@@ -62,7 +62,7 @@ CollisionResult Movable::_find_closest_collision(const CollisionMap& collisionMa
 	const Coord2 delta(info.currentDir * info.remainingDist);
 	for (const auto& obj : collisionMap.getColliding(*this, delta)) {
 		switch (collides(info.collider, info.currentPosition, delta, obj->getCollider(), obj->getPosition(), testNorm, testInterval)) {
-		case CollisionResult::SWEEP:
+		case CollisionResult::Sweep:
 			info.isCollision = true;
 			if (interval > testInterval) {
 				interval = testInterval;
@@ -71,29 +71,29 @@ CollisionResult Movable::_find_closest_collision(const CollisionMap& collisionMa
 			}
 			if (interval < constants::EPSILON) {
 				info.moveDist = 0;
-				return CollisionResult::SWEEP;
+				return CollisionResult::Sweep;
 			}
 			break;
-		case CollisionResult::MTV:
+		case CollisionResult::MinimumTranslationVector:
 			info.isCollision = true;
 			info.moveDist = testInterval;
 			info.normal = testNorm;
 			info.collidable = obj;
-			return CollisionResult::MTV; // Currently overlapping something. Abort.
-		case CollisionResult::NONE: break;
+			return CollisionResult::MinimumTranslationVector; // Currently overlapping something. Abort.
+		case CollisionResult::None: break;
 		};
 	}
 	if (!info.isCollision) {
 		info.moveDist = info.remainingDist;
-		return CollisionResult::NONE;
+		return CollisionResult::None;
 	}
 	info.moveDist = (info.remainingDist * interval) - getPushoutDistance(info.currentDir, info.normal);
 	if (info.moveDist < 0)
 		info.moveDist = 0;
-	return CollisionResult::SWEEP;
+	return CollisionResult::Sweep;
 }
 bool Movable::_move(CollisionInfo& info, const CollisionMap& collisionMap) {
-	if (_find_closest_collision(collisionMap, info) == CollisionResult::MTV) {
+	if (_find_closest_collision(collisionMap, info) == CollisionResult::MinimumTranslationVector) {
 		_resolve_collision(info, collisionMap);
 		return true;
 	}
@@ -196,11 +196,11 @@ void Movable::_move_MTV(CollisionInfo& info, Coord2 delta, const CollisionMap& c
 		if (std::any_of(positions.begin(), positions.end(), [lhs = info.currentPosition](Coord2 rhs){ return math::almostEqual(lhs.x, rhs.x) && math::almostEqual(lhs.y, rhs.y); }))
 			return; // Oscillating or didn't move from starting position.
 	}
-	DBG_WARN("Max debug attempts (" << MTV_RESOLUTION_MAX_ATTAMTPS << ") used. MTV collision may not be resolved.");
+	DBG_WARN("Max debug attempts (" << MTV_RESOLUTION_MAX_ATTAMTPS << ") used. MinimumTranslationVector collision may not be resolved.");
 }
 
 void Movable::_resolve_collision(CollisionInfo& info, const CollisionMap& collisionMap) {
-	DBG_LOG("Debugging MTV collision...");
+	DBG_LOG("Debugging MinimumTranslationVector collision...");
 	std::vector<Coord2> positions;
 	positions.reserve(MTV_RESOLUTION_MAX_ATTAMTPS + 1); // Keep track of current position, in case we oscillate between objects.
 	positions.push_back(info.currentPosition);
@@ -215,15 +215,15 @@ void Movable::_resolve_collision(CollisionInfo& info, const CollisionMap& collis
 			}
 		}
 		if (resolved) {
-			DBG_LOG("MTV collision resolved (in " << i << " attempts).");
+			DBG_LOG("MinimumTranslationVector collision resolved (in " << i << " attempts).");
 			return; // Situation resolved. No longer overlapping anything.
 		}
 		info.currentPosition += (info.moveDist + COLLISION_BUFFER) * info.normal;;
 		if (std::any_of(positions.begin(), positions.end(), [lhs = info.currentPosition](Coord2 rhs){ return math::almostEqual(lhs.x, rhs.x) && math::almostEqual(lhs.y, rhs.y); })) {
-			DBG_ERR("MTV collision can not be resolved. Movable is oscillating between positions.");
+			DBG_ERR("MinimumTranslationVector collision can not be resolved. Movable is oscillating between positions.");
 			return;
 		}
 	}
-	DBG_WARN("Max debug attempts (" << MTV_RESOLUTION_MAX_ATTAMTPS << ") used. MTV collision may not be resolved.");
+	DBG_WARN("Max debug attempts (" << MTV_RESOLUTION_MAX_ATTAMTPS << ") used. MinimumTranslationVector collision may not be resolved.");
 }
 }

@@ -21,11 +21,11 @@ public:
 		return -(COLLISION_BUFFER / collisionNormal.dot(travelDir));
 	}
 	enum class CollisionType {
-		NONE,    // Collisions are ignored (noclip).
-		DEFLECT, // Collisions result in deflecting along edges.
-		REVERSE, // Collisions result in reversing direction.
-		REFLECT, // Collisions result in reflecting/bouncing off edges.
-		MTV      // Perform MTV collisions by moving the shape by its full movement vector and then resolving collisions.
+		None,    // Collisions are ignored (noclip).
+		Deflect, // Collisions result in deflecting along edges.
+		Reverse, // Collisions result in reversing direction.
+		Reflect, // Collisions result in reflecting/bouncing off edges.
+		MinimumTranslationVector // Perform MinimumTranslationVector collisions by moving the shape by its full movement vector and then resolving collisions.
 	};
 
 	struct CollisionInfo {
@@ -50,7 +50,7 @@ public:
 	// Returns the final position of the collider.
 	Coord2 move(ConstShapeRef collider, Coord2 origin, Coord2 delta, const CollisionMap& collisionMap);
 protected:
-	CollisionType type = CollisionType::DEFLECT;
+	CollisionType type = CollisionType::Deflect;
 
 	// What to do on collision. This can be used to handle special collisions.
 	// Default implementation simply returns true, to continue the algorithm.

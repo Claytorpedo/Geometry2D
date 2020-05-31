@@ -10,7 +10,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		WHEN("The circle is copied to the rectangle.") {
 			first = second;
 			THEN("The first one is now a copy of the circle.") {
-				CHECK(first.type() == ShapeType::CIRCLE);
+				CHECK(first.type() == ShapeType::Circle);
 				CHECK(first.circle().center.x == ApproxEps(0));
 				CHECK(first.circle().center.y == ApproxEps(0));
 				CHECK(first.circle().radius == ApproxEps(1));
@@ -19,7 +19,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		WHEN("The circle is moved to the rectangle.") {
 			first = ::std::move(second);
 			THEN("The first one is now a copy of the circle.") {
-				CHECK(first.type() == ShapeType::CIRCLE);
+				CHECK(first.type() == ShapeType::Circle);
 				CHECK(first.circle().center.x == ApproxEps(0));
 				CHECK(first.circle().center.y == ApproxEps(0));
 				CHECK(first.circle().radius == ApproxEps(1));
@@ -31,7 +31,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		WHEN("A new ShapeContainer is made by copy.") {
 			ShapeContainer shape{poly};
 			THEN("It copies the polygon.") {
-				CHECK(shape.type() == ShapeType::POLYGON);
+				CHECK(shape.type() == ShapeType::Polygon);
 				CHECK(shape.poly().left() == ApproxEps(0));
 				CHECK(shape.poly().right() == ApproxEps(3));
 				CHECK(shape.poly().top() == ApproxEps(2));
@@ -41,7 +41,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		WHEN("A new ShapeContainer is made by move.") {
 			ShapeContainer shape{::std::move(poly)};
 			THEN("It copies the polygon.") {
-				CHECK(shape.type() == ShapeType::POLYGON);
+				CHECK(shape.type() == ShapeType::Polygon);
 				CHECK(shape.poly().left() == ApproxEps(0));
 				CHECK(shape.poly().right() == ApproxEps(3));
 				CHECK(shape.poly().top() == ApproxEps(2));
@@ -51,7 +51,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		WHEN("It copies to itself.") {
 			poly = poly;
 			THEN("It results in the same shape.") {
-				CHECK(poly.type() == ShapeType::POLYGON);
+				CHECK(poly.type() == ShapeType::Polygon);
 				CHECK(poly.poly().left() == ApproxEps(0));
 				CHECK(poly.poly().right() == ApproxEps(3));
 				CHECK(poly.poly().top() == ApproxEps(2));
@@ -61,7 +61,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		WHEN("It move-assigns to itself.") {
 			poly = std::move(poly);
 			THEN("It results in the same shape.") {
-				CHECK(poly.type() == ShapeType::POLYGON);
+				CHECK(poly.type() == ShapeType::Polygon);
 				CHECK(poly.poly().left() == ApproxEps(0));
 				CHECK(poly.poly().right() == ApproxEps(3));
 				CHECK(poly.poly().top() == ApproxEps(2));
@@ -73,7 +73,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		ShapeContainer shape{Rect{-1,-1,2,2}};
 		THEN("It is convertible to a ShapeRef.") {
 			ShapeRef ref = shape;
-			CHECK(ref.type() == ShapeType::RECTANGLE);
+			CHECK(ref.type() == ShapeType::Rectangle);
 			CHECK(ref.rect().left() == ApproxEps(-1));
 			CHECK(ref.rect().right() == ApproxEps(1));
 			CHECK(ref.rect().top() == ApproxEps(-1));
@@ -81,7 +81,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 		}
 		THEN("It is convertible to a ConstShapeRef.") {
 			ConstShapeRef ref = shape;
-			CHECK(ref.type() == ShapeType::RECTANGLE);
+			CHECK(ref.type() == ShapeType::Rectangle);
 			CHECK(ref.rect().left() == ApproxEps(-1));
 			CHECK(ref.rect().right() == ApproxEps(1));
 			CHECK(ref.rect().top() == ApproxEps(-1));
@@ -124,7 +124,7 @@ SCENARIO("In place construction.", "[ShapeContainer]") {
 	GIVEN("A rectangle.") {
 		ShapeContainer shape(std::in_place_type_t<Rect>{}, 1.0f, 2.0f, 3.0f, 4.0f);
 		THEN("It was constructed properly.") {
-			CHECK(shape.type() == ShapeType::RECTANGLE);
+			CHECK(shape.type() == ShapeType::Rectangle);
 			CHECK(shape.rect().left() == 1);
 			CHECK(shape.rect().right() == 4);
 			CHECK(shape.rect().top() == 2);
@@ -141,7 +141,7 @@ SCENARIO("In place construction.", "[ShapeContainer]") {
 		poly.push_back({1, -1});
 		ShapeContainer shape(std::in_place_type_t<Polygon>{}, std::move(poly), true);
 		THEN("It was constructed properly.") {
-			CHECK(shape.type() == ShapeType::POLYGON);
+			CHECK(shape.type() == ShapeType::Polygon);
 			CHECK(shape.poly().left() == 0);
 			CHECK(shape.poly().right() == 2);
 			CHECK(shape.poly().top() == -1);
@@ -151,7 +151,7 @@ SCENARIO("In place construction.", "[ShapeContainer]") {
 	GIVEN("A circle.") {
 		ShapeContainer shape(std::in_place_type_t<Circle>{}, 1.0f, 2.0f, 3.0f);
 		THEN("It was constructed properly.") {
-			CHECK(shape.type() == ShapeType::CIRCLE);
+			CHECK(shape.type() == ShapeType::Circle);
 			CHECK(shape.circle().left() == -2);
 			CHECK(shape.circle().right() == 4);
 			CHECK(shape.circle().top() == -1);
