@@ -82,42 +82,42 @@ public:
 	using ShapeRef::circle;
 
 	ShapeContainer() = delete;
-	ShapeContainer(Rect r) noexcept : ShapeRef{ShapeType::Rectangle}, shape_{::std::move(r)} {
-		ShapeRef::setShape(::std::get<Rect>(shape_));
+	ShapeContainer(Rect r) noexcept : ShapeRef{ShapeType::Rectangle}, shape_{std::move(r)} {
+		ShapeRef::setShape(std::get<Rect>(shape_));
 	}
-	ShapeContainer(Polygon p) noexcept : ShapeRef{ShapeType::Polygon}, shape_{::std::move(p)} {
-		ShapeRef::setShape(::std::get<Polygon>(shape_));
+	ShapeContainer(Polygon p) noexcept : ShapeRef{ShapeType::Polygon}, shape_{std::move(p)} {
+		ShapeRef::setShape(std::get<Polygon>(shape_));
 	}
-	ShapeContainer(Circle c) noexcept : ShapeRef{ShapeType::Circle}, shape_{::std::move(c)} {
-		ShapeRef::setShape(::std::get<Circle>(shape_));
+	ShapeContainer(Circle c) noexcept : ShapeRef{ShapeType::Circle}, shape_{std::move(c)} {
+		ShapeRef::setShape(std::get<Circle>(shape_));
 	}
 	// Construct shape in place by forwarding arguments.
 	template <typename Contained, typename... Args>
-	ShapeContainer(::std::in_place_type_t<Contained> placeType, Args&&... args) noexcept : ShapeRef(ShapeType::Rectangle), shape_{placeType, ::std::forward<Args>(args)...} {
-		if constexpr (::std::is_same_v<Rect, Contained>) {
+	ShapeContainer(std::in_place_type_t<Contained> placeType, Args&&... args) noexcept : ShapeRef(ShapeType::Rectangle), shape_{placeType, std::forward<Args>(args)...} {
+		if constexpr (std::is_same_v<Rect, Contained>) {
 			// Type was defaulted to Rect.
-		} else if constexpr (::std::is_same_v<Polygon, Contained>) {
+		} else if constexpr (std::is_same_v<Polygon, Contained>) {
 			type_ = ShapeType::Polygon;
-		} else if constexpr (::std::is_same_v<Circle, Contained>) {
+		} else if constexpr (std::is_same_v<Circle, Contained>) {
 			type_ = ShapeType::Circle;
 		} else
-			static_assert(::std::is_same_v<Contained, false>); // Unhandled shape type.
-		ShapeRef::setShape(::std::get<Contained>(shape_));
+			static_assert(std::is_same_v<Contained, false>); // Unhandled shape type.
+		ShapeRef::setShape(std::get<Contained>(shape_));
 	}
 
 	explicit ShapeContainer(ConstShapeRef shape) noexcept : ShapeRef{shape.type()} {
 		switch (shape.type()) {
 			case ShapeType::Rectangle:
 				shape_ = shape.rect();
-				ShapeRef::setShape(::std::get<Rect>(shape_));
+				ShapeRef::setShape(std::get<Rect>(shape_));
 				break;
 			case ShapeType::Polygon:
 				shape_ = shape.poly();
-				ShapeRef::setShape(::std::get<Polygon>(shape_));
+				ShapeRef::setShape(std::get<Polygon>(shape_));
 				break;
 			case ShapeType::Circle:
 				shape = shape.circle();
-				ShapeRef::setShape(::std::get<Circle>(shape_));
+				ShapeRef::setShape(std::get<Circle>(shape_));
 				break;
 		}
 		setShape();
@@ -126,7 +126,7 @@ public:
 	ShapeContainer(const ShapeContainer& o) noexcept : ShapeRef{o.type_}, shape_{o.shape_} {
 		setShape();
 	}
-	ShapeContainer(ShapeContainer&& o) noexcept : ShapeRef{o.type_}, shape_{::std::move(o.shape_)} {
+	ShapeContainer(ShapeContainer&& o) noexcept : ShapeRef{o.type_}, shape_{std::move(o.shape_)} {
 		setShape();
 	}
 	ShapeContainer& operator=(const ShapeContainer& o) noexcept {
@@ -137,7 +137,7 @@ public:
 	}
 	ShapeContainer& operator=(ShapeContainer&& o) noexcept {
 		type_ = o.type_;
-		shape_ = ::std::move(o.shape_);
+		shape_ = std::move(o.shape_);
 		setShape();
 		return *this;
 	}
@@ -145,13 +145,14 @@ public:
 private:
 	constexpr void setShape() noexcept {
 		switch (type_) {
-			case ShapeType::Rectangle: ShapeRef::setShape(::std::get<Rect>(shape_)); break;
-			case ShapeType::Polygon: ShapeRef::setShape(::std::get<Polygon>(shape_)); break;
-			case ShapeType::Circle: ShapeRef::setShape(::std::get<Circle>(shape_)); break;
+			case ShapeType::Rectangle: ShapeRef::setShape(std::get<Rect>(shape_)); break;
+			case ShapeType::Polygon: ShapeRef::setShape(std::get<Polygon>(shape_)); break;
+			case ShapeType::Circle: ShapeRef::setShape(std::get<Circle>(shape_)); break;
 		}
 	}
 
-	::std::variant<Rect, Polygon, Circle> shape_;
+	std::variant<Rect, Polygon, Circle> shape_;
+
 };
 
 constexpr ShapeRef::ShapeRef(ShapeContainer& s) noexcept : type_{s.type()}, shape_{&s.shape()} {}
