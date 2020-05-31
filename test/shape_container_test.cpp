@@ -17,7 +17,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 			}
 		}
 		WHEN("The circle is moved to the rectangle.") {
-			first = ::std::move(second);
+			first = std::move(second);
 			THEN("The first one is now a copy of the circle.") {
 				CHECK(first.type() == ShapeType::Circle);
 				CHECK(first.circle().center.x == ApproxEps(0));
@@ -39,7 +39,7 @@ SCENARIO("Copying and moving shape containers around.", "[ShapeContainer]") {
 			}
 		}
 		WHEN("A new ShapeContainer is made by move.") {
-			ShapeContainer shape{::std::move(poly)};
+			ShapeContainer shape{std::move(poly)};
 			THEN("It copies the polygon.") {
 				CHECK(shape.type() == ShapeType::Polygon);
 				CHECK(shape.poly().left() == ApproxEps(0));
