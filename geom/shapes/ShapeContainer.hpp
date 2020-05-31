@@ -107,18 +107,18 @@ public:
 
 	explicit ShapeContainer(ConstShapeRef shape) noexcept : ShapeRef{shape.type()} {
 		switch (shape.type()) {
-		case ShapeType::Rectangle:
-			shape_ = shape.rect();
-			ShapeRef::setShape(::std::get<Rect>(shape_));
-			break;
-		case ShapeType::Polygon:
-			shape_ = shape.poly();
-			ShapeRef::setShape(::std::get<Polygon>(shape_));
-			break;
-		case ShapeType::Circle:
-			shape = shape.circle();
-			ShapeRef::setShape(::std::get<Circle>(shape_));
-			break;
+			case ShapeType::Rectangle:
+				shape_ = shape.rect();
+				ShapeRef::setShape(::std::get<Rect>(shape_));
+				break;
+			case ShapeType::Polygon:
+				shape_ = shape.poly();
+				ShapeRef::setShape(::std::get<Polygon>(shape_));
+				break;
+			case ShapeType::Circle:
+				shape = shape.circle();
+				ShapeRef::setShape(::std::get<Circle>(shape_));
+				break;
 		}
 		setShape();
 	}
@@ -145,9 +145,9 @@ public:
 private:
 	constexpr void setShape() noexcept {
 		switch (type_) {
-		case ShapeType::Rectangle: ShapeRef::setShape(::std::get<Rect>(shape_)); break;
-		case ShapeType::Polygon: ShapeRef::setShape(::std::get<Polygon>(shape_)); break;
-		case ShapeType::Circle: ShapeRef::setShape(::std::get<Circle>(shape_)); break;
+			case ShapeType::Rectangle: ShapeRef::setShape(::std::get<Rect>(shape_)); break;
+			case ShapeType::Polygon: ShapeRef::setShape(::std::get<Polygon>(shape_)); break;
+			case ShapeType::Circle: ShapeRef::setShape(::std::get<Circle>(shape_)); break;
 		}
 	}
 

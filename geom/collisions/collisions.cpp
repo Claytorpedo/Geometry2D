@@ -19,7 +19,7 @@
 
 namespace ctp {
 namespace {
-constexpr static gFloat MAX_TIME = 1.0f; // Max t for sweep tests. Using interval [0,1].
+constexpr static gFloat MaxTime = 1.0f; // Max t for sweep tests. Using interval [0,1].
 
 inline CollisionResult _circle_circle(const Circle& first, const Circle& second, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 	const Coord2 firstPos(first.center + offset);
@@ -97,7 +97,7 @@ inline CollisionResult _collides_with_edge(const Coord2 circlePos, Coord2 pointO
 	if (closestDist < 0) // The edge is "behind" the circle.
 		return CollisionResult::None;
 	const gFloat collisionDist(-closestDist / delta.dot(edgeNorm)); // adjacent / cosTheta = hypotenuse. Negation is to reverse edgeNorm.
-	if (collisionDist > MAX_TIME)
+	if (collisionDist > MaxTime)
 		return CollisionResult::None;
 	out_norm = edgeNorm;
 	out_t = collisionDist;
@@ -163,12 +163,12 @@ inline CollisionResult _circle_rect(const Circle& circle, const Rect& rect, Coor
 }
 inline CollisionResult _handle_circle_collisions(const Circle& circle, ConstShapeRef other, Coord2 offset, Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 	switch (other.type()) {
-	case ShapeType::Rectangle:
-		return _circle_rect(circle, other.rect(), offset, delta, out_norm, out_t);
-	case ShapeType::Polygon:
-		return _circle_poly(circle, other.poly(), offset, delta, out_norm, out_t);
-	case ShapeType::Circle:
-		return _circle_circle(circle, other.circle(), offset, delta, out_norm, out_t);
+		case ShapeType::Rectangle:
+			return _circle_rect(circle, other.rect(), offset, delta, out_norm, out_t);
+		case ShapeType::Polygon:
+			return _circle_poly(circle, other.poly(), offset, delta, out_norm, out_t);
+		case ShapeType::Circle:
+			return _circle_circle(circle, other.circle(), offset, delta, out_norm, out_t);
 	}
 	DBG_ERR("Unhandled shape type for circle collision. Ignoring.");
 	return CollisionResult::None;
@@ -186,7 +186,7 @@ inline CollisionResult _perform_hybrid_SAT(const Shape& first, const Shape& seco
 	Coord2 delta, Coord2& out_norm, gFloat& out_t) {
 	bool areCurrentlyOverlapping = true; // Start by assuming they are overlapping.
 	gFloat mtv_dist(-1), testDist, overlap1, overlap2;
-	gFloat speed, enterTime(-1), exitTime(MAX_TIME), testEnter, testExit;
+	gFloat speed, enterTime(-1), exitTime(MaxTime), testEnter, testExit;
 	Coord2 mtv_norm, sweep_norm;
 	Projection projFirst, projSecond;
 	for (std::size_t i = 0; i < axes.size(); ++i) {
@@ -217,7 +217,7 @@ inline CollisionResult _perform_hybrid_SAT(const Shape& first, const Shape& seco
 			}
 			if (testExit < exitTime)
 				exitTime = testExit; // Keep track of earliest exit time: some axis may stop overlapping before all axes overlap.
-			if (enterTime > MAX_TIME || enterTime > exitTime)
+			if (enterTime > MaxTime || enterTime > exitTime)
 				return CollisionResult::None; // Either don't collide on this time interval, or won't ever with the direction of motion.
 		} else { // They are currently overlapping on this axis.
 			if (speed != 0) { // Find when the time when they stop overlapping on this axis (start time == 0 == now).
@@ -267,4 +267,4 @@ CollisionResult collides(ConstShapeRef first, Coord2 firstPos, Coord2 firstDelta
 	ConstShapeRef second, Coord2 secondPos, Coord2 secondDelta, Coord2& out_norm, gFloat& out_t) {
 	return collides(first, firstPos, firstDelta - secondDelta, second, secondPos, out_norm, out_t);
 }
-}
+} // namespace ctp
